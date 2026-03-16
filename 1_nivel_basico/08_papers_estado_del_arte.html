@@ -52,6 +52,10 @@
         <h1>📚 Papers y Estado del Arte</h1>
         <p>Una guía curada de los trabajos más influyentes en inferencia causal, desde los fundamentos de Pearl hasta las aplicaciones más recientes con deep learning. Para cada paper incluimos: contexto, contribución principal, y relevancia práctica.</p>
 
+        <div class="highlight-box">
+            🔎 <strong>Ruta sugerida + PDFs:</strong> Si quieres una lista ordenada y acceso directo a los papers en PDF, visita <a href="00_recursos.html">Sección 00 – Recursos</a>.
+        </div>
+
         <h2>1. Línea Temporal de la Causalidad</h2>
         <div class="timeline">
             <div class="timeline-item">
@@ -146,6 +150,7 @@
             <span class="paper-tag tag-discovery">Descubrimiento</span> <span class="paper-tag tag-dl">Deep Learning</span>
             <p><strong>Contribución:</strong> Reformula el descubrimiento causal como optimización continua. La restricción de aciclicidad <span style="font-family:monospace; color:#a5d6ff;">tr(e^W) - d = 0</span> es diferenciable.</p>
             <p><strong>Impacto:</strong> Abrió la puerta a métodos basados en gradientes (deep learning) para descubrir DAGs. Antes, los métodos eran combinatorios.</p>
+            <p><a href="pdfs/notears.pdf" class="btn-nav" target="_blank" rel="noopener">Abrir PDF local</a> <a href="https://arxiv.org/pdf/1803.01422.pdf" class="btn-nav" style="background: rgba(255,255,255,0.12); color: var(--text); margin-left: 10px;" target="_blank" rel="noopener">Ver en arXiv</a></p>
         </div>
 
         <h2>4. Estimación de Efectos Causales con ML</h2>
@@ -156,6 +161,7 @@
             <p><strong>Contribución:</strong> Framework para estimar efectos causales usando cualquier modelo ML (forest, neural net, etc.) como nuisance model, con garantías de √n-consistencia.</p>
             <p><strong>Idea clave:</strong> Cross-fitting (sample splitting) + Neyman orthogonality eliminan el sesgo de regularización del ML.</p>
             <p><strong>Implementación:</strong> EconML (Microsoft), DoubleML (Python/R).</p>
+            <p><a href="pdfs/double_ml.pdf" class="btn-nav" target="_blank" rel="noopener">Abrir PDF local</a> <a href="https://arxiv.org/pdf/1608.00060.pdf" class="btn-nav" style="background: rgba(255,255,255,0.12); color: var(--text); margin-left: 10px;" target="_blank" rel="noopener">Ver en arXiv</a></p>
         </div>
 
         <div class="paper-card">
@@ -170,6 +176,7 @@
             <span class="paper-tag tag-estimation">Estimación</span> <span class="paper-tag tag-dl">Deep Learning</span>
             <p><strong>Contribución:</strong> VAE que modela confusores latentes. El espacio latente Z actúa como proxy de confusores no observados.</p>
             <p><strong>Limitación:</strong> Asume que los features observados son suficientes para recuperar Z (proxy variable assumption).</p>
+            <p><a href="pdfs/cevae.pdf" class="btn-nav" target="_blank" rel="noopener">Abrir PDF local</a> <a href="https://arxiv.org/pdf/1706.05977.pdf" class="btn-nav" style="background: rgba(255,255,255,0.12); color: var(--text); margin-left: 10px;" target="_blank" rel="noopener">Ver en arXiv</a></p>
         </div>
 
         <h2>5. Robustez y Distribución (OOD)</h2>
@@ -179,6 +186,7 @@
             <span class="paper-tag tag-dl">Deep Learning</span>
             <p><strong>Contribución:</strong> Aprende representaciones donde el predictor óptimo es el mismo en todos los entornos → captura relaciones causales (invariantes) vs. espurias (cambiantes).</p>
             <p><strong>Debate:</strong> Resultados mixtos en práctica. V-REx, IB-IRM, y EQRM son variantes que intentan mejorar.</p>
+            <p><a href="pdfs/irm.pdf" class="btn-nav" target="_blank" rel="noopener">Abrir PDF local</a> <a href="https://arxiv.org/pdf/1907.02893.pdf" class="btn-nav" style="background: rgba(255,255,255,0.12); color: var(--text); margin-left: 10px;" target="_blank" rel="noopener">Ver en arXiv</a></p>
         </div>
 
         <div class="paper-card">

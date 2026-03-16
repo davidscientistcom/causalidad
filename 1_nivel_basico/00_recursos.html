@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>00 Recursos para Aprender Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --accent: #bc8cff;
+            --muted: #8b949e;
+            --card: #161b22;
+            --border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 28px;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            margin-bottom: 14px;
+            color: var(--accent);
+        }
+
+        h2 {
+            margin-top: 34px;
+            margin-bottom: 14px;
+            font-size: 1.8rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 18px;
+        }
+
+        .note {
+            background: rgba(188, 140, 255, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 16px 18px;
+            border-radius: 0 10px 10px 0;
+            margin: 22px 0;
+        }
+
+        .list {
+            margin-left: 20px;
+            margin-bottom: 22px;
+        }
+
+        .list li {
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 22px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .card p {
+            margin-bottom: 12px;
+            color: var(--muted);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            font-weight: 700;
+            border-radius: 10px;
+            background: rgba(188, 140, 255, 0.16);
+            border: 1px solid rgba(188, 140, 255, 0.3);
+            color: var(--accent);
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: rgba(188, 140, 255, 0.22);
+        }
+
+        .small {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .footer {
+            padding: 30px 0 10px;
+            text-align: center;
+            color: #484f58;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="btn" style="margin-bottom:18px; display:inline-block;">← Volver al roadmap</a>
+
+        <h1>📌 Recursos: De lo más sencillo a lo más complejo</h1>
+        <p>Esta página reúne lecturas, notas y descargas (PDF) para aprender <strong>causalidad desde cero</strong>. La idea es tener un único lugar donde regresar cuando quieras consultar un concepto o descargar un paper.</p>
+
+        <div class="note">
+            <strong>Tip:</strong> Si estás empezando, sigue el orden de abajo. Las primeras lecturas son más conceptuales y accesibles; al final hay material más técnico y de vanguardia.
+        </div>
+
+        <h2>1) Introducción y conceptos clave</h2>
+        <ol class="list">
+            <li><strong>Ver → Hacer → Imaginar</strong> (Escalera de la Causalidad) — <a href="02_escalera_causacion.html">Sección 02</a> del curso.</li>
+            <li><strong>La Paradoja de Simpson</strong> y por qué los datos no cuentan toda la historia — <a href="03_paradoja_simpson.html">Sección 03</a>.</li>
+            <li><strong>¿Qué es un DAG?</strong> Nudos, confusores y colisionadores — <a href="04_dags.html">Sección 04</a>.</li>
+        </ol>
+
+        <h2>2) Lecturas recomendadas (orden sugerido)</h2>
+        <ul class="list">
+            <li><strong><a href="https://en.wikipedia.org/wiki/Book_of_Why" target="_blank" rel="noopener">The Book of Why</a></strong> (Pearl & Mackenzie) — el mejor punto de partida no técnico.</li>
+            <li><strong><a href="https://ftp.cs.ucla.edu/pub/stat_ser/r389.pdf" target="_blank" rel="noopener">Causal Inference in Statistics: A Primer</a></strong> (Pearl, Glymour, Jewell) — breve y muy claro.</li>
+            <li><strong><a href="https://ftp.cs.ucla.edu/pub/stat_ser/r389.pdf" target="_blank" rel="noopener">Causality</a></strong> (Pearl) — el libro de referencia (avanzado).</li>
+            <li><strong><a href="https://arxiv.org/abs/1608.00060" target="_blank" rel="noopener">Double/Debiased Machine Learning</a></strong> — puente entre ML y estimación causal.</li>
+            <li><strong><a href="https://arxiv.org/abs/1803.01422" target="_blank" rel="noopener">DAGs with NO TEARS</a></strong> — aprendizaje de grafos causales mediante optimización continua.</li>
+            <li><strong><a href="https://arxiv.org/abs/1907.02893" target="_blank" rel="noopener">Invariant Risk Minimization (IRM)</a></strong> — robustez y generalización OOD desde causalidad.</li>
+        </ul>
+
+        <h2>3) Descargas (PDF) — disponibles localmente</h2>
+        <p class="small">Los PDFs que aparecen aquí se descargaron automáticamente y están disponibles en la carpeta <code>pdfs/</code> del curso. Si algún enlace no funciona, puedes volver a descargarlos desde el link en línea.</p>
+
+        <div class="card">
+            <h3>📄 Double/Debiased Machine Learning</h3>
+            <p>Un excelente primer paper que muestra cómo usar ML para estimar efectos causales con garantías estadísticas.</p>
+            <a href="pdfs/double_ml.pdf" class="btn" target="_blank" rel="noopener">Abrir PDF (local)</a>
+            <span class="small">(También disponible en <a href="https://arxiv.org/pdf/1608.00060.pdf" target="_blank" rel="noopener">arXiv</a>).</span>
+        </div>
+
+        <div class="card">
+            <h3>📄 DAGs with NO TEARS</h3>
+            <p>Aprendizaje de grafos causales mediante optimización continua. Ideal para conectar causalidad con Deep Learning.</p>
+            <a href="pdfs/notears.pdf" class="btn" target="_blank" rel="noopener">Abrir PDF (local)</a>
+            <span class="small">(También disponible en <a href="https://arxiv.org/pdf/1803.01422.pdf" target="_blank" rel="noopener">arXiv</a>).</span>
+        </div>
+
+        <div class="card">
+            <h3>📄 Invariant Risk Minimization (IRM)</h3>
+            <p>Formaliza la idea de que las relaciones causales deben ser invariantes entre entornos, lo que ayuda al aprendizaje OOD.</p>
+            <a href="pdfs/irm.pdf" class="btn" target="_blank" rel="noopener">Abrir PDF (local)</a>
+            <span class="small">(También disponible en <a href="https://arxiv.org/pdf/1907.02893.pdf" target="_blank" rel="noopener">arXiv</a>).</span>
+        </div>
+
+        <div class="card">
+            <h3>📄 CEVAE (Counterfactual VAE)</h3>
+            <p>Modelo generativo que utiliza variables latentes para estimar efectos causales con confusores no observados.</p>
+            <a href="pdfs/cevae.pdf" class="btn" target="_blank" rel="noopener">Abrir PDF (local)</a>
+            <span class="small">(También disponible en <a href="https://arxiv.org/pdf/1706.05977.pdf" target="_blank" rel="noopener">arXiv</a>).</span>
+        </div>
+
+        <div class="footer">
+            <p>Hecho para el proyecto de <strong>Causalidad</strong>. Si quieres ampliar la lista con más papers o notebooks, agrega los enlaces aquí y vuelvo a actualizar.</p>
+        </div>
+    </div>
+</body>
+</html>
