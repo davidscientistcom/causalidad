@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>08: Papers y Estado del Arte | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #bc8cff; --bg: #0d1117; --text: #e6edf3; --card-bg: #161b22; --border: #30363d; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px; }
+        .container { max-width: 920px; margin: 0 auto; padding-top: 30px; }
+        .breadcrumb { font-size: 0.85em; color: #8b949e; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        h1 { font-size: 2.5em; font-weight: 900; margin-bottom: 15px; color: var(--accent); }
+        h2 { font-size: 1.8em; margin: 50px 0 15px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.35em; margin: 30px 0 10px; color: #c9d1d9; }
+        p { margin-bottom: 18px; font-size: 1.08em; color: #c9d1d9; }
+        .highlight-box { background: rgba(188, 140, 255, 0.06); border-left: 4px solid var(--accent); padding: 20px; border-radius: 0 8px 8px 0; margin: 25px 0; font-size: 1.1em; }
+        ul, ol { margin-left: 22px; margin-bottom: 20px; font-size: 1.08em; color: #c9d1d9; }
+        li { margin-bottom: 10px; }
+        .paper-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin: 25px 0; }
+        .paper-card h3 { margin-top: 0; color: var(--accent); font-size: 1.2em; }
+        .paper-meta { font-size: 0.9em; color: #8b949e; margin-bottom: 12px; }
+        .paper-tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.8em; font-weight: 600; margin: 2px 4px; }
+        .tag-foundational { background: rgba(255, 121, 198, 0.15); color: #ff79c6; }
+        .tag-dl { background: rgba(80, 250, 123, 0.15); color: #50fa7b; }
+        .tag-fairness { background: rgba(227, 179, 65, 0.15); color: #e3b341; }
+        .tag-discovery { background: rgba(121, 192, 255, 0.15); color: #79c0ff; }
+        .tag-estimation { background: rgba(255, 107, 53, 0.15); color: #ff6b35; }
+        pre { background: #161b22; border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin: 20px 0; overflow-x: auto; font-size: 0.92em; line-height: 1.6; }
+        code { font-family: 'Courier New', monospace; color: #e6edf3; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
+        th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; }
+        th { background: #21262d; color: var(--accent); font-weight: 700; }
+        td { color: #c9d1d9; }
+        .timeline { position: relative; padding-left: 40px; margin: 30px 0; }
+        .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: var(--border); border-radius: 2px; }
+        .timeline-item { position: relative; margin-bottom: 20px; }
+        .timeline-item::before { content: ''; position: absolute; left: -32px; top: 8px; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; border: 3px solid var(--bg); }
+        .timeline-year { font-weight: 900; color: var(--accent); font-size: 1.1em; }
+        .btn-nav { display: inline-block; padding: 12px 24px; background: var(--accent); color: #000; text-decoration: none; font-weight: 700; border-radius: 8px; margin-top: 40px; transition: transform 0.2s; }
+        .btn-nav:hover { transform: translateY(-2px); }
+        .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; }
+        .btn-back { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumb"><a href="index.html">← Volver al Roadmap</a> / Sección 08</div>
+
+        <h1>📚 Papers y Estado del Arte</h1>
+        <p>Una guía curada de los trabajos más influyentes en inferencia causal, desde los fundamentos de Pearl hasta las aplicaciones más recientes con deep learning. Para cada paper incluimos: contexto, contribución principal, y relevancia práctica.</p>
+
+        <h2>1. Línea Temporal de la Causalidad</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <span class="timeline-year">1988</span> — Pearl publica "Probabilistic Reasoning in Intelligent Systems". Introduce redes Bayesianas.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1995</span> — Pearl: "Causal Diagrams for Empirical Research". Formaliza DAGs para causalidad.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2000</span> — Pearl: "Causality: Models, Reasoning, and Inference". El libro fundacional.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2003</span> — Spirtes, Glymour, Scheines: "Causation, Prediction, and Search". Algoritmos PC/FCI.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2006</span> — Shimizu et al.: LiNGAM. Descubrimiento causal con no-gaussianidad.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2012</span> — Peters, Janzing, Schölkopf: "Causal Reasoning via Invariances" (ICP).
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2016</span> — Johansson, Shalit, Sontag: "Learning Representations for Counterfactual Inference".
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2017</span> — Louizos et al.: CEVAE. Deep learning para efectos causales.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2018</span> — Pearl y Mackenzie: "The Book of Why". Divulgación de la causalidad.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2019</span> — Arjovsky et al.: IRM. Invariant Risk Minimization.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2020</span> — Zheng et al.: NOTEARS. DAGs con optimización continua.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2021</span> — Schölkopf: "Toward Causal Representation Learning". Manifiesto del campo.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2022</span> — Microsoft DECI: Deep End-to-end Causal Inference.
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2023–24</span> — LLMs y causalidad: ¿Pueden los modelos de lenguaje razonar causalmente?
+            </div>
+        </div>
+
+        <h2>2. Papers Fundacionales</h2>
+
+        <div class="paper-card">
+            <h3>📄 Causality (Pearl, 2000/2009)</h3>
+            <div class="paper-meta">Judea Pearl — Cambridge University Press — 2ª edición 2009</div>
+            <span class="paper-tag tag-foundational">Fundacional</span>
+            <p><strong>Contribución:</strong> Formaliza la inferencia causal completa: DAGs, do-cálculo, contrafactuales, SCMs. Las tres reglas del do-cálculo que son <em>completas</em> (todo efecto identificable se puede derivar con ellas).</p>
+            <p><strong>Conceptos clave:</strong> Operador do(), d-separación, criterio backdoor/frontdoor, SCMs, contrafactuales.</p>
+            <p><strong>Por qué leerlo:</strong> Es LA referencia. Todos los demás papers se basan en este framework.</p>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 The Book of Why (Pearl & Mackenzie, 2018)</h3>
+            <div class="paper-meta">Judea Pearl, Dana Mackenzie — Basic Books</div>
+            <span class="paper-tag tag-foundational">Fundacional</span>
+            <p><strong>Contribución:</strong> Versión divulgativa de "Causality". Explica la escalera de causalidad, la revolución causal, y por qué la estadística tradicional no puede responder preguntas causales.</p>
+            <p><strong>Por qué leerlo:</strong> Ideal como primer libro. Accesible sin formación matemática avanzada.</p>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 Causal Inference in Statistics: A Primer (Pearl, Glymour, Jewell, 2016)</h3>
+            <div class="paper-meta">Pearl, Glymour, Jewell — Wiley</div>
+            <span class="paper-tag tag-foundational">Fundacional</span>
+            <p><strong>Contribución:</strong> Libro de texto conciso (150 páginas) que cubre DAGs, intervenciones, contrafactuales con ejercicios. Puente perfecto entre "The Book of Why" y "Causality".</p>
+        </div>
+
+        <h2>3. Descubrimiento Causal</h2>
+
+        <div class="paper-card">
+            <h3>📄 Causation, Prediction, and Search (Spirtes, Glymour, Scheines, 2000)</h3>
+            <div class="paper-meta">MIT Press — 2ª edición</div>
+            <span class="paper-tag tag-discovery">Descubrimiento</span>
+            <p><strong>Contribución:</strong> Algoritmos PC y FCI para descubrir DAGs a partir de datos usando tests de independencia condicional.</p>
+            <p><strong>Idea clave:</strong> Si solo usamos independencias condicionales, no podemos determinar la dirección de todas las flechas → obtenemos un CPDAG (clase de equivalencia). FCI extiende a variables latentes.</p>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 A Linear Non-Gaussian Acyclic Model (LiNGAM) — Shimizu et al., 2006</h3>
+            <span class="paper-tag tag-discovery">Descubrimiento</span>
+            <p><strong>Contribución:</strong> Si las relaciones son lineales y el ruido es no-gaussiano, el DAG es completamente identificable (no solo la clase de equivalencia).</p>
+            <p><strong>Idea clave:</strong> Usa ICA (Independent Component Analysis) para descubrir el orden causal. Funciona mejor que PC cuando se cumplen sus asunciones.</p>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 DAGs with NO TEARS — Zheng et al., 2018/2020</h3>
+            <span class="paper-tag tag-discovery">Descubrimiento</span> <span class="paper-tag tag-dl">Deep Learning</span>
+            <p><strong>Contribución:</strong> Reformula el descubrimiento causal como optimización continua. La restricción de aciclicidad <span style="font-family:monospace; color:#a5d6ff;">tr(e^W) - d = 0</span> es diferenciable.</p>
+            <p><strong>Impacto:</strong> Abrió la puerta a métodos basados en gradientes (deep learning) para descubrir DAGs. Antes, los métodos eran combinatorios.</p>
+        </div>
+
+        <h2>4. Estimación de Efectos Causales con ML</h2>
+
+        <div class="paper-card">
+            <h3>📄 Double/Debiased Machine Learning — Chernozhukov et al., 2018</h3>
+            <span class="paper-tag tag-estimation">Estimación</span>
+            <p><strong>Contribución:</strong> Framework para estimar efectos causales usando cualquier modelo ML (forest, neural net, etc.) como nuisance model, con garantías de √n-consistencia.</p>
+            <p><strong>Idea clave:</strong> Cross-fitting (sample splitting) + Neyman orthogonality eliminan el sesgo de regularización del ML.</p>
+            <p><strong>Implementación:</strong> EconML (Microsoft), DoubleML (Python/R).</p>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 Causal Forest — Wager & Athey, 2018</h3>
+            <span class="paper-tag tag-estimation">Estimación</span>
+            <p><strong>Contribución:</strong> Random Forest adaptado para estimar CATE (efecto heterogéneo). Cada árbol se entrena maximizando la diferencia de tratamiento en las hojas.</p>
+            <p><strong>Por qué importa:</strong> Permite descubrir quién se beneficia más del tratamiento. Con intervalos de confianza válidos.</p>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 CEVAE — Louizos et al., 2017</h3>
+            <span class="paper-tag tag-estimation">Estimación</span> <span class="paper-tag tag-dl">Deep Learning</span>
+            <p><strong>Contribución:</strong> VAE que modela confusores latentes. El espacio latente Z actúa como proxy de confusores no observados.</p>
+            <p><strong>Limitación:</strong> Asume que los features observados son suficientes para recuperar Z (proxy variable assumption).</p>
+        </div>
+
+        <h2>5. Robustez y Distribución (OOD)</h2>
+
+        <div class="paper-card">
+            <h3>📄 Invariant Risk Minimization (IRM) — Arjovsky et al., 2019</h3>
+            <span class="paper-tag tag-dl">Deep Learning</span>
+            <p><strong>Contribución:</strong> Aprende representaciones donde el predictor óptimo es el mismo en todos los entornos → captura relaciones causales (invariantes) vs. espurias (cambiantes).</p>
+            <p><strong>Debate:</strong> Resultados mixtos en práctica. V-REx, IB-IRM, y EQRM son variantes que intentan mejorar.</p>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 Toward Causal Representation Learning — Schölkopf, 2021</h3>
+            <span class="paper-tag tag-dl">Deep Learning</span> <span class="paper-tag tag-foundational">Fundacional</span>
+            <p><strong>Contribución:</strong> Manifiesto que conecta causalidad con representación. Argumenta que la robustez, transferencia, y generalización del ML dependen de aprender representaciones que reflejen la estructura causal del mundo.</p>
+            <p><strong>Conceptos clave:</strong> Independent Causal Mechanisms (ICM), sparse mechanism shift, causal factorization.</p>
+        </div>
+
+        <h2>6. Equidad (Fairness) Causal</h2>
+
+        <div class="paper-card">
+            <h3>📄 Counterfactual Fairness — Kusner et al., 2017</h3>
+            <span class="paper-tag tag-fairness">Fairness</span>
+            <p><strong>Contribución:</strong> Define equidad como: "La decisión para un individuo sería la misma en un mundo contrafactual donde su atributo protegido (raza, género) fuera diferente."</p>
+            <p><strong>Ventaja sobre fairness estadística:</strong> No requiere trade-offs arbitrarios entre false positive parity, equal opportunity, etc. Se basa en la estructura causal.</p>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 Causal Fairness Analysis — Plecko & Bareinboim, 2022</h3>
+            <span class="paper-tag tag-fairness">Fairness</span>
+            <p><strong>Contribución:</strong> Framework completo para descomponer la disparidad total en: efecto directo (discriminación directa), efecto indirecto (vía mediadores), y efecto espurio (confusores).</p>
+        </div>
+
+        <h2>7. LLMs y Causalidad (2023–2024)</h2>
+
+        <div class="paper-card">
+            <h3>📄 Causal Reasoning and Large Language Models — Kiciman et al., 2023</h3>
+            <span class="paper-tag tag-dl">Deep Learning</span>
+            <p><strong>Pregunta:</strong> ¿Pueden los LLMs (GPT-4, etc.) razonar causalmente?</p>
+            <p><strong>Hallazgos:</strong></p>
+            <ul>
+                <li>Los LLMs pueden identificar correctamente la dirección causal en muchos benchmarks</li>
+                <li>Funcionan bien para conocimiento causal <em>del sentido común</em></li>
+                <li>Fallan en razonamiento causal formal (do-cálculo, d-separación compleja)</li>
+                <li>Pueden ser útiles como "prior causal" para proponer DAGs iniciales</li>
+            </ul>
+        </div>
+
+        <div class="paper-card">
+            <h3>📄 CausalBench — Chevalley et al., 2023</h3>
+            <span class="paper-tag tag-discovery">Descubrimiento</span>
+            <p><strong>Contribución:</strong> Benchmark para evaluar descubrimiento causal en datos biológicos reales (perturbación genética). Los métodos basados en DL no superan claramente a los clásicos (PC, GES) en todos los escenarios.</p>
+        </div>
+
+        <h2>8. Libros Recomendados por Nivel</h2>
+        <table>
+            <tr><th>Nivel</th><th>Libro</th><th>Autor</th><th>Enfoque</th></tr>
+            <tr><td style="color:#50fa7b;">Principiante</td><td>The Book of Why</td><td>Pearl & Mackenzie</td><td>Divulgación, sin fórmulas</td></tr>
+            <tr><td style="color:#50fa7b;">Principiante</td><td>Causal Inference: The Mixtape</td><td>Cunningham</td><td>Econometría aplicada, con código</td></tr>
+            <tr><td style="color:#f1fa8c;">Intermedio</td><td>Causal Inference in Statistics: A Primer</td><td>Pearl, Glymour, Jewell</td><td>DAGs + fórmulas, con ejercicios</td></tr>
+            <tr><td style="color:#f1fa8c;">Intermedio</td><td>The Effect</td><td>Huntington-Klein</td><td>Práctica con R/Python, enfoque moderno</td></tr>
+            <tr><td style="color:#ff7b72;">Avanzado</td><td>Causality</td><td>Pearl</td><td>Referencia formal completa</td></tr>
+            <tr><td style="color:#ff7b72;">Avanzado</td><td>Elements of Causal Inference</td><td>Peters, Janzing, Schölkopf</td><td>ML + causalidad, descubrimiento</td></tr>
+            <tr><td style="color:#ff7b72;">Avanzado</td><td>What If</td><td>Hernán & Robins</td><td>Epidemiología causal, gratis online</td></tr>
+        </table>
+
+        <h2>9. Recursos y Herramientas</h2>
+        <table>
+            <tr><th>Recurso</th><th>Tipo</th><th>URL</th></tr>
+            <tr><td>DoWhy</td><td>Librería Python</td><td>github.com/py-why/dowhy</td></tr>
+            <tr><td>EconML</td><td>Librería Python</td><td>github.com/py-why/EconML</td></tr>
+            <tr><td>causal-learn</td><td>Librería Python</td><td>github.com/py-why/causal-learn</td></tr>
+            <tr><td>CausalNex</td><td>Librería Python</td><td>github.com/quantumblacklabs/causalnex</td></tr>
+            <tr><td>pgmpy</td><td>Librería Python</td><td>pgmpy.org</td></tr>
+            <tr><td>DAGitty</td><td>Web tool para DAGs</td><td>dagitty.net</td></tr>
+            <tr><td>Brady Neal Course</td><td>Curso online gratuito</td><td>YouTube: "Introduction to Causal Inference"</td></tr>
+            <tr><td>PyWhy</td><td>Ecosistema Python</td><td>pywhy.org</td></tr>
+        </table>
+
+        <div class="nav-row">
+            <a href="07_deep_learning_causal.html" class="btn-nav btn-back">← Anterior</a>
+            <a href="09_practica_python_dags.html" class="btn-nav">Siguiente: Práctica Python DAGs →</a>
+        </div>
+    </div>
+</body>
+</html>

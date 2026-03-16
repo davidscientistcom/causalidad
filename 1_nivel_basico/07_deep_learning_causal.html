@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>07: Deep Learning Causal | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #50fa7b;
+            /* Verde lima para sección 7 */
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .breadcrumb {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 40px 0 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin: 30px 0 10px;
+            color: #c9d1d9;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        .highlight-box {
+            background: rgba(80, 250, 123, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.15em;
+        }
+
+        .concept-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+
+        .concept-card:hover {
+            border-color: var(--accent);
+        }
+
+        .concept-card h3 {
+            margin-top: 0;
+            color: #a5d6ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-nav-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 07
+        </div>
+
+        <h1>🌌 Deep Learning Causal</h1>
+        <p>A primera vista, la Causalidad Clásica (Pearl) y el Deep Learning actual (LeCun, Hinton, Bengio) parecen
+            incompatibles. La Causalidad asume que ya conocemos las variables semánticamente significativas (Ej:
+            "Temperatura", "Ventas") y el grafo de cómo interactúan. El Deep Learning asume que partimos de datos brutos
+            y desestructurados (píxeles, ondas de audio, tokens de texto).</p>
+
+        <p>El desafío del siglo XXI en IA es unificarlos: <strong>Causal Representation Learning</strong>.</p>
+
+        <h2>El Problema del Deep Learning Actual: OOD</h2>
+        <p>Las redes neuronales modernas son máquinas formidables de Interpolación (Memorización y Asociación I.I.D. -
+            Independent and Identically Distributed). Si el entorno de test es idéntico a la distribución temporal y
+            espacial de entrenamiento, su precisión es sobrehumana. Pero fallan dramáticamente bajo cambios de
+            distribución.</p>
+
+        <div class="highlight-box">
+            <strong>Out-of-Distribution (OOD) Failure:</strong> Entrenas a un coche autónomo en California donde todos
+            los Stop Signs ocurren de día. Si lo llevas a Noruega en invierno con nieve, chocará porque la red asoció
+            espuriamente "color del cielo + luz" a la orden "frenar", en lugar de encontrar la relación causal
+            invariante abstracta del hexágono rojo.
+        </div>
+
+        <h2>Hacia la Integración Causal en Redes Neuronales</h2>
+
+        <div class="concept-card">
+            <h3>1. Descubrimiento Causal (Causal Discovery)</h3>
+            <p>Los algoritmos tradicionales de descubrimiento causal (como PC o FCI) escalan fatal y asumen variables ya
+                estructuradas. Las nuevas arquitecturas de Deep Learning usando DAGs diferenciables (NOTEARS) permiten
+                optimizar funciones de pérdida contínuas para intentar que una red neuronal "aprenda" la topología
+                causal por sí misma directamente desde los datos observacionales masivos.</p>
+        </div>
+
+        <div class="concept-card">
+            <h3>2. Aprendizaje de Representaciones Causales</h3>
+            <p>Yoshua Bengio aboga fuertemente por modelos que asuman que el mundo está compuesto por <i>Mecanismos
+                    Causales Independientes (ICM)</i>. Si una parte del sistema físico cambia o es intervenida (Ej: Te
+                cambias de gafas de sol a la vista desnuda humana), todo el pipeline visual de entrada cambia, PERO el
+                99% de los mecanismos cognitivos internos de tu cerebro NO necesitan reentrenarse.</p>
+            <p>Buscamos modelos donde las representaciones latentes extraídas de los píxeles sean verdaderas entidades
+                causales que operan por "partes independientes", permitiendo una Generalización Genuina rápida bajo
+                nuevas condiciones.</p>
+        </div>
+
+        <div class="concept-card">
+            <h3>3. Reinforcement Learning e Intervenciones</h3>
+            <p>El terreno natural donde el Causal Deep Learning ya opera es el Reinforcement Learning interaccional.
+                Mover el brazo de un robot <i>es</i> por definición una operación <code>do()</code>. Sin embargo, gran
+                parte del RL actual es "ciego" causalmente y consume millones de iteraciones a fuerza bruta. Infundir
+                conocimiento e invarianzas causales al RL es clave para resolver los problemas de escalado de la
+                Robótica inteligente.</p>
+        </div>
+
+        <h2>Cierre del Bootcamp</h2>
+        <p>Como miembros de un grupo de investigación doctoral, dominar e investigar la Inferencia Causal nos permite
+            superar a todos los modelos de Machine Learning tradicionales cuando de decisiones críticas, extrapolación,
+            explicabilidad, políticas de salud y OOD se trate.</p>
+
+        <div class="btn-nav-group">
+            <a href="06_contrafactuales.html" class="btn-nav">← Anterior</a>
+            <a href="08_papers_estado_del_arte.html" class="btn-nav primary">Siguiente: Papers Estado del Arte →</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>09: Python - Datos Sintéticos y DAGs | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #f1fa8c;
+            /* Amarillo claro para sección 9 */
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+            --code-bg: #282a36;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .breadcrumb {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 40px 0 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin: 30px 0 10px;
+            color: #c9d1d9;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        .highlight-box {
+            background: rgba(241, 250, 140, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.15em;
+        }
+
+        /* Código Python con sintaxis aproximada a Dracula */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: #f8f8f2;
+        }
+
+        code .keyword {
+            color: #ff79c6;
+        }
+
+        code .function {
+            color: #50fa7b;
+        }
+
+        code .string {
+            color: #f1fa8c;
+        }
+
+        code .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        code .number {
+            color: #bd93f9;
+        }
+
+        .terminal-output {
+            background: #000;
+            padding: 15px;
+            border-left: 4px solid #50fa7b;
+            font-family: monospace;
+            color: #a5d6ff;
+            margin-bottom: 30px;
+        }
+
+        .btn-nav-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 50px;
+        }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 09
+        </div>
+
+        <h1>🐍 Hands-on Causalidad: Simulando Grafo y SCM en Python</h1>
+        <p>Toda la teoría de Pearl cobra sentido cuando **controlas el proceso de generación de datos** (Data Generating
+            Process, DGP). Vamos a usar `numpy` para crear un universo artificial donde somos Dios: dictamos exactamente
+            las ecuaciones estructurales causales.</p>
+
+        <div class="highlight-box">
+            <strong>Objetivo del Laboratorio:</strong> Queremos reproducir matemáticamente el peligro de un
+            <strong>Collider (Colisionador)</strong>, el error más común del Data Science. Veremos cómo dos variables
+            totalmente independientes desarrollan una "correlación espuria" en Pandas simplemente porque filtramos
+            (condicionamos) el Dataset por la consecuencia común.
+        </div>
+
+        <h2>1. Definiendo el Modelo Estructural (SCM) usando NumPy</h2>
+        <p>Recordemos el ejemplo clásico: <code>Talento (X) → Hollywood (Z) ← Belleza (Y)</code>.</p>
+        <p>En el mundo real general, el Talento (X) y la Belleza (Y) son exógenos (nacen del azar genético) y son
+            <strong>completamente independientes</strong>. NUNCA correlacionan. Sin embargo, convertirse en una estrella
+            de Hollywood (Z) es una consecuencia causativa de <i>ambas</i> cosas. Quien tiene las dos, triunfa.</p>
+
+        <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> statsmodels.api <span class="keyword">as</span> sm
+
+<span class="comment"># 1. Fijar semilla para reproducibilidad divina</span>
+np.random.<span class="function">seed</span>(<span class="number">42</span>)
+n_samples = <span class="number">100000</span>
+
+<span class="comment"># 2. Generar el Ruido Exógeno (U)</span>
+<span class="comment"># Asumimos que Talento (X) y Belleza (Y) se distribuyen normalmente a nivel global</span>
+talento = np.random.<span class="function">normal</span>(<span class="number">0</span>, <span class="number">1</span>, size=n_samples)
+belleza = np.random.<span class="function">normal</span>(<span class="number">0</span>, <span class="number">1</span>, size=n_samples)
+
+<span class="comment"># 3. Ecuación Estructural Causal para Hollywood (Z)</span>
+<span class="comment"># Si la suma de ambas características excede un umbral (ruidoso), eres estrella actor</span>
+factor_xito = <span class="number">2.0</span> * talento + <span class="number">1.5</span> * belleza + np.random.<span class="function">normal</span>(<span class="number">0</span>, <span class="number">0.5</span>, size=n_samples)
+
+<span class="comment"># Z será 1 si triunfaste en Hollywood, 0 si no.</span>
+hollywood = (factor_xito > <span class="number">3.0</span>).<span class="function">astype</span>(int)
+
+<span class="comment"># Montamos nuestro Dataset</span>
+df = pd.<span class="function">DataFrame</span>({<span class="string">'Talento_X'</span>: talento, <span class="string">'Belleza_Y'</span>: belleza, <span class="string">'Actor_Z'</span>: hollywood})
+</code></pre>
+
+        <h2>2. Demostrando la Independencia Global (Peldaño 1)</h2>
+        <p>El Data Scientist "A" descarga el dataset global (100.000 personas de la calle). Chequea si existe alguna
+            relación lineal o correlativa entre el Talento y la Belleza usando una regresión OLS.</p>
+
+        <pre><code><span class="comment"># Regresión global de Belleza predicha por Talento</span>
+X_global = sm.<span class="function">add_constant</span>(df[<span class="string">'Talento_X'</span>])
+model_global = sm.<span class="function">OLS</span>(df[<span class="string">'Belleza_Y'</span>], X_global).<span class="function">fit</span>()
+<span class="keyword">print</span>(<span class="string">"Coeficiente del Talento a nivel global:"</span>, model_global.params[<span class="string">'Talento_X'</span>])
+</code></pre>
+
+        <div class="terminal-output">
+            Coeficiente del Talento a nivel global: 0.0019 (p-value: 0.542 No Significativo)<br>
+            <strong>Correlación: 0.00</strong> → Es decir, ¡total independencia! (Correcto causalmente)
+        </div>
+
+        <h2>3. El Error Causal: Condicionar por el Collider Z</h2>
+        <p>El Data Scientist "B" es contratado por unos estudios en Los Ángeles. Solo tiene datos de la industria del
+            cine. Es decir, su `DataFrame` está filtrado implícitamente:
+            <code>df_hollywood = df[df['Actor_Z'] == 1]</code>. ¡Está <strong>condicionando por el Collider</strong>!
+        </p>
+
+        <pre><code><span class="comment"># Creamos el Dataset condicionado a Hollywood</span>
+df_hollywood = df[df[<span class="string">'Actor_Z'</span>] == <span class="number">1</span>]
+
+<span class="comment"># Regresión de Belleza predicha por Talento EN HOLLYWOOD</span>
+X_holly = sm.<span class="function">add_constant</span>(df_hollywood[<span class="string">'Talento_X'</span>])
+model_holly = sm.<span class="function">OLS</span>(df_hollywood[<span class="string">'Belleza_Y'</span>], X_holly).<span class="function">fit</span>()
+<span class="keyword">print</span>(<span class="string">"Coeficiente del Talento en Hollywood:"</span>, model_holly.params[<span class="string">'Talento_X'</span>])
+</code></pre>
+
+        <div class="terminal-output">
+            Coeficiente del Talento en Hollywood: -0.68 (p-value: 0.0000 Extremadamente Significativo)<br>
+            <strong>Correlación: Furiosamente Negativa</strong>. La IA concluye: "Mientras más talento tiene una persona
+            de la base de datos, ¡más *fea* es!"
+        </div>
+
+        <p><strong>El Descubrimiento de Pearl Empírico:</strong> La estadística cruda no se ha equivocado
+            aritméticamente; en <i>ese</i> dataset de actores, el talento y la belleza muestran correlación negativa. El
+            que ha fallado es el Científico de Datos por no entender el DAG. Al filtrar por `Actor_Z` (condicionar por
+            el colisionador), abrió forzosamente un flujo de información (correlación) entre dos variables que eran
+            originalmente independientes.</p>
+
+        <div class="highlight-box">
+            Esto se conoce como <strong>Sesgo de Selección o Berkson's Paradox</strong>. Lo único que lo soluciona es
+            entender a nivel de grafo que Z es un colisionador entre X e Y, y por lo tanto, según las leyes de la
+            d-separación de Pearl, <strong>nunca se debe intentar introducir Z en el modelo probabilístico si se quiere
+                evaluar la relación pura entre X e Y.</strong>
+        </div>
+
+        <div class="btn-nav-group">
+            <a href="08_papers_estado_del_arte.html" class="btn-nav">← Anterior (Papers)</a>
+            <a href="10_practica_python_do_calculus.html" class="btn-nav primary">Siguiente: Backdoor Ajuste Práctico
+                →</a>
+        </div>
+    </div>
+</body>
+
+</html>

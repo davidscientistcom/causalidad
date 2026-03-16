@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>02: La Escalera de la Causación | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #79c0ff;
+            /* Azul para sección 2 */
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .breadcrumb {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 40px 0 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        .math {
+            font-family: 'Courier New', Courier, monospace;
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #a5d6ff;
+        }
+
+        .stair-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 40px 0;
+            padding-left: 20px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .stair {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .stair h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stair-lvl {
+            background: #21262d;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.6em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid var(--accent);
+        }
+
+        .stair p {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .stair .formula {
+            font-family: monospace;
+            font-size: 1.25em;
+            color: #ff7b72;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .btn-nav-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 02
+        </div>
+
+        <h1>🪜 La Escalera de la Causación</h1>
+        <p>En su libro fundacional "The Book of Why", Judea Pearl conceptualiza el razonamiento en tres niveles
+            jerárquicos. Es matemáticamente imposible responder preguntas de un nivel superior utilizando únicamente
+            conocimientos (datos + axiomas) de un nivel inferior.</p>
+
+        <p>Esta es la limitación teórica que impide que el Data Science tradicional pueda responder preguntas causales,
+            sin importar cuán masivos sean los datos (Big Data).</p>
+
+        <div class="stair-container">
+            <!-- PELDAÑO 1 -->
+            <div class="stair">
+                <h3>Peldaño 1: Ver (Asociación) <span class="stair-lvl">Nivel L1</span></h3>
+                <p><strong>Actividad:</strong> Observar, detectar patrones.</p>
+                <p><strong>Pregunta típica:</strong> ¿Qué ocurre si "X" es observado? ¿Cómo cambian mis creencias sobre
+                    "Y" si veo "X"?</p>
+                <p><strong>Ejemplo:</strong> ¿Qué probabilidad hay de que un dolor de cabeza (Y) remita si observamos
+                    que el paciente tomó aspirina (X)?</p>
+                <div class="formula">P(y | x)</div>
+                <p><strong>Herramientas:</strong> Estadística clásica, Regresión, Deep Learning estándar (Redes
+                    Neuronales, Transformers, LLMs autoregresivos). Son excelentes mapeando asociaciones, pero no
+                    "entienden" el mundo.</p>
+            </div>
+
+            <!-- PELDAÑO 2 -->
+            <div class="stair">
+                <h3>Peldaño 2: Hacer (Intervención) <span class="stair-lvl">Nivel L2</span></h3>
+                <p><strong>Actividad:</strong> Intervenir, actuar deliberadamente modificando el sistema.</p>
+                <p><strong>Pregunta típica:</strong> ¿Qué ocurrirá si hago "X"? ¿Cómo cambia "Y"?</p>
+                <p><strong>Ejemplo:</strong> Si *obligo* a un paciente aleatorio a tomar aspirina, ¿cuál es la
+                    probabilidad de que su dolor de cabeza remita?</p>
+                <div class="formula">P(y | do(x))</div>
+                <p><strong>El matiz crítico:</strong> Observar que alguien compra un rolex (Peldaño 1) se asocia
+                    fuertemente con ser millonario. Pero *hacer* (Peldaño 2) que alguien compre un rolex regalándole uno
+                    o rebajando agresivamente su precio, no lo hará millonario. <span class="math">P(Millonario | Rolex)
+                        ≠ P(Millonario | do(Rolex))</span>.</p>
+                <p><strong>Pruebas Físicas:</strong> Los RCTs (Ensayos de Control Aleatorizado) o A/B Testing, permiten
+                    subir a este peldaño forzando la intervención física.</p>
+            </div>
+
+            <!-- PELDAÑO 3 -->
+            <div class="stair">
+                <h3>Peldaño 3: Imaginar (Contrafactuales) <span class="stair-lvl">Nivel L3</span></h3>
+                <p><strong>Actividad:</strong> Imaginar mundos alternativos. Razonamiento retrospectivo y entendimiento
+                    pleno.</p>
+                <p><strong>Pregunta típica:</strong> ¿Qué hubiera pasado si no hubiera hecho "X"?</p>
+                <p><strong>Ejemplo:</strong> El paciente tomó aspirina y su dolor remitió. ¿Habría remitido el dolor si
+                    *no* la hubiera tomado?</p>
+                <div class="formula">P(y_{x'} | x, y)</div>
+                <p><strong>Explicación de la fórmula:</strong> Probabilidad de Y en el mundo imaginario donde
+                    intervenimos para que X sea x' <span class="math">(y_{x'})</span>, dado que en el mundo *real*
+                    observamos que X ocurrió y resulto en Y <span class="math">(x, y)</span>. Para responder esto
+                    necesitamos un Modelo Causal Estructural (SCM) completo.</p>
+                <p>Este es el nivel de la cognición humana madura. Entendemos por qué suceden las cosas y podemos
+                    deducir responsabilidades y arrepentimientos ("Si hubiera salido antes de casa, no habría tenido el
+                    accidente").</p>
+            </div>
+        </div>
+
+        <h2>Conclusión del Módulo</h2>
+        <p>Un modelo de Machine Learning que vive exclusivamente en el Peldaño 1 jamás podrá responder espontáneamente
+            preguntas sobre el Peldaño 2. Necesita información causal externa (un modelo matemático, un DAG) provista
+            por un experto, o ejecutar acciones explícitas que perturben el sistema por fuerza bruta (como ocurre
+            inherentemente en algunas ramas puras de un Reinforcement Learning).</p>
+
+        <div class="btn-nav-group">
+            <a href="01_introduccion.html" class="btn-nav">← Anterior</a>
+            <a href="03_paradoja_simpson.html" class="btn-nav primary">Siguiente: La Paradoja de Simpson →</a>
+        </div>
+    </div>
+</body>
+
+</html>

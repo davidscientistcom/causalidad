@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Causalidad — Bootcamp Nivel Doctorado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Guía completa de Inferencia Causal: desde The Book of Why hasta Deep Learning Causal. Pensado para investigadores y estudiantes de doctorado.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.6em;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #39d0d8, #bc8cff, #ff79c6, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.9em;
+            margin-bottom: 48px;
+        }
+
+        .path-label {
+            text-align: center;
+            font-size: 0.75em;
+            color: #bc8cff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .group-label {
+            text-align: center;
+            font-size: 0.7em;
+            color: #484f58;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 32px 0 12px;
+            font-weight: 700;
+        }
+
+        .sections-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: #161b22;
+            border-radius: 14px;
+            border: 1px solid #30363d;
+            padding: 22px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.22s;
+            cursor: pointer;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+        }
+
+        .card-num {
+            font-size: 0.65em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-num::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--accent);
+            opacity: .3;
+        }
+
+        .card h2 {
+            font-size: 1.05em;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .card p {
+            font-size: 0.8em;
+            color: #8b949e;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag {
+            font-size: 0.68em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            color: #8b949e;
+            background: #21262d;
+        }
+
+        .card-arrow {
+            position: absolute;
+            bottom: 18px;
+            right: 18px;
+            font-size: 1.3em;
+            color: var(--accent);
+            opacity: .5;
+            transition: opacity .2s, transform .2s;
+        }
+
+        .card:hover .card-arrow {
+            opacity: 1;
+            transform: translateX(4px);
+        }
+
+        /* Difficulty dots */
+        .difficulty {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 10px;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #21262d;
+            border: 1px solid #30363d;
+        }
+
+        .dot.on {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Color palette */
+        .c1 {
+            --accent: #39d0d8;
+        }
+
+        /* cyan */
+        .c2 {
+            --accent: #79c0ff;
+        }
+
+        /* azul */
+        .c3 {
+            --accent: #bc8cff;
+        }
+
+        /* morado */
+        .c4 {
+            --accent: #ff79c6;
+        }
+
+        /* rosa */
+        .c5 {
+            --accent: #ff6b35;
+        }
+
+        /* naranja */
+        .c6 {
+            --accent: #e3b341;
+        }
+
+        /* amarillo */
+        .c7 {
+            --accent: #50fa7b;
+        }
+
+        /* verde lima */
+
+        /* Banner hero */
+        .hero-banner {
+            max-width: 1200px;
+            margin: 0 auto 32px;
+            background: linear-gradient(135deg, #1a0d2522, #0d1117);
+            border: 1px solid #bc8cff22;
+            border-radius: 16px;
+            padding: 28px 32px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat .num {
+            font-size: 2em;
+            font-weight: 900;
+            color: #bc8cff;
+        }
+
+        .hero-stat .label {
+            font-size: 0.72em;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .banner {
+            max-width: 1200px;
+            margin: 0 auto 28px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 14px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+        }
+
+        .banner-icon {
+            font-size: 2em;
+        }
+
+        .banner h3 {
+            font-size: 0.88em;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #bc8cff;
+        }
+
+        .banner p {
+            font-size: 0.78em;
+            color: #8b949e;
+        }
+
+        code {
+            font-family: monospace;
+            background: #21262d;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: .9em;
+            color: #a5d6ff;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 48px;
+            color: #484f58;
+            font-size: .78em;
+        }
+
+        @media (max-width: 640px) {
+            .hero-banner {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🤔 Bootcamp Causalidad</h1>
+    <p class="subtitle">Rompiendo el paradigma de la mera correlación · Nivel Doctorado · 2025-26</p>
+
+    <!-- Stats banner -->
+    <div class="hero-banner">
+        <div class="hero-stat">
+            <div class="num">Pearl</div>
+            <div class="label">El Cálculo do()</div>
+        </div>
+        <div class="hero-stat">
+            <div class="num">DAGs</div>
+            <div class="label">d-separación visual</div>
+        </div>
+        <div class="hero-stat">
+            <div class="num">Deep</div>
+            <div class="label">Causal Representation</div>
+        </div>
+    </div>
+
+    <!-- Bibliografía prioritaria -->
+    <div class="banner">
+        <div class="banner-icon">📚</div>
+        <div>
+            <h3>Lectura fundamental: The Book of Why</h3>
+            <p>
+                Este bootcamp sigue la línea metodológica de <code>Judea Pearl</code>.
+                Estudiaremos en profundidad la <strong>Escalera de la Causación</strong> y transitaremos
+                desde el razonamiento clásico estadístico y de Machine Learning tradicional, hasta los descubrimientos
+                recientes en
+                inferencia de contrafactuales.
+            </p>
+        </div>
+    </div>
+
+    <div class="path-label">🛤️ Roadmap del Curso — de cero a IA Causal</div>
+
+    <!-- BLOQUE 1 -->
+    <div class="group-label">🧠 Nivel Base — El Límite de la Correlación</div>
+    <div class="sections-grid">
+        <a href="01_introduccion.html" class="card c1">
+            <div class="card-num">Sección 01</div>
+            <h2>🛑 Más allá de las Correlaciones</h2>
+            <p>Limitaciones de la estadística tradicional y el Machine Learning puramente correlacional. Introducción
+                intuitiva al problema de inferencia causal.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="tags"><span class="tag">correlación</span><span class="tag">inferencia</span><span
+                    class="tag">límite ml</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+        <a href="02_escalera_causacion.html" class="card c2">
+            <div class="card-num">Sección 02</div>
+            <h2>🪜 La Escalera de la Causación</h2>
+            <p>El corazón de The Book of Why: 1. Ver (Asociación, P(y|x)). 2. Hacer (Intervención, P(y|do(x))). 3.
+                Imaginar (Contrafactuales).</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="tags"><span class="tag">asociación</span><span class="tag">intervención</span><span
+                    class="tag">contrafactuales</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+        <a href="03_paradoja_simpson.html" class="card c3">
+            <div class="card-num">Sección 03</div>
+            <h2>🔄 La Paradoja de Simpson</h2>
+            <p>Explicación matemática y tabulación de la Paradoja de Simpson. Por qué solo la causalidad (y no la
+                estadística clásica) puede resolverla.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="tags"><span class="tag">simpson paradox</span><span class="tag">sesgos</span><span
+                    class="tag">confounding</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+    </div>
+
+    <!-- BLOQUE 2 -->
+    <div class="group-label">📐 Grafos y Matemáticas — El Álgebra de la Realidad</div>
+    <div class="sections-grid">
+        <a href="04_dags.html" class="card c4">
+            <div class="card-num">Sección 04</div>
+            <h2>🕸️ Grafos Acíclicos Dirigidos (DAGs)</h2>
+            <p>Cadenas, bifurcaciones (confounders) y colisionadores (colliders). Explicación sistemática del concepto
+                de d-separación.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="tags"><span class="tag">dags</span><span class="tag">colliders</span><span
+                    class="tag">d-separation</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+        <a href="05_do_calculus.html" class="card c5">
+            <div class="card-num">Sección 05</div>
+            <h2>🧮 El Cálculo do()</h2>
+            <p>Axiomática de las intervenciones. Criterios de la puerta trasera (Backdoor) y puerta delantera
+                (Frontdoor) con ejemplos formales.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+            </div>
+            <div class="tags"><span class="tag">do-calculus</span><span class="tag">backdoor</span><span
+                    class="tag">frontdoor</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+        <a href="06_contrafactuales.html" class="card c6">
+            <div class="card-num">Sección 06</div>
+            <h2>🔮 Contrafactuales y SCMs</h2>
+            <p>Modelos de Ecuaciones Estructurales. Resolviendo "Qué hubiera pasado si...". El proceso abductivo, la
+                acción y predicción.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+            </div>
+            <div class="tags"><span class="tag">scm</span><span class="tag">abducción</span><span
+                    class="tag">hipótesis</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+    </div>
+
+    <!-- BLOQUE 3 -->
+    <div class="group-label">🤖 IA Moderna — El Presente y Futuro</div>
+    <div class="sections-grid">
+        <a href="07_deep_learning_causal.html" class="card c7">
+            <div class="card-num">Sección 07</div>
+            <h2>🌌 Deep Learning Causal</h2>
+            <p>Donde la causalidad se topa con el ML. Causal Representation Learning y Out-of-Distribution
+                Generalization para IA robusta.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+            </div>
+            <div class="tags"><span class="tag">deep learning</span><span class="tag">ood</span><span class="tag">causal
+                    representation</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+        <a href="08_papers_estado_del_arte.html" class="card" style="border-color: #ffb86c; --accent: #ffb86c;">
+            <div class="card-num">Sección 08</div>
+            <h2>📄 Estado del Arte: Papers</h2>
+            <p>Revisión profunda de los papers fundamentales (Bengio, Schölkopf) que lideran la convergencia entre
+                Causalidad y Redes Neuronales.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+            </div>
+            <div class="tags"><span class="tag">papers</span><span class="tag">SOTA</span><span
+                    class="tag">investigación</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+    </div>
+
+    <!-- BLOQUE 4 -->
+    <div class="group-label">💻 Laboratorios Prácticos — Python y Datos Sintéticos</div>
+    <div class="sections-grid">
+        <a href="09_practica_python_dags.html" class="card" style="border-color: #f1fa8c; --accent: #f1fa8c;">
+            <div class="card-num">Sección 09</div>
+            <h2>🐍 Python: Datos Sintéticos y DAGs</h2>
+            <p>Demo interactiva en código Python puro creando SCMs con NumPy y verificando el (des)bloqueo de flujos en
+                colisionadores y bifurcaciones.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="tags"><span class="tag">python</span><span class="tag">numpy</span><span class="tag">synthetic
+                    data</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+        <a href="10_practica_python_do_calculus.html" class="card" style="border-color: #8be9fd; --accent: #8be9fd;">
+            <div class="card-num">Sección 10</div>
+            <h2>🔧 Python: ML Sesgado vs DoWhy</h2>
+            <p>Laboratorio donde un modelo predictivo estándar falla. Solución empírica implementando Backdoor
+                Adjustment en código con Scikit-Learn.</p>
+            <div class="difficulty">
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot on"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="tags"><span class="tag">scikit-learn</span><span class="tag">DoWhy</span><span
+                    class="tag">backdoor</span></div>
+            <span class="card-arrow">→</span>
+        </a>
+    </div>
+
+    <div class="footer">Bootcamp de Causalidad Nivel Doctorado · Judea Pearl Foundation Principles · Grupo de
+        Investigación 2025-26</div>
+</body>
+
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>03: La Paradoja de Simpson | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #bc8cff;
+            /* Morado para sección 3 */
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .breadcrumb {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 40px 0 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin: 30px 0 10px;
+            color: #c9d1d9;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        .highlight-box {
+            background: rgba(188, 140, 255, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.15em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1em;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #21262d;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .bold-row {
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .btn-nav-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 03
+        </div>
+
+        <h1>🔄 La Paradoja de Simpson</h1>
+        <p>Uno de los rompecabezas más fascinantes de la estadística es la Paradoja de Simpson. Ocurre cuando una
+            tendencia aparece en diferentes grupos de datos, pero desaparece o se invierte cuando estos grupos se
+            combinan.</p>
+
+        <p>Para la estadística clásica, esto es una "paradoja" inescrutable. <strong>Para la Inferencia Causal, no hay
+                paradoja alguna</strong>; es simplemente el resultado de ignorar el modelo causal subyacente
+            (específicamente, los <i>confounders</i>).</p>
+
+        <h2>El Falso Tratamiento Milagroso</h2>
+        <p>Imagina que eres el investigador principal de un nuevo fármaco para una enfermedad grave. Recopilas los
+            siguientes resultados de recuperación de pacientes clínicos:</p>
+
+        <h3>Población Global</h3>
+        <table>
+            <tr>
+                <th>Grupo</th>
+                <th>Recuperados / Total</th>
+                <th>Tasa de Recuperación</th>
+            </tr>
+            <tr>
+                <td>Tomaron el Fármaco (Tratamiento)</td>
+                <td>40 / 80</td>
+                <td style="color: #ff7b72; font-weight: bold;">50%</td>
+            </tr>
+            <tr>
+                <td>No tomaron Fármaco (Control)</td>
+                <td>32 / 80</td>
+                <td style="color: #ff7b72; font-weight: bold;">40%</td>
+            </tr>
+        </table>
+        <p><strong>Conclusión Estadística Nivel 1:</strong> El fármaco parece funcionar. 50% vs 40%. Debemos aprobarlo,
+            ¿verdad?</p>
+
+        <h3>Los Datos Estratificados por Género</h3>
+        <p>Decides desglosar los mismos datos exactos separándolos por hombres y mujeres. Observa lo que sucede:</p>
+
+        <table>
+            <tr>
+                <th>Género</th>
+                <th>Grupo</th>
+                <th>Recuperados / Total</th>
+                <th>Tasa de Recuperación</th>
+            </tr>
+            <tr>
+                <td rowspan="2">Hombres</td>
+                <td>Tratamiento</td>
+                <td>36 / 60</td>
+                <td style="color: #50fa7b; font-weight: bold;">60%</td>
+            </tr>
+            <tr>
+                <td>Control</td>
+                <td>14 / 20</td>
+                <td style="color: #50fa7b; font-weight: bold;">70%</td>
+            </tr>
+            <tr class="bold-row">
+                <td colspan="4" style="text-align: left; padding-left: 30px;"><i>→ Fármaco es dañino para los Hombres
+                        (60% vs 70%)</i></td>
+            </tr>
+            <tr>
+                <td rowspan="2">Mujeres</td>
+                <td>Tratamiento</td>
+                <td>4 / 20</td>
+                <td style="color: #50fa7b; font-weight: bold;">20%</td>
+            </tr>
+            <tr>
+                <td>Control</td>
+                <td>18 / 60</td>
+                <td style="color: #50fa7b; font-weight: bold;">30%</td>
+            </tr>
+            <tr class="bold-row">
+                <td colspan="4" style="text-align: left; padding-left: 30px;"><i>→ Fármaco es dañino para las Mujeres
+                        (20% vs 30%)</i></td>
+            </tr>
+        </table>
+
+        <div class="highlight-box">
+            <strong>La Paradoja:</strong> ¡El fármaco es MALO para los hombres, y MALO para las mujeres, pero parece
+            BUENO para la población general! ¿A quién le damos el fármaco? ¿Lo aprobamos o no?
+        </div>
+
+        <h2>La Resolución Causal</h2>
+        <p>La estadística sola no puede decirte a qué tabla hacerle caso. La matemática pura de la probabilidad
+            condicional es ambigua aquí.</p>
+        <p>Para resolver esto, <strong>necesitamos saber cómo se generaron los datos (la Causalidad)</strong>. El factor
+            de confusión clave (Confounder) es el "Género".</p>
+        <ul>
+            <li>Los Hombres tienen altas tasas naturales de recuperación (70% base).</li>
+            <li>Las Mujeres tienen bajas tasas naturales de recuperación (30% base).</li>
+            <li>En este estudio observacional, los doctores tendieron a recetar el fármaco a los pacientes con mayor
+                esperanza de base (Hombres: 60 tratados vs 20 control).</li>
+        </ul>
+        <p>Por tanto, el grupo "Tratamiento" total (80 personas) está desproporcionadamente lleno de pacientes que, de
+            base, se iban a curar casi seguro por sí mismos. Esto infla artificialmente la cifra global al 50%.</p>
+
+        <p><strong>El Cálculo do():</strong> Nos dice categóricamente que <i>debemos condicionar</i> por todos los
+            factores que causen simultáneamente la asignación del tratamiento y el resultado. Como el Género afecta a
+            ambos, debemos mirar los datos estratificados. El fármaco es <strong>veneno</strong> y no debe aprobarse.
+        </p>
+
+        <div class="btn-nav-group">
+            <a href="02_escalera_causacion.html" class="btn-nav">← Anterior</a>
+            <a href="04_dags.html" class="btn-nav primary">Siguiente: Grafos Causales (DAGs) →</a>
+        </div>
+    </div>
+</body>
+
+</html>

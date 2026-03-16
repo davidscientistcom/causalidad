@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>01: Más allá de las Correlaciones | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #39d0d8;
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        .container { max-width: 920px; margin: 0 auto; padding-top: 30px; }
+
+        .breadcrumb { font-size: 0.85em; color: #8b949e; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        h1 { font-size: 2.5em; font-weight: 900; margin-bottom: 15px; color: var(--accent); }
+        h2 { font-size: 1.8em; margin: 50px 0 15px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.35em; margin: 30px 0 10px; color: #c9d1d9; }
+        h4 { font-size: 1.15em; margin: 20px 0 8px; color: #8b949e; }
+
+        p { margin-bottom: 18px; font-size: 1.08em; color: #c9d1d9; }
+
+        .highlight-box {
+            background: rgba(57, 208, 216, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-size: 1.1em;
+        }
+
+        .warning-box {
+            background: rgba(255, 123, 114, 0.08);
+            border-left: 4px solid #ff7b72;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+        }
+
+        ul, ol { margin-left: 22px; margin-bottom: 20px; font-size: 1.08em; color: #c9d1d9; }
+        li { margin-bottom: 10px; }
+
+        .math {
+            font-family: 'Courier New', Courier, monospace;
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #a5d6ff;
+        }
+
+        .math-block {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.25em;
+            margin: 20px 0;
+            color: #a5d6ff;
+        }
+
+        .example-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .example-card h3 {
+            margin-top: 0;
+            color: #ff7b72;
+            font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dag-box {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .dag-box svg { max-width: 100%; }
+
+        pre {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-size: 0.92em;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: #e6edf3;
+        }
+
+        .keyword { color: #ff79c6; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .function { color: #50fa7b; }
+        .number { color: #bd93f9; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: center;
+        }
+
+        th { background: #21262d; color: var(--accent); font-weight: 700; }
+        td { color: #c9d1d9; }
+
+        .vs-table { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 25px 0; }
+        .vs-col {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .vs-col h4 { margin-top: 0; }
+        .vs-col.good { border-color: #50fa7b; }
+        .vs-col.good h4 { color: #50fa7b; }
+        .vs-col.bad { border-color: #ff7b72; }
+        .vs-col.bad h4 { color: #ff7b72; }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 8px;
+            margin-top: 40px;
+            transition: transform 0.2s;
+        }
+
+        .btn-nav:hover { transform: translateY(-2px); }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 01
+        </div>
+
+        <h1>🛑 Más allá de las Correlaciones</h1>
+        <p>Durante más de un siglo, la estadística formal ha operado bajo un dogma paralizante: <i>"La correlación no
+                implica causalidad"</i>. Si bien esto es estrictamente cierto, la estadística no nos proporcionó ninguna
+            herramienta matemática formal para expresar qué <strong>sí</strong> es la causalidad. Este vacío ha limitado
+            enormemente a campos como la medicina, la economía, las políticas públicas y, por supuesto, el Machine Learning.</p>
+
+        <div class="highlight-box">
+            <strong>El Problema Fundamental:</strong> Las redes neuronales profundas actuales son, en esencia,
+            sofisticados ajustadores de curvas. Pueden encontrar correlaciones complejas en espacios de alta
+            dimensionalidad <span class="math">P(y|x)</span>, pero fracasan cuando se interviene en el sistema o cuando
+            la distribución de los datos cambia (out-of-distribution). La inferencia causal nos da las herramientas
+            matemáticas para ir más allá.
+        </div>
+
+        <!-- ═══════ SECCIÓN 1 ═══════ -->
+        <h2>1. El Paradigma de la Estadística Tradicional</h2>
+        <p>La probabilidad y la estadística clásica están diseñadas para responder preguntas sobre la
+            <strong>asociación</strong> entre variables. El lenguaje formal se basa en distribuciones conjuntas
+            <span class="math">P(X, Y)</span>, distribuciones marginales <span class="math">P(X)</span>, y
+            probabilidades condicionales:</p>
+
+        <div class="math-block">
+            P(Y | X) = P(X, Y) / P(X)
+        </div>
+
+        <p>¿Qué significa <span class="math">P(Ventas | Oferta)</span>? Significa: "Si <strong>observo</strong> que hay
+            una oferta, ¿cuál es la probabilidad de que las ventas sean altas?".</p>
+
+        <p>Pero un gestor no quiere <i>observar</i> una oferta. Quiere <strong>hacer</strong> una oferta. La estadística
+            clásica no distingue crear una oferta deliberadamente de simplemente ver que el precio estaba bajo porque el
+            producto caducaba. Ambos se colapsan en <span class="math">P(Y|X)</span>.</p>
+
+        <h3>1.1 ¿Por qué la estadística sola no basta?</h3>
+        <p>Consideremos tres escenarios donde la correlación engaña:</p>
+
+        <div class="example-card">
+            <h3>🍦 Ejemplo 1: Helados y Ahogamientos</h3>
+            <p>Los datos muestran una fuerte correlación positiva entre la venta de helados y el número de ahogamientos.
+               ¿Debería un gobierno prohibir la venta de helados para reducir ahogamientos?</p>
+            <p><strong>Realidad:</strong> Existe un <strong>confusor</strong> oculto: la temperatura. Cuando hace calor,
+               la gente compra más helados Y se baña más en piscinas/playas. La temperatura causa ambos eventos
+               independientemente.</p>
+
+            <div class="dag-box">
+                <svg width="380" height="160" viewBox="0 0 380 160">
+                    <defs>
+                        <marker id="arrow1" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#39d0d8" />
+                        </marker>
+                    </defs>
+                    <rect x="140" y="10" width="120" height="36" rx="8" fill="#21262d" stroke="#ff79c6" stroke-width="2"/>
+                    <text x="200" y="34" text-anchor="middle" fill="#ff79c6" font-size="14" font-weight="700">Temperatura</text>
+
+                    <rect x="10" y="110" width="120" height="36" rx="8" fill="#21262d" stroke="#39d0d8" stroke-width="2"/>
+                    <text x="70" y="134" text-anchor="middle" fill="#39d0d8" font-size="14" font-weight="700">Helados</text>
+
+                    <rect x="260" y="110" width="120" height="36" rx="8" fill="#21262d" stroke="#39d0d8" stroke-width="2"/>
+                    <text x="320" y="134" text-anchor="middle" fill="#39d0d8" font-size="14" font-weight="700">Ahogamientos</text>
+
+                    <line x1="170" y1="48" x2="90" y2="108" stroke="#39d0d8" stroke-width="2" marker-end="url(#arrow1)"/>
+                    <line x1="230" y1="48" x2="300" y2="108" stroke="#39d0d8" stroke-width="2" marker-end="url(#arrow1)"/>
+
+                    <line x1="130" y1="128" x2="260" y2="128" stroke="#ff7b72" stroke-width="1.5" stroke-dasharray="6,4"/>
+                    <text x="195" y="122" text-anchor="middle" fill="#ff7b72" font-size="10">correlación espuria</text>
+                </svg>
+            </div>
+            <p style="font-size:0.95em; color:#8b949e;">La línea punteada roja muestra la correlación espuria; las
+               flechas sólidas muestran la causalidad real. Temperatura es el <strong>confusor</strong>.</p>
+        </div>
+
+        <div class="example-card">
+            <h3>📊 Ejemplo 2: Zapatos y Dolor de Cabeza</h3>
+            <p>Los datos muestran que las personas que duermen con zapatos puestos tienen más probabilidad de despertarse
+               con dolor de cabeza. ¿Dormir con zapatos causa dolor de cabeza?</p>
+            <p><strong>Realidad:</strong> El confusor es el consumo de alcohol. Las personas que beben mucho a veces se
+               duermen vestidas (con zapatos) Y tienen resaca al día siguiente.</p>
+        </div>
+
+        <div class="example-card">
+            <h3>🏙️ Ejemplo 3: Bomberos y Daños</h3>
+            <p>Cuantos más bomberos se envían a un incendio, mayor es el daño del edificio. ¿Los bomberos causan daño?</p>
+            <p><strong>Realidad:</strong> La <strong>severidad del incendio</strong> es el confusor. Incendios más grandes
+               requieren más bomberos Y causan más daño. Si interviniéramos enviando bomberos aleatoriamente (do), veríamos
+               que más bomberos <i>reducen</i> el daño.</p>
+        </div>
+
+        <h3>1.2 La trampa de la correlación en números</h3>
+        <p>Veamos esto con datos concretos usando Python:</p>
+
+        <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+np.random.seed(<span class="number">42</span>)
+n = <span class="number">1000</span>
+
+<span class="comment"># La temperatura es la causa real (confusor)</span>
+temperatura = np.random.normal(<span class="number">25</span>, <span class="number">8</span>, n)
+
+<span class="comment"># Helados vendidos dependen de la temperatura</span>
+helados = <span class="number">50</span> + <span class="number">3</span> * temperatura + np.random.normal(<span class="number">0</span>, <span class="number">10</span>, n)
+
+<span class="comment"># Ahogamientos dependen de la temperatura (NO de los helados)</span>
+ahogamientos = <span class="number">2</span> + <span class="number">0.15</span> * temperatura + np.random.normal(<span class="number">0</span>, <span class="number">2</span>, n)
+
+df = pd.DataFrame({<span class="string">'temperatura'</span>: temperatura,
+                    <span class="string">'helados'</span>: helados,
+                    <span class="string">'ahogamientos'</span>: ahogamientos})
+
+<span class="comment"># Correlación ENGAÑOSA helados ↔ ahogamientos</span>
+<span class="function">print</span>(<span class="string">"Correlación helados-ahogamientos:"</span>,
+      df[<span class="string">'helados'</span>].corr(df[<span class="string">'ahogamientos'</span>]).<span class="function">round</span>(<span class="number">3</span>))
+<span class="comment"># Resultado: ≈ 0.67 → ¡fuerte correlación positiva!</span>
+
+<span class="comment"># Pero si controlamos por temperatura (regresión parcial):</span>
+<span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression
+
+<span class="comment"># Residuales de helados después de quitar efecto de temperatura</span>
+res_helados = helados - LinearRegression().fit(
+    temperatura.reshape(-<span class="number">1</span>,<span class="number">1</span>), helados).predict(temperatura.reshape(-<span class="number">1</span>,<span class="number">1</span>))
+
+<span class="comment"># Residuales de ahogamientos después de quitar efecto de temperatura</span>
+res_ahoga = ahogamientos - LinearRegression().fit(
+    temperatura.reshape(-<span class="number">1</span>,<span class="number">1</span>), ahogamientos).predict(temperatura.reshape(-<span class="number">1</span>,<span class="number">1</span>))
+
+<span class="function">print</span>(<span class="string">"Correlación PARCIAL (controlando temperatura):"</span>,
+      np.corrcoef(res_helados, res_ahoga)[<span class="number">0</span>,<span class="number">1</span>].<span class="function">round</span>(<span class="number">3</span>))
+<span class="comment"># Resultado: ≈ 0.01 → ¡Desaparece! No hay efecto causal</span></code></pre>
+
+        <div class="highlight-box">
+            <strong>Lección clave:</strong> La correlación de 0.67 era completamente espuria. Al controlar por el confusor
+            (temperatura), la correlación entre helados y ahogamientos desaparece. Esto es exactamente lo que la inferencia
+            causal formaliza matemáticamente.
+        </div>
+
+        <!-- ═══════ SECCIÓN 2 ═══════ -->
+        <h2>2. Correlación Ciega en Machine Learning</h2>
+        <p>El problema no es solo académico. Modelos de ML en producción han causado daños reales por confiar ciegamente
+           en correlaciones.</p>
+
+        <div class="example-card">
+            <h3>🏥 Ejemplo 4: El Algoritmo de Asma y Neumonía</h3>
+            <p><strong>Contexto:</strong> En un hospital se entrenó una red neuronal para predecir el riesgo de muerte
+                por neumonía, con el objetivo de admitir automáticamente a los pacientes de alto riesgo y enviar a casa
+                a los de bajo riesgo.</p>
+            <p><strong>El hallazgo de la IA:</strong> El modelo aprendió: <i>"Si el paciente tiene asma, el riesgo de muerte
+                por neumonía disminuye. Por tanto, mándalo a casa."</i></p>
+            <p><strong>El Error Causal:</strong> Médicamente, el asma <strong>empeora severamente</strong> la neumonía. Pero en
+                los datos históricos, los médicos ingresaban <i>inmediatamente</i> en cuidados intensivos a los pacientes
+                con asma + neumonía. Gracias a esos cuidados agresivos, su supervivencia era excelente. La IA vio la
+                asociación final (Asma → Supervivencia) pero no el mediador (Intervención Médica Intensiva).</p>
+
+            <div class="dag-box">
+                <svg width="500" height="200" viewBox="0 0 500 200">
+                    <defs>
+                        <marker id="arrow2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#39d0d8" />
+                        </marker>
+                    </defs>
+                    <rect x="10" y="80" width="100" height="36" rx="8" fill="#21262d" stroke="#ff79c6" stroke-width="2"/>
+                    <text x="60" y="103" text-anchor="middle" fill="#ff79c6" font-size="13" font-weight="700">Asma</text>
+
+                    <rect x="190" y="80" width="130" height="36" rx="8" fill="#21262d" stroke="#50fa7b" stroke-width="2"/>
+                    <text x="255" y="103" text-anchor="middle" fill="#50fa7b" font-size="12" font-weight="700">UCI Inmediata</text>
+
+                    <rect x="390" y="80" width="110" height="36" rx="8" fill="#21262d" stroke="#39d0d8" stroke-width="2"/>
+                    <text x="445" y="103" text-anchor="middle" fill="#39d0d8" font-size="13" font-weight="700">Supervivencia</text>
+
+                    <line x1="110" y1="98" x2="188" y2="98" stroke="#39d0d8" stroke-width="2" marker-end="url(#arrow2)"/>
+                    <line x1="320" y1="98" x2="388" y2="98" stroke="#39d0d8" stroke-width="2" marker-end="url(#arrow2)"/>
+
+                    <text x="150" y="88" text-anchor="middle" fill="#8b949e" font-size="10">causa</text>
+                    <text x="355" y="88" text-anchor="middle" fill="#8b949e" font-size="10">causa</text>
+
+                    <path d="M60,80 Q60,20 445,20 Q445,20 445,78" stroke="#ff7b72" stroke-width="1.5" stroke-dasharray="6,4" fill="none" marker-end="url(#arrow2)"/>
+                    <text x="250" y="15" text-anchor="middle" fill="#ff7b72" font-size="10">Lo que ve la IA (atajo espurio)</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="example-card">
+            <h3>🐄 Ejemplo 5: Vacas y Clasificación de Imágenes</h3>
+            <p>Un clasificador de imágenes entrenado para distinguir vacas de camellos aprendió a detectar...
+               <strong>hierba verde</strong>. En el dataset de entrenamiento, las vacas aparecían siempre en prados verdes
+               y los camellos en desiertos. Cuando se mostró una vaca en la playa, el modelo la clasificó como camello.</p>
+            <p><strong>Causalidad:</strong> La especie del animal causa su apariencia visual (textura, forma). El fondo
+               (prado vs desierto) es un confusor introducido por el sesgo de selección del dataset.</p>
+        </div>
+
+        <div class="example-card">
+            <h3>💊 Ejemplo 6: El sesgo de selección en ensayos clínicos</h3>
+            <p>Un modelo predice que cierto fármaco es eficaz basándose en datos observacionales. Pero los médicos
+               recetaban ese fármaco preferentemente a pacientes jóvenes y sanos (los más fáciles de tratar). Al evaluar
+               con un RCT (ensayo aleatorizado), el fármaco resultó ineficaz.</p>
+            <p><strong>Lección:</strong> La asignación del tratamiento no era aleatoria → confusor (gravedad del paciente)
+               sesgaba la correlación observada.</p>
+        </div>
+
+        <h3>2.1 ¿Cuándo falla el ML clásico?</h3>
+        <p>El ML basado en correlaciones falla sistemáticamente en estos escenarios:</p>
+
+        <table>
+            <tr>
+                <th>Escenario</th>
+                <th>Pregunta</th>
+                <th>¿ML correlacional sirve?</th>
+            </tr>
+            <tr>
+                <td>Predicción (mismo entorno)</td>
+                <td>"¿Cuánto venderé mañana?"</td>
+                <td style="color: #50fa7b;">✅ Sí</td>
+            </tr>
+            <tr>
+                <td>Intervención</td>
+                <td>"¿Qué pasa si cambio el precio?"</td>
+                <td style="color: #ff7b72;">❌ No</td>
+            </tr>
+            <tr>
+                <td>Cambio de distribución</td>
+                <td>"¿Funciona en otro país?"</td>
+                <td style="color: #ff7b72;">❌ No</td>
+            </tr>
+            <tr>
+                <td>Contrafactual</td>
+                <td>"¿Qué habría pasado si...?"</td>
+                <td style="color: #ff7b72;">❌ No</td>
+            </tr>
+            <tr>
+                <td>Fairness / Equidad</td>
+                <td>"¿Mi modelo discrimina?"</td>
+                <td style="color: #ff7b72;">❌ No</td>
+            </tr>
+        </table>
+
+        <!-- ═══════ SECCIÓN 3 ═══════ -->
+        <h2>3. La Revolución Causal de Judea Pearl</h2>
+        <p>Judea Pearl (Premio Turing 2011) propuso formalizar un nuevo lenguaje matemático. La idea central es un
+           operador que represente una acción externa, una "cirugía" sobre el modelo probabilístico:</p>
+
+        <div class="vs-table">
+            <div class="vs-col bad">
+                <h4>❌ Estadística Clásica (Observar)</h4>
+                <div class="math-block" style="font-size:1.1em;">P(Y | X = x)</div>
+                <p style="font-size:0.9em;">"Si <strong>observo</strong> que el paciente toma el fármaco, ¿qué probabilidad tiene de curarse?"</p>
+                <p style="font-size:0.85em; color:#8b949e;">Mezcla el efecto del fármaco con las razones por las que se le recetó (gravedad, edad, etc.)</p>
+            </div>
+            <div class="vs-col good">
+                <h4>✅ Inferencia Causal (Intervenir)</h4>
+                <div class="math-block" style="font-size:1.1em;">P(Y | do(X = x))</div>
+                <p style="font-size:0.9em;">"Si <strong>fuerzo</strong> al paciente a tomar el fármaco (independientemente de todo lo demás), ¿qué probabilidad tiene de curarse?"</p>
+                <p style="font-size:0.85em; color:#8b949e;">Aísla el efecto causal puro del tratamiento.</p>
+            </div>
+        </div>
+
+        <h3>3.1 El operador do() en detalle</h3>
+        <p>El operador <span class="math">do(X = x)</span> significa: "intervenir en el sistema fijando la variable X al valor x,
+           <strong>cortando</strong> todas las flechas que llegan a X desde sus causas naturales". Esto simula un experimento
+           controlado aleatorio (RCT) pero <strong>usando datos observacionales</strong>.</p>
+
+        <div class="math-block">
+            P(Y | X = x) ≠ P(Y | do(X = x))  ← ¡Esta es la desigualdad fundamental!
+        </div>
+
+        <p>Solo son iguales cuando no hay confusores (cuando X se asigna aleatoriamente, como en un RCT).</p>
+
+        <h3>3.2 Ejemplo numérico: Ver vs Hacer</h3>
+        <div class="example-card">
+            <h3>💊 Ejemplo 7: Fármaco con confusor</h3>
+            <p>Supongamos que observamos estos datos en un hospital:</p>
+            <table>
+                <tr><th></th><th>Toma fármaco</th><th>No toma fármaco</th></tr>
+                <tr><td><strong>Se cura</strong></td><td>81%</td><td>70%</td></tr>
+                <tr><td><strong>No se cura</strong></td><td>19%</td><td>30%</td></tr>
+            </table>
+            <p><strong>Observando:</strong> P(Cura | Fármaco) = 81% > 70%. ¡Parece que el fármaco funciona!</p>
+            <p>Pero si estratificamos por <strong>gravedad</strong> (confusor):</p>
+            <table>
+                <tr><th></th><th colspan="2">Casos Leves</th><th colspan="2">Casos Graves</th></tr>
+                <tr><th></th><th>Fármaco</th><th>No Fármaco</th><th>Fármaco</th><th>No Fármaco</th></tr>
+                <tr><td><strong>Se cura</strong></td><td>93%</td><td>95%</td><td>30%</td><td>35%</td></tr>
+                <tr><td><strong>No se cura</strong></td><td>7%</td><td>5%</td><td>70%</td><td>65%</td></tr>
+            </table>
+            <p><strong>¡Paradoja de Simpson!</strong> En AMBOS subgrupos, el fármaco es PEOR. La razón: los médicos
+               daban el fármaco preferentemente a pacientes leves (87% de los que tomaron fármaco eran leves), inflando
+               artificialmente la tasa de curación global.</p>
+            <p><strong>Intervención:</strong> P(Cura | do(Fármaco)) pondera correctamente por la distribución de gravedad
+               en la población, revelando que el fármaco es perjudicial.</p>
+        </div>
+
+        <!-- ═══════ SECCIÓN 4 ═══════ -->
+        <h2>4. Las Tres Capas del Razonamiento Causal</h2>
+        <p>Pearl propone que toda pregunta sobre el mundo puede clasificarse en uno de tres niveles (lo veremos en
+           profundidad en la Sección 02):</p>
+
+        <table>
+            <tr>
+                <th>Peldaño</th>
+                <th>Pregunta típica</th>
+                <th>Formalismo</th>
+                <th>Ejemplo</th>
+            </tr>
+            <tr>
+                <td><strong>1. Asociación</strong></td>
+                <td>"¿Qué observo?"</td>
+                <td><span class="math">P(Y | X)</span></td>
+                <td>"Los que compran pañales compran cerveza"</td>
+            </tr>
+            <tr>
+                <td><strong>2. Intervención</strong></td>
+                <td>"¿Qué pasa si hago?"</td>
+                <td><span class="math">P(Y | do(X))</span></td>
+                <td>"¿Si pongo pañales junto a cerveza, vendo más?"</td>
+            </tr>
+            <tr>
+                <td><strong>3. Contrafactual</strong></td>
+                <td>"¿Qué habría pasado?"</td>
+                <td><span class="math">P(Y_x | X', Y')</span></td>
+                <td>"Si NO hubiera puesto la oferta, ¿habría vendido igual?"</td>
+            </tr>
+        </table>
+
+        <div class="highlight-box">
+            <strong>Cada peldaño es estrictamente más poderoso que el anterior:</strong> No puedes responder preguntas
+            del peldaño 2 con información del peldaño 1, ni del peldaño 3 con información del peldaño 2.
+            Un modelo de ML tradicional vive exclusivamente en el peldaño 1.
+        </div>
+
+        <!-- ═══════ SECCIÓN 5 ═══════ -->
+        <h2>5. Herramientas Python para Inferencia Causal</h2>
+        <p>El ecosistema de Python ya permite trabajar con causalidad de forma práctica. Aquí un vistazo rápido
+           (las exploraremos en detalle en los labs):</p>
+
+        <table>
+            <tr>
+                <th>Librería</th>
+                <th>¿Qué hace?</th>
+                <th>Importar como</th>
+            </tr>
+            <tr>
+                <td><strong>DoWhy</strong></td>
+                <td>Inferencia causal end-to-end: modelo, identificación, estimación, refutación</td>
+                <td><span class="math">import dowhy</span></td>
+            </tr>
+            <tr>
+                <td><strong>CausalNex</strong></td>
+                <td>Redes bayesianas + descubrimiento causal</td>
+                <td><span class="math">from causalnex.structure import StructureModel</span></td>
+            </tr>
+            <tr>
+                <td><strong>EconML</strong></td>
+                <td>Efectos causales heterogéneos (CATE), meta-learners</td>
+                <td><span class="math">from econml.dml import DML</span></td>
+            </tr>
+            <tr>
+                <td><strong>pgmpy</strong></td>
+                <td>Modelado gráfico probabilístico, DAGs, inferencia</td>
+                <td><span class="math">from pgmpy.models import BayesianNetwork</span></td>
+            </tr>
+            <tr>
+                <td><strong>causal-learn</strong></td>
+                <td>Descubrimiento causal: PC, FCI, GES, etc.</td>
+                <td><span class="math">from causallearn.search.ConstraintBased.PC import pc</span></td>
+            </tr>
+            <tr>
+                <td><strong>networkx</strong></td>
+                <td>Visualización y manipulación de grafos</td>
+                <td><span class="math">import networkx as nx</span></td>
+            </tr>
+        </table>
+
+        <h3>5.1 Ejemplo rápido con DoWhy</h3>
+        <pre><code><span class="keyword">import</span> dowhy
+<span class="keyword">from</span> dowhy <span class="keyword">import</span> CausalModel
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+np.random.seed(<span class="number">0</span>)
+n = <span class="number">1000</span>
+
+<span class="comment"># Generar datos con confusor Z</span>
+Z = np.random.binomial(<span class="number">1</span>, <span class="number">0.5</span>, n)  <span class="comment"># confusor binario</span>
+X = <span class="number">0.6</span> * Z + np.random.normal(<span class="number">0</span>, <span class="number">0.3</span>, n)  <span class="comment"># tratamiento</span>
+Y = <span class="number">2.0</span> * X + <span class="number">3.0</span> * Z + np.random.normal(<span class="number">0</span>, <span class="number">1</span>, n)  <span class="comment"># outcome</span>
+
+df = pd.DataFrame({<span class="string">'Z'</span>: Z, <span class="string">'X'</span>: X, <span class="string">'Y'</span>: Y})
+
+<span class="comment"># Definir modelo causal como DAG</span>
+model = CausalModel(
+    data=df,
+    treatment=<span class="string">'X'</span>,
+    outcome=<span class="string">'Y'</span>,
+    common_causes=[<span class="string">'Z'</span>],  <span class="comment"># declaramos el confusor</span>
+    graph=<span class="string">"digraph { Z -> X; Z -> Y; X -> Y; }"</span>
+)
+
+<span class="comment"># Identificar efecto causal</span>
+identified = model.identify_effect()
+
+<span class="comment"># Estimar efecto causal con backdoor</span>
+estimate = model.estimate_effect(
+    identified,
+    method_name=<span class="string">"backdoor.linear_regression"</span>
+)
+<span class="function">print</span>(<span class="string">f"Efecto causal estimado: {estimate.value:.2f}"</span>)
+<span class="comment"># ≈ 2.0 (el verdadero efecto que pusimos)</span>
+
+<span class="comment"># Refutar el resultado (test de robustez)</span>
+refutation = model.refute_estimate(
+    identified, estimate,
+    method_name=<span class="string">"random_common_cause"</span>
+)
+<span class="function">print</span>(refutation)</code></pre>
+
+        <div class="highlight-box">
+            <strong>Nota:</strong> Sin ajustar por Z, una regresión naïve daría un coeficiente de ≈3.5 (inflado por el confusor).
+            DoWhy, usando el criterio backdoor, devuelve correctamente ≈2.0.
+        </div>
+
+        <!-- ═══════ SECCIÓN 6 ═══════ -->
+        <h2>6. ¿Por qué necesitas esto?</h2>
+        <p>Si trabajas en cualquiera de estas áreas, la inferencia causal no es opcional:</p>
+
+        <ul>
+            <li><strong>Data Science / ML Engineering:</strong> Para entender cuándo tu modelo funciona por las razones correctas
+                y cuándo simplemente memorizó atajos espurios en los datos.</li>
+            <li><strong>Economía / Políticas Públicas:</strong> Para evaluar el impacto real de intervenciones (no basta con
+                correlacionar gasto público con resultados).</li>
+            <li><strong>Medicina / Epidemiología:</strong> Para estimar efectos de tratamientos a partir de datos observacionales
+                cuando un RCT no es ético o es imposible.</li>
+            <li><strong>IA Explicable (XAI):</strong> Para responder "¿por qué el modelo decidió esto?" y "¿qué tendría que
+                haber sido diferente para obtener otro resultado?".</li>
+            <li><strong>Fairness / Equidad algorítmica:</strong> Para determinar si un algoritmo discrimina causalmente (no solo
+                correlativamente) por raza, género, etc.</li>
+        </ul>
+
+        <div class="warning-box">
+            <strong>⚠️ Sin causalidad, tu modelo es frágil:</strong> Un modelo que solo captura correlaciones funcionará
+            bien en el mismo entorno donde se entrenó, pero puede colapsar catastróficamente cuando se despliegue en un
+            contexto diferente, cuando cambien las políticas, o cuando lo uses para tomar decisiones (intervenciones).
+        </div>
+
+        <h2>7. Mapa conceptual de este curso</h2>
+        <p>A lo largo de las siguientes secciones, construiremos progresivamente las herramientas:</p>
+
+        <ol>
+            <li><strong>Sección 02:</strong> La Escalera de la Causación en profundidad (3 peldaños con muchos ejemplos)</li>
+            <li><strong>Sección 03:</strong> La Paradoja de Simpson — el caso más famoso de por qué necesitamos causalidad</li>
+            <li><strong>Sección 04:</strong> DAGs — el lenguaje visual para representar relaciones causales</li>
+            <li><strong>Sección 05:</strong> El Cálculo do() — las matemáticas de las intervenciones</li>
+            <li><strong>Sección 06:</strong> Contrafactuales — "¿qué habría pasado si...?"</li>
+            <li><strong>Sección 07:</strong> Deep Learning Causal — la frontera actual</li>
+            <li><strong>Sección 08:</strong> Papers del estado del arte</li>
+            <li><strong>Secciones 09-10:</strong> Laboratorios prácticos completos en Python</li>
+        </ol>
+
+        <a href="02_escalera_causacion.html" class="btn-nav">Siguiente: La Escalera de la Causación →</a>
+    </div>
+</body>
+
+</html>

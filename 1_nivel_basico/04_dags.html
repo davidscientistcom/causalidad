@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>04: Grafos Causales (DAGs) | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+    <style>
+        :root {
+            --accent: #ff79c6;
+            /* Rosa para sección 4 */
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .breadcrumb {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 40px 0 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        .graph-box {
+            background: #ffffff05;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .graph-desc {
+            font-size: 0.95em;
+            color: #8b949e;
+            text-align: center;
+        }
+
+        .highlight-box {
+            background: rgba(255, 121, 198, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.15em;
+        }
+
+        .btn-nav-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 04
+        </div>
+
+        <h1>🕸️ Grafos Acíclicos Dirigidos (DAGs)</h1>
+        <p>Para matematizar la causalidad necesitamos un mapa visual que exprese los supuestos del mundo real (el modelo
+            cualitativo empírico de un experto). Estos son los DAGs causales (<i>Directed Acyclic Graphs</i>). Los nodos
+            son variables y las flechas son relaciones causales directas.</p>
+
+        <p>Toda la complejidad de cualquier sistema de inferencia causal del universo se construye combinando tan solo
+            <strong>tres estructuras fundamentales</strong>.</p>
+
+        <h2>1. La Cadena (Mediación)</h2>
+        <p>La información fluye a través de una cadena de eventos secuenciales.</p>
+
+        <div class="graph-box">
+            <div class="mermaid">
+                graph LR
+                X((X)) --> Z((Z))
+                Z --> Y((Y))
+                style X fill:#1f6feb,stroke:#58a6ff
+                style Z fill:#238636,stroke:#3fb950
+                style Y fill:#a371f7,stroke:#bc8cff
+            </div>
+            <p class="graph-desc">X causa Z que causa Y<br>Ejemplo: Fuego (X) → Humo (Z) → Alarma (Y)</p>
+        </div>
+        <p><strong>Comportamiento del flujo de información:</strong> Si observas X, puedes predecir Y. El flujo está
+            <strong>abierto</strong>. Sin embargo, si condicionas por Z (fijas el evento Z, sabes con certeza cuánto
+            humo hay), la información se bloquea. El flujo queda <strong>cerrado</strong> (d-separado).</p>
+
+        <h2>2. La Bifurcación (Confounder)</h2>
+        <p>Una variable central C causa otras dos variables A y B. Éste es el responsable clásico de las correlaciones
+            espurias (como vimos en la Paradoja de Simpson).</p>
+
+        <div class="graph-box">
+            <div class="mermaid">
+                graph TD
+                Z((Z)) --> X((X))
+                Z --> Y((Y))
+                style X fill:#1f6feb,stroke:#58a6ff
+                style Z fill:#da3633,stroke:#ff7b72
+                style Y fill:#a371f7,stroke:#bc8cff
+            </div>
+            <p class="graph-desc">Z es la causa común de X e Y<br>Ejemplo: Temperatura exterior alta (Z)
+                incrementa<br>Venta de Helados (X) y Ataques de Tiburón (Y)</p>
+        </div>
+        <p><strong>Comportamiento del flujo de información:</strong> Como Z empuja simultáneamente a X y Y, estas dos
+            suben o bajan juntas de forma correlacionada (flujo <strong>abierto</strong>). Si condicionamos respecto a Z
+            (separamos por niveles de temperatura), la correlación mágica entre Helados y Tiburones desaparece. El
+            camino queda <strong>cerrado</strong>.</p>
+
+        <h2>3. El Colisionador (Collider)</h2>
+        <p>El caso más contraintuitivo del Machine Learning. Dos factores totalmente independientes (X e Y) provocan un
+            rasgo convergente (Z).</p>
+
+        <div class="graph-box">
+            <div class="mermaid">
+                graph TD
+                X((X)) --> Z((Z))
+                Y((Y)) --> Z((Z))
+                style X fill:#1f6feb,stroke:#58a6ff
+                style Z fill:#d29922,stroke:#d2a8ff
+                style Y fill:#a371f7,stroke:#bc8cff
+            </div>
+            <p class="graph-desc">X e Y son independientes, Z es la consecuencia de ambas<br>Ejemplo: Talento (X) y
+                Belleza (Y) → Son actores de Hollywood (Z)</p>
+        </div>
+
+        <div class="highlight-box">
+            <strong>El Peligro del Collider:</strong> Por defecto, Talento y Belleza no tienen ninguna correlación en la
+            Tierra (flujo de información naturalmente <strong>cerrado</strong>). ¡Pero si <strong>condicionamos</strong>
+            por Z (es decir, limitamos nuestro Dataset de entrenamiento SÓLO a las personas que YA son estrellas de
+            Hollywood), abrimos el flujo de información!
+            <br><br>
+            Aparecerá una correlación negativa artificial: si en Hollywood ves a alguien que resulta ser poco atractivo,
+            tu IA deducirá inmediatamente (y acertará en esos datos condicionados) que debe tener un talento desbordante
+            para estar ahí (porque algo lo debió llevar como actor).
+        </div>
+
+        <h2>d-Separación: La Ley Maestra</h2>
+        <p>Con estas 3 reglas, Pearl unificó la causalidad. Dados dos nodos X y Y en un super-grafo de miles de
+            variables interconectadas (como un cuerpo humano o una macroeconomía), podemos determinar matemáticamente
+            empleando un algoritmo gráfico si están causalmente separados simplemente localizando las cadenas,
+            bifurcaciones y colisionadores intermedios.</p>
+
+        <div class="btn-nav-group">
+            <a href="03_paradoja_simpson.html" class="btn-nav">← Anterior</a>
+            <a href="05_do_calculus.html" class="btn-nav primary">Siguiente: El Cálculo Do →</a>
+        </div>
+    </div>
+</body>
+
+</html>

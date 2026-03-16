@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>06: Contrafactuales y SCMs | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #e3b341;
+            /* Amarillo para sección 6 */
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .breadcrumb {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 40px 0 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        .highlight-box {
+            background: rgba(227, 179, 65, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.15em;
+        }
+
+        /* 3 Steps */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .step {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .step-num {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: var(--accent);
+            color: #000;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.2em;
+            border-radius: 50%;
+        }
+
+        .step h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+            color: var(--accent);
+            margin-bottom: 15px;
+            padding-left: 15px;
+        }
+
+        .btn-nav-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 06
+        </div>
+
+        <h1>🔮 Contrafactuales y SCMs</h1>
+        <p>Hemos llegado a la cúspide de la Escalera de la Causación: Peldaño 3. A diferencia del operador
+            <code>do()</code> (que opera a nivel de poblaciones y responde preguntas como "¿Deberíamos aprobar este
+            fármaco a nivel nacional?"), los contrafactuales lidian con el <strong>individuo específico en
+                retrospectiva</strong>.</p>
+
+        <div class="highlight-box">
+            <strong>La Pregunta Contrafactual:</strong> "El paciente John Smith murió tras tomar el fármaco. ¿Habría
+            sobrevivido si no lo hubiera tomado?"
+        </div>
+
+        <p>Para resolver esto, ya no nos basta con un DAG gráfico. Necesitamos un modelo fuertemente matemático: un
+            <strong>Structural Causal Model (SCM)</strong>. En un SCM, cada nodo está definido por una ecuación
+            determinista exacta basada en sus padres y en variables exógenas (ruido <code>U</code>, representing la
+            idiosincrasia oculta y específica de John Smith).</p>
+        <p style="font-family: monospace; color: #a5d6ff; text-align: center; font-size: 1.2em;">v_i = f_i(pa_i, U_i)
+        </p>
+
+        <h2>El Algoritmo de 3 Pasos de Pearl</h2>
+        <p>Evaluar un contrafactual matemáticamente requiere transformar nuestro modelo usando la información observada
+            para crear un "Mundo Paralelo".</p>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <h3>Abducción (Update)</h3>
+                <p>Usamos todo lo que <strong>sabemos</strong> que pasó en la realidad (E.g. John tomó el fármaco y
+                    murió) para <strong>actualizar nuestro conocimiento sobre el ruido exógeno U</strong> de ese
+                    individuo en particular. Ajustamos el SCM para que coincida exactamente con las características
+                    ocultas (U_John).</p>
+            </div>
+
+            <div class="step">
+                <div class="step-num">2</div>
+                <h3>Acción (Action / Mutilation)</h3>
+                <p>Modificamos el SCM matemáticamente: borramos las ecuaciones naturales que causaron que John tomara el
+                    fármaco, y las sustituimos con la acción forzada constante (<code>Fármaco = No</code>). Esto es
+                    equivalente a aplicar el operador <code>do(x')</code> dentro del modelo, mutilando el grafo.</p>
+            </div>
+
+            <div class="step">
+                <div class="step-num">3</div>
+                <h3>Predicción (Prediction)</h3>
+                <p>Propagamos las nuevas variables forzadas a través del DAG mutilado, utilizando el modelo original,
+                    pero —y esto es lo crucial— manteniendo el ruido idiosincrático <code>U_John</code> calculado en el
+                    paso 1. El resultado de esta propagación es la probabilidad matemática del escenario contrafactual.
+                </p>
+            </div>
+        </div>
+
+        <p>Este nivel nos permite abordar Inteligencia Artificial verdaderamente explicable (XAI), donde un modelo no
+            solo te da una predicción de denegación de una hipoteca, sino que puede generarte exactamente la explicación
+            lógica: "Se le denegó. Si sus ingresos hubieran sido 5.000$ superiores, el modelo sí se la habría
+            concedido."</p>
+
+        <div class="btn-nav-group">
+            <a href="05_do_calculus.html" class="btn-nav">← Anterior</a>
+            <a href="07_deep_learning_causal.html" class="btn-nav primary">Siguiente: Deep Learning Causal →</a>
+        </div>
+    </div>
+</body>
+
+</html>

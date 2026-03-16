@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>05: El Cálculo do() | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #ff6b35;
+            /* Naranja para sección 5 */
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .breadcrumb {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 40px 0 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        .math-block {
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.4em;
+            margin: 30px 0;
+            color: #a5d6ff;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.1);
+        }
+
+        .highlight-box {
+            background: rgba(255, 107, 53, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.15em;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .btn-nav-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 05
+        </div>
+
+        <h1>🧮 El Cálculo do()</h1>
+        <p>El mayor hito algorítmico de Judea Pearl fue demostrar matemáticamente que, bajo ciertas reglas gráficas en
+            un DAG, la expresión intervencionista abstracta <span style="font-family: monospace; color: #a5d6ff;">P(Y |
+                do(X))</span> puede <strong>traducirse (reducirse) a probabilidad condicional puramente clásica
+                observacional</strong> de la forma <span style="font-family: monospace; color: #a5d6ff;">P(y, x,
+                z)</span>.</p>
+
+        <p>Esto significa que podemos predecir los efectos de una intervención (política pública, fármaco, estrategia de
+            precios) <strong>sin necesidad de llevar a cabo físicamente la intervención o experimento</strong>,
+            simplemente usando datos históricos observacionales y la topología causal (DAG).</p>
+
+        <h2>1. El Criterio de la Puerta Trasera (Backdoor Criterion)</h2>
+        <p>La forma principal de que nuestra estimación del efecto causal de X sobre Y sea espuria (falsa) es porque hay
+            un "camino por la puerta trasera" abierto entre X e Y. Es decir, variables que apuntan tanto a X como a Y
+            (Confounders).</p>
+
+        <p><strong>El Método:</strong> Para encontrar el efecto causal <i>puro</i> de X sobre Y, debemos condicionar
+            sobre un conjunto de variables Z tal que:</p>
+        <ul>
+            <li>Z bloquea todos los caminos espurios ("puertas traseras") entre X e Y.</li>
+            <li>Ningún elemento de Z es un descendiente de X (no podemos usar mediadores para ajustar).</li>
+        </ul>
+
+        <div class="math-block">
+            P(Y | do(X)) = &sum;<sub>z</sub> P(Y | X, Z=z) * P(Z=z)
+        </div>
+
+        <p>Esta es la fórmula fundamental de <strong>Ajuste por Puerta Trasera</strong>. Nota crucial: en la parte
+            derecha de la ecuación ya no existe el operador <i>do()</i>. Todo son probabilidades clásicas computables a
+            partir de tu base de datos (SQL, Pandas, PySpark).</p>
+
+        <h2>2. El Criterio de la Puerta Delantera (Frontdoor Criterion)</h2>
+        <p>¿Qué pasa si existe un confounder fortísimo entre X e Y, pero <strong>no podemos medirlo</strong>, no tenemos
+            datos en el dataset (<i>Unobserved Confounder</i>)?</p>
+
+        <div class="highlight-box">
+            <strong>Ejemplo de Fumar y Cáncer de Pulmón:</strong><br>Históricamente la tabaquera alegaba que quizá
+            existía un "Gen de la Adicción al Tabaco" (Confounder Oculto U) que hacía que la gente fumara (X) y también
+            causaba cáncer de pulmón (Y). Puesto que U no se puede medir, no podemos usar la fórmula Backdoor. ¡No
+            tenemos los datos!
+        </div>
+
+        <p>Pearl diseñó el milagroso ajuste de Puerta Delantera. Si logramos encontrar una variable mediadora M (por
+            ejemplo, "Alquitrán en los pulmones") que interceda completamente entre X e Y, y que NO esté afectada
+            directamente por el Confounder Oculto U, podemos hacer el cálculo combinando dos mecanismos consecutivos (X
+            → M, y luego M → Y).</p>
+
+        <div class="math-block">
+            P(Y | do(X)) = &sum;<sub>m</sub> P(M=m | X) &sum;<sub>x'</sub> P(Y | X=x', M=m) * P(X=x')
+        </div>
+
+        <p>¡Magia matemática! Hemos logrado calcular la causalidad pura de <span
+                style="font-family: monospace; color: #a5d6ff;">P(Y | do(X))</span> ignorando por completo la variable
+            inmesurable U. Solo necesitamos datos sobre Fumar (X), Alquitrán (M) y Cáncer (Y).</p>
+
+        <div class="btn-nav-group">
+            <a href="04_dags.html" class="btn-nav">← Anterior</a>
+            <a href="06_contrafactuales.html" class="btn-nav primary">Siguiente: Contrafactuales y SCMs →</a>
+        </div>
+    </div>
+</body>
+
+</html>

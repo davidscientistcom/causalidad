@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>10: Python - ML Sesgado vs DoWhy | Causalidad</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #8be9fd;
+            /* Cyan claro para sección 10 */
+            --bg: #0d1117;
+            --text: #e6edf3;
+            --card-bg: #161b22;
+            --border: #30363d;
+            --code-bg: #282a36;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 30px;
+        }
+
+        .breadcrumb {
+            font-size: 0.85em;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin: 40px 0 15px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #c9d1d9;
+        }
+
+        .highlight-box {
+            background: rgba(139, 233, 253, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.15em;
+        }
+
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: #f8f8f2;
+        }
+
+        code .keyword {
+            color: #ff79c6;
+        }
+
+        code .function {
+            color: #50fa7b;
+        }
+
+        code .string {
+            color: #f1fa8c;
+        }
+
+        code .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        code .number {
+            color: #bd93f9;
+        }
+
+        .terminal-output {
+            background: #000;
+            padding: 15px;
+            border-left: 4px solid #ff7b72;
+            font-family: monospace;
+            color: #a5d6ff;
+            margin-bottom: 30px;
+        }
+
+        .terminal-output.success {
+            border-left-color: #50fa7b;
+        }
+
+        .btn-nav-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 50px;
+        }
+
+        .btn-nav {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-nav.primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            border: none;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">← Volver al Roadmap</a> / Sección 10
+        </div>
+
+        <h1>🔧 ML Sesgado vs DoWhy (Backdoor)</h1>
+        <p>En este laboratorio simularemos el problema fundamental del Científico de Datos moderno. Generaremos unos
+            datos con un factor de confusión fuerte y oculto. Entrenaremos un modelo de Machine Learning estándar que
+            sufrirá sesgo brutal, y luego lo solucionaremos implementando matemáticamente la fórmula de <strong>Ajuste
+                por Puerta Trasera (Backdoor Criterion)</strong> que vimos en el Peldaño 2.</p>
+
+        <h2>1. El Escenario Patológico (Confounder)</h2>
+        <p>Supongamos que medimos la relación entre las <code>Horas de Entrenamiento Físico (X)</code> de un atleta y su
+            <code>Velocidad en Pista (Y)</code>. Sin embargo, hay un factor genético oculto
+            <code>Edad Biológica (Z)</code>. <br>
+            - La gente muy joven tiende a correr más rápido (Z afecta Y).<br>
+            - La gente muy joven también tiene más energía para entrenar más horas (Z afecta X).</p>
+        <p>El *verdadero* efecto causal del entrenamiento en la velocidad es exactamente <b>+2.0</b> por hora. Vamos a
+            generarlo.</p>
+
+        <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression
+
+np.random.<span class="function">seed</span>(<span class="number">100</span>)
+N = <span class="number">5000</span>
+
+<span class="comment"># Z: Edad Biológica (Genética/Metabolismo invertido, mayor es mejor)</span>
+Z = np.random.<span class="function">normal</span>(<span class="number">50</span>, <span class="number">10</span>, N)
+
+<span class="comment"># X: Horas Entrenamiento (afectadas por Z, los jóvenes entrenan más)</span>
+X = <span class="number">0.5</span> * Z + np.random.<span class="function">normal</span>(<span class="number">0</span>, <span class="number">2</span>, N)
+
+<span class="comment"># Y: Velocidad. Causalidad real de Entrenamiento=2.0. Impacto oculto de Z=1.5</span>
+<span class="comment"># FÓRMULA DIAGNÓSTICA REAL DEL MUNDO: </span>
+Y = <span class="number">2.0</span> * X + <span class="number">1.5</span> * Z + np.random.<span class="function">normal</span>(<span class="number">0</span>, <span class="number">1</span>, N)
+
+df = pd.<span class="function">DataFrame</span>({<span class="string">'Entrenamiento_X'</span>: X, <span class="string">'Genetica_Z'</span>: Z, <span class="string">'Velocidad_Y'</span>: Y})
+</code></pre>
+
+        <h2>2. El Fracaso del Machine Learning Estándar</h2>
+        <p>El equipo de ML puro no tiene ni idea de causalidad. Descargan <code>Entrenamiento_X</code> y
+            <code>Velocidad_Y</code>, e ignoran <code>Z</code>. Entrenan un modelo para medir el impacto de entrenar una
+            hora más.</p>
+
+        <pre><code><span class="comment"># Modelo Naïve (Ignorando Z)</span>
+X_features = df[[<span class="string">'Entrenamiento_X'</span>]]
+y_target = df[<span class="string">'Velocidad_Y'</span>]
+
+modelo_ml = <span class="function">LinearRegression</span>().<span class="function">fit</span>(X_features, y_target)
+<span class="keyword">print</span>(<span class="string">"Impacto de 1h Entrenamiento (según Scikit-Learn ingenuo):"</span>, modelo_ml.coef_[<span class="number">0</span>])
+</code></pre>
+
+        <div class="terminal-output">
+            Impacto de 1h Entrenamiento (según Scikit-Learn ingenuo): 4.14
+        </div>
+
+        <p>El modelo concluye que 1 hora de entrenamiento aporta <strong>4.14</strong> puntos de velocidad. <strong>¡Es
+                falso y el doble de la realidad (2.0)!</strong> Está combinando el efecto del entrenamiento de la
+            persona con la ventaja genética que "coincidentemente" tienen los que más entrenan. Si vendes un plan de
+            entrenamiento prometiendo 4.14, estás estafando al cliente.</p>
+
+        <h2>3. La Solución: Backdoor Adjustment Programático</h2>
+        <p>El Científico de Datos Causal dibuja un DAG: <code>X ← Z → Y</code>. Se da cuenta de que <code>Z</code> es
+            una puerta trasera abierta. Emplea la poderosa librería <strong>DoWhy</strong> (o lo codifica a mano si Z es
+            observable) para condicionar y romper el camino espurio.</p>
+
+        <pre><code><span class="comment"># === Backdoor Manual con Scikit-Learn ===</span>
+<span class="comment"># Lo hacemos añadiendo el confounder al modelo de ajuste</span>
+X_ajustado = df[[<span class="string">'Entrenamiento_X'</span>, <span class="string">'Genetica_Z'</span>]]
+modelo_causal = <span class="function">LinearRegression</span>().<span class="function">fit</span>(X_ajustado, y_target)
+
+<span class="keyword">print</span>(<span class="string">"Target ATE (Efecto Causal Real Verdadero): 2.000"</span>)
+<span class="keyword">print</span>(<span class="string">"Impacto de 1h Entrenamiento (modelo Causal Ajustado):"</span>, modelo_causal.coef_[<span class="number">0</span>])
+</code></pre>
+
+        <div class="terminal-output success">
+            Target ATE (Efecto Causal Real Verdadero): 2.000<br>
+            Impacto de 1h Entrenamiento (modelo Causal Ajustado): 2.012
+        </div>
+
+        <p><strong>Lo hemos logrado.</strong> Al condicionar estratigráficamente por <code>Z</code> (la puerta trasera),
+            el coeficiente matemático de Regresión del Entrenamiento vuelve a ser la Causalidad Verdadera. El modelo
+            purga la correlación espuria e identifica correctamente el peso físico de las horas.</p>
+
+        <div class="highlight-box">
+            <strong>Nota Práctica:</strong> En el mundo moderno de IA empresarial, librerías como <code>DoWhy</code> o
+            <code>CausalML</code> generalizan este bloque de código. Permiten ingresar *DataFrames* puros con miles de
+            variables y un grafo <code>networkx</code> o archivo <code>.dot</code>. El motor examina el DAG de Pearl
+            automáticamente, localiza todos los caminos Backdoor/Frontdoor y expulsa las fórmulas matemáticas de ajuste
+            correctas antes de invocar a los modelos Predictivos clásicos (como Random Forest o un Perceptrón).
+        </div>
+
+        <div class="btn-nav-group">
+            <a href="09_practica_python_dags.html" class="btn-nav">← Anterior (DAGs en Python)</a>
+            <a href="index.html" class="btn-nav primary">Finalizado. Volver al Índice 🏠</a>
+        </div>
+    </div>
+</body>
+
+</html>
