@@ -8,21 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
-    <style>
+    <link rel="stylesheet" href="../../../shared/styles.css"/>
+  <style>
         :root {
             --accent: #ff79c6;
-            /* Rosa para sección 4 */
             --bg: #0d1117;
             --text: #e6edf3;
             --card-bg: #161b22;
             --border: #30363d;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -32,46 +28,24 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding-top: 30px;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding-top: 30px; }
 
-        .breadcrumb {
-            font-size: 0.85em;
-            color: #8b949e;
-            margin-bottom: 20px;
-        }
+        .breadcrumb { font-size: 0.85em; color: #8b949e; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
 
-        .breadcrumb a {
-            color: var(--accent);
-            text-decoration: none;
-        }
+        h1 { font-size: 2.5em; font-weight: 900; margin-bottom: 15px; color: var(--accent); }
+        h2 { font-size: 1.8em; margin: 40px 0 15px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.3em; margin: 25px 0 10px; color: #c9d1d9; }
 
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
+        p { margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
 
-        h1 {
-            font-size: 2.5em;
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: var(--accent);
-        }
-
-        h2 {
-            font-size: 1.8em;
-            margin: 40px 0 15px;
-            color: #fff;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-
-        p {
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            color: #c9d1d9;
+        .math {
+            font-family: 'Courier New', Courier, monospace;
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #a5d6ff;
         }
 
         .graph-box {
@@ -87,26 +61,141 @@
             gap: 15px;
         }
 
-        .graph-desc {
-            font-size: 0.95em;
-            color: #8b949e;
-            text-align: center;
-        }
+        .graph-desc { font-size: 0.95em; color: #8b949e; text-align: center; }
 
         .highlight-box {
-            background: rgba(255, 121, 198, 0.1);
+            background: rgba(255, 121, 198, 0.08);
             border-left: 4px solid var(--accent);
             padding: 20px;
             border-radius: 0 8px 8px 0;
             margin: 30px 0;
-            font-size: 1.15em;
+            font-size: 1.1em;
         }
 
-        .btn-nav-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 40px;
+        .warning-box {
+            background: rgba(255, 123, 114, 0.08);
+            border-left: 4px solid #ff7b72;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
         }
+
+        .info-box {
+            background: rgba(82, 196, 26, 0.08);
+            border-left: 4px solid #52c41a;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 30px 0;
+        }
+
+        .step {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 20px 20px 20px 70px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .step-num {
+            position: absolute;
+            top: 50%;
+            left: 18px;
+            transform: translateY(-50%);
+            background: var(--accent);
+            color: #000;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1em;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .step p { margin: 0; font-size: 1em; }
+
+        .dsep-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            font-size: 0.95em;
+        }
+
+        .dsep-table th, .dsep-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dsep-table th {
+            background: #21262d;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+        }
+
+        .dsep-table tr:last-child td { border-bottom: none; }
+
+        pre {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #edf2de;
+        }
+
+        code { font-family: 'Courier New', monospace; }
+
+        .code-label {
+            display: inline-block;
+            background: #21262d;
+            color: #8b949e;
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: -4px;
+            font-family: monospace;
+            border: 1px solid var(--border);
+            border-bottom: none;
+        }
+
+        .exercise-box {
+            background: rgba(227, 179, 65, 0.06);
+            border: 1px solid #e3b341;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px 0;
+        }
+
+        .exercise-box h3 { color: #e3b341; margin-top: 0; }
+
+        ol { margin-left: 25px; margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
+        ol li { margin-bottom: 12px; }
+        ul { margin-left: 25px; margin-bottom: 20px; font-size: 1.05em; color: #c9d1d9; }
+        ul li { margin-bottom: 8px; }
+
+        .btn-nav-group { display: flex; gap: 15px; margin-top: 40px; }
 
         .btn-nav {
             display: inline-block;
@@ -127,105 +216,401 @@
             border: none;
         }
 
-        .btn-nav:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-        }
+        .btn-nav:hover { transform: translateY(-2px); border-color: var(--accent); }
     </style>
+
+  <!-- Anti-flash -->
+  <script>!function(){var t=localStorage.getItem('lucentia-theme')||'dark';'light'===t&&document.documentElement.setAttribute('data-theme','light')}()</script>
+
 </head>
 
 <body>
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="index.html">← Volver al Roadmap</a> / Sección 04
+<!-- Botón hamburguesa — visible en tablet/móvil -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Abrir menú" aria-expanded="true">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a href="index.html">← Volver al Roadmap</a> / Sección 04
+    </div>
+
+    <h1>🕸️ Grafos Acíclicos Dirigidos (DAGs)</h1>
+    <p>Para matematizar la causalidad necesitamos un lenguaje que codifique los supuestos del mundo real.
+        Los <strong>DAGs causales</strong> (<em>Directed Acyclic Graphs</em>) son ese lenguaje: los nodos son variables
+        y las flechas son relaciones causales directas. "Acíclico" significa que no hay bucles
+        (ninguna variable puede ser causa de sí misma a través del grafo).</p>
+    <p>Toda la complejidad de cualquier sistema de inferencia causal se construye combinando tan solo
+        <strong>tres estructuras fundamentales</strong>.</p>
+
+    <!-- ======================= 3 ESTRUCTURAS ======================= -->
+    <h2>Las Tres Estructuras Fundamentales</h2>
+
+    <h3>1. La Cadena (Mediación)</h3>
+    <p>La información fluye a través de una secuencia causal. La variable Z es el mecanismo por el que X causa Y.</p>
+
+    <div class="graph-box">
+        <div class="mermaid">
+            graph LR
+            X((X)) --> Z((Z))
+            Z --> Y((Y))
+            style X fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style Z fill:#238636,stroke:#3fb950,color:#fff
+            style Y fill:#a371f7,stroke:#bc8cff,color:#fff
         </div>
+        <p class="graph-desc">X → Z → Y &nbsp;|&nbsp; Ejemplo: Fuego (X) → Humo (Z) → Alarma (Y)</p>
+    </div>
 
-        <h1>🕸️ Grafos Acíclicos Dirigidos (DAGs)</h1>
-        <p>Para matematizar la causalidad necesitamos un mapa visual que exprese los supuestos del mundo real (el modelo
-            cualitativo empírico de un experto). Estos son los DAGs causales (<i>Directed Acyclic Graphs</i>). Los nodos
-            son variables y las flechas son relaciones causales directas.</p>
+    <table class="dsep-table">
+        <tr><th>Condición</th><th>Flujo X–Y</th><th>¿Están correlacionados X e Y?</th></tr>
+        <tr><td>Sin condicionar (Z libre)</td><td>Abierto</td><td>Sí — X predice Y a través de Z</td></tr>
+        <tr><td>Condicionando por Z</td><td>Cerrado (d-separados)</td><td>No — Z bloquea el camino</td></tr>
+    </table>
+    <p><strong>Interpretación:</strong> Si sé exactamente cuánto humo hay (fijo Z), el hecho de que haya fuego
+        ya no me dice nada adicional sobre la alarma. Z absorbe toda la información.</p>
 
-        <p>Toda la complejidad de cualquier sistema de inferencia causal del universo se construye combinando tan solo
-            <strong>tres estructuras fundamentales</strong>.</p>
+    <h3>2. La Bifurcación (Confounder / Causa Común)</h3>
+    <p>Una variable central Z causa simultáneamente X e Y. Es la fuente clásica de correlaciones espurias.</p>
 
-        <h2>1. La Cadena (Mediación)</h2>
-        <p>La información fluye a través de una cadena de eventos secuenciales.</p>
-
-        <div class="graph-box">
-            <div class="mermaid">
-                graph LR
-                X((X)) --> Z((Z))
-                Z --> Y((Y))
-                style X fill:#1f6feb,stroke:#58a6ff
-                style Z fill:#238636,stroke:#3fb950
-                style Y fill:#a371f7,stroke:#bc8cff
-            </div>
-            <p class="graph-desc">X causa Z que causa Y<br>Ejemplo: Fuego (X) → Humo (Z) → Alarma (Y)</p>
+    <div class="graph-box">
+        <div class="mermaid">
+            graph TD
+            Z((Z)) --> X((X))
+            Z --> Y((Y))
+            style X fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style Z fill:#da3633,stroke:#ff7b72,color:#fff
+            style Y fill:#a371f7,stroke:#bc8cff,color:#fff
         </div>
-        <p><strong>Comportamiento del flujo de información:</strong> Si observas X, puedes predecir Y. El flujo está
-            <strong>abierto</strong>. Sin embargo, si condicionas por Z (fijas el evento Z, sabes con certeza cuánto
-            humo hay), la información se bloquea. El flujo queda <strong>cerrado</strong> (d-separado).</p>
+        <p class="graph-desc">Z → X y Z → Y &nbsp;|&nbsp; Ejemplo: Temperatura (Z) → Ventas de helado (X) y Ataques de tiburón (Y)</p>
+    </div>
 
-        <h2>2. La Bifurcación (Confounder)</h2>
-        <p>Una variable central C causa otras dos variables A y B. Éste es el responsable clásico de las correlaciones
-            espurias (como vimos en la Paradoja de Simpson).</p>
+    <table class="dsep-table">
+        <tr><th>Condición</th><th>Flujo X–Y</th><th>¿Están correlacionados X e Y?</th></tr>
+        <tr><td>Sin condicionar (Z libre)</td><td>Abierto</td><td>Sí — correlación espuria por Z</td></tr>
+        <tr><td>Condicionando por Z</td><td>Cerrado (d-separados)</td><td>No — elimina el backdoor path</td></tr>
+    </table>
 
-        <div class="graph-box">
-            <div class="mermaid">
-                graph TD
-                Z((Z)) --> X((X))
-                Z --> Y((Y))
-                style X fill:#1f6feb,stroke:#58a6ff
-                style Z fill:#da3633,stroke:#ff7b72
-                style Y fill:#a371f7,stroke:#bc8cff
-            </div>
-            <p class="graph-desc">Z es la causa común de X e Y<br>Ejemplo: Temperatura exterior alta (Z)
-                incrementa<br>Venta de Helados (X) y Ataques de Tiburón (Y)</p>
+    <h3>3. El Colisionador (Collider)</h3>
+    <p>El caso más contraintuitivo. Dos variables X e Y son <em>independientes</em>, pero ambas causan Z.
+        Z es el "punto de colisión".</p>
+
+    <div class="graph-box">
+        <div class="mermaid">
+            graph TD
+            X((X)) --> Z((Z))
+            Y((Y)) --> Z((Z))
+            style X fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style Z fill:#d29922,stroke:#e3b341,color:#000
+            style Y fill:#a371f7,stroke:#bc8cff,color:#fff
         </div>
-        <p><strong>Comportamiento del flujo de información:</strong> Como Z empuja simultáneamente a X y Y, estas dos
-            suben o bajan juntas de forma correlacionada (flujo <strong>abierto</strong>). Si condicionamos respecto a Z
-            (separamos por niveles de temperatura), la correlación mágica entre Helados y Tiburones desaparece. El
-            camino queda <strong>cerrado</strong>.</p>
+        <p class="graph-desc">X → Z ← Y &nbsp;|&nbsp; Ejemplo: Talento (X) + Belleza (Y) → Actor famoso (Z)</p>
+    </div>
 
-        <h2>3. El Colisionador (Collider)</h2>
-        <p>El caso más contraintuitivo del Machine Learning. Dos factores totalmente independientes (X e Y) provocan un
-            rasgo convergente (Z).</p>
+    <table class="dsep-table">
+        <tr><th>Condición</th><th>Flujo X–Y</th><th>¿Están correlacionados X e Y?</th></tr>
+        <tr><td>Sin condicionar (Z libre)</td><td><strong>Cerrado</strong> (d-separados)</td><td>No — independientes por defecto</td></tr>
+        <tr><td>Condicionando por Z (o descendiente de Z)</td><td><strong>Abierto</strong> — ¡Activa el flujo!</td><td>Sí — correlación espuria generada</td></tr>
+    </table>
 
-        <div class="graph-box">
-            <div class="mermaid">
-                graph TD
-                X((X)) --> Z((Z))
-                Y((Y)) --> Z((Z))
-                style X fill:#1f6feb,stroke:#58a6ff
-                style Z fill:#d29922,stroke:#d2a8ff
-                style Y fill:#a371f7,stroke:#bc8cff
-            </div>
-            <p class="graph-desc">X e Y son independientes, Z es la consecuencia de ambas<br>Ejemplo: Talento (X) y
-                Belleza (Y) → Son actores de Hollywood (Z)</p>
+    <div class="highlight-box">
+        <strong>El Peligro del Collider:</strong> Si filtras tu dataset solo a actores famosos (Z=1), introduces
+        una correlación negativa artificial entre Talento y Belleza. Los actores poco atractivos en el dataset
+        "deben" tener mucho talento (para estar ahí sin la belleza). Esto corrompe cualquier análisis posterior.
+        En Machine Learning, esto ocurre cuando entrenas modelos sobre datos ya filtrados por un proceso de selección.
+    </div>
+
+    <!-- ======================= D-SEPARACIÓN ======================= -->
+    <h2>d-Separación: El Algoritmo Maestro de Pearl</h2>
+    <p>La <strong>d-separación</strong> (d = "direccional") es el algoritmo que, dado un DAG de cualquier tamaño con
+        miles de variables, determina con certeza matemática si dos conjuntos de variables son <em>independientes
+        condicionalmente</em> dado un tercer conjunto de variables observadas.</p>
+
+    <p>Definición formal: Dos nodos X e Y están <strong>d-separados</strong> dado un conjunto Z si
+        <em>todos los caminos</em> no dirigidos entre X e Y están bloqueados por Z.</p>
+
+    <h3>¿Cuándo está bloqueado un camino?</h3>
+    <p>Un camino entre X e Y está bloqueado dado Z si contiene al menos uno de estos patrones:</p>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <p><strong>Cadena o Bifurcación con Z en el medio observado:</strong>
+                X → <strong>Z</strong> → Y &nbsp;o&nbsp; X ← <strong>Z</strong> → Y.
+                Si <strong>Z ∈ observadas</strong>, el camino está bloqueado.</p>
         </div>
-
-        <div class="highlight-box">
-            <strong>El Peligro del Collider:</strong> Por defecto, Talento y Belleza no tienen ninguna correlación en la
-            Tierra (flujo de información naturalmente <strong>cerrado</strong>). ¡Pero si <strong>condicionamos</strong>
-            por Z (es decir, limitamos nuestro Dataset de entrenamiento SÓLO a las personas que YA son estrellas de
-            Hollywood), abrimos el flujo de información!
-            <br><br>
-            Aparecerá una correlación negativa artificial: si en Hollywood ves a alguien que resulta ser poco atractivo,
-            tu IA deducirá inmediatamente (y acertará en esos datos condicionados) que debe tener un talento desbordante
-            para estar ahí (porque algo lo debió llevar como actor).
+        <div class="step">
+            <div class="step-num">2</div>
+            <p><strong>Colisionador no observado:</strong>
+                X → <strong>Z</strong> ← Y.
+                Si <strong>Z ∉ observadas</strong> y <strong>ningún descendiente de Z ∈ observadas</strong>,
+                el camino está bloqueado (por defecto cerrado).</p>
         </div>
-
-        <h2>d-Separación: La Ley Maestra</h2>
-        <p>Con estas 3 reglas, Pearl unificó la causalidad. Dados dos nodos X y Y en un super-grafo de miles de
-            variables interconectadas (como un cuerpo humano o una macroeconomía), podemos determinar matemáticamente
-            empleando un algoritmo gráfico si están causalmente separados simplemente localizando las cadenas,
-            bifurcaciones y colisionadores intermedios.</p>
-
-        <div class="btn-nav-group">
-            <a href="03_paradoja_simpson.html" class="btn-nav">← Anterior</a>
-            <a href="05_do_calculus.html" class="btn-nav primary">Siguiente: El Cálculo Do →</a>
+        <div class="step">
+            <div class="step-num">3</div>
+            <p><strong>Colisionador observado — abre el camino:</strong>
+                X → <strong>Z</strong> ← Y.
+                Si <strong>Z ∈ observadas</strong> (o un descendiente suyo), el camino se <em>activa</em>
+                (pasa de bloqueado a abierto). ¡Condicionar por un colisionador introduce dependencia!</p>
         </div>
     </div>
-</body>
 
+    <h3>Ejemplo Completo — DAG con 5 Nodos</h3>
+    <p>Consideremos el siguiente DAG que modela el efecto de la Educación sobre los Ingresos:</p>
+
+    <div class="graph-box">
+        <div class="mermaid">
+            graph TD
+            F((Familia\nRica)) --> E((Educación))
+            F --> I((Ingresos))
+            E --> J((Trabajo\nCalificado))
+            J --> I
+            H((Habilidad\nNatural)) --> E
+            H --> I
+            style F fill:#da3633,stroke:#ff7b72,color:#fff
+            style E fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style J fill:#238636,stroke:#3fb950,color:#fff
+            style I fill:#a371f7,stroke:#bc8cff,color:#fff
+            style H fill:#d29922,stroke:#e3b341,color:#000
+        </div>
+        <p class="graph-desc">
+            Familia Rica (F) es confounder de Educación–Ingresos.<br>
+            Habilidad Natural (H) es otro confounder no siempre medido.<br>
+            Trabajo Calificado (J) es mediador del efecto de Educación sobre Ingresos.
+        </p>
+    </div>
+
+    <p><strong>Pregunta:</strong> ¿Está d-separado Educación (E) de Ingresos (I)?</p>
+
+    <p>Enumeremos todos los caminos no dirigidos entre E e I:</p>
+    <table class="dsep-table">
+        <tr>
+            <th>Camino</th>
+            <th>Tipo</th>
+            <th>Sin observar nada</th>
+            <th>Observando {F}</th>
+            <th>Observando {F, H}</th>
+        </tr>
+        <tr>
+            <td>E → J → I</td>
+            <td>Cadena (mediador)</td>
+            <td style="color:#50fa7b;">Abierto</td>
+            <td style="color:#50fa7b;">Abierto</td>
+            <td style="color:#50fa7b;">Abierto</td>
+        </tr>
+        <tr>
+            <td>E ← F → I</td>
+            <td>Fork (confounder F)</td>
+            <td style="color:#ff7b72;">Abierto (espurio)</td>
+            <td style="color:#a5d6ff;"><strong>Bloqueado ✓</strong></td>
+            <td style="color:#a5d6ff;"><strong>Bloqueado ✓</strong></td>
+        </tr>
+        <tr>
+            <td>E ← H → I</td>
+            <td>Fork (confounder H)</td>
+            <td style="color:#ff7b72;">Abierto (espurio)</td>
+            <td style="color:#ff7b72;">Abierto (espurio)</td>
+            <td style="color:#a5d6ff;"><strong>Bloqueado ✓</strong></td>
+        </tr>
+        <tr>
+            <td>E ← H → I ← F → E</td>
+            <td>Mixto (con ciclo prohibido)</td>
+            <td colspan="3" style="text-align:center; color:#8b949e;">No aplica — es acíclico</td>
+        </tr>
+    </table>
+
+    <div class="info-box">
+        <strong>Conclusión:</strong><br>
+        — Sin observar nada: E e I están <em>correlacionados espuriamente</em> por F y H. El efecto estimado de la educación en los ingresos está sesgado.<br>
+        — Observando solo F: todavía hay sesgo por H (habilidad natural no medida).<br>
+        — Observando {F, H}: todos los caminos backdoor bloqueados → E e I son d-separados dados {F, H} → podemos estimar el efecto causal limpio de la educación.
+    </div>
+
+    <!-- ======================= MARKOV + FAITHFULNESS ======================= -->
+    <h2>Los Dos Supuestos Fundamentales del DAG</h2>
+    <p>Para que el razonamiento d-separación sea válido, el DAG debe satisfacer dos condiciones sobre los datos:</p>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <p><strong>Condición de Markov Causal:</strong> Cada variable es condicionalmente independiente de sus
+                no-descendientes dados sus padres directos en el DAG. Es decir: el DAG captura <em>todas</em> las
+                dependencias relevantes. Si X e Y están d-separados dado Z en el DAG, entonces también son
+                independientes en los datos.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <p><strong>Fidelidad (Faithfulness):</strong> La implicación inversa: si dos variables son
+                independientes en los datos, también deben estar d-separadas en el DAG. Es decir,
+                no existen "cancelaciones accidentales" de efectos que creen independencias espurias en los datos
+                que no existen en el grafo.</p>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <strong>Violación de Faithfulness:</strong> Imagina un DAG X → Z → Y y X → Y (efecto directo).
+        Si el efecto directo X→Y cancela exactamente el efecto indirecto X→Z→Y, los datos mostrarán
+        X⊥Y aunque el DAG no los d-separa. Esta situación es una <em>coincidencia de parámetros</em> y
+        viola la Faithfulness. Es rara en la práctica pero teóricamente posible.
+    </div>
+
+    <!-- ======================= CÓDIGO PYTHON ======================= -->
+    <h2>Código Python: Construir y Analizar un DAG</h2>
+    <p>Usamos <code>pgmpy</code> para construir el DAG del ejemplo de Educación–Ingresos, hacer consultas de
+        d-separación y generar datos sintéticos.</p>
+
+    <p class="code-label">python</p>
+    <pre><code># pip install pgmpy networkx matplotlib
+from pgmpy.models import BayesianNetwork
+from pgmpy.factors.discrete import TabularCPD
+
+# ---- CONSTRUIR EL DAG ----
+# Nodos: F=FamiliaRica, H=Habilidad, E=Educacion, J=TrabajoCalificado, I=Ingresos
+dag = BayesianNetwork([
+    ('F', 'E'),   # Familia Rica → Educacion
+    ('F', 'I'),   # Familia Rica → Ingresos (nepotismo, herencias, etc.)
+    ('H', 'E'),   # Habilidad → Educacion
+    ('H', 'I'),   # Habilidad → Ingresos
+    ('E', 'J'),   # Educacion → Trabajo Calificado
+    ('J', 'I'),   # Trabajo Calificado → Ingresos
+])
+
+print("Nodos:", dag.nodes())
+print("Aristas:", dag.edges())
+
+# ---- CONSULTAS DE D-SEPARACIÓN ----
+# ¿E e I son d-separados dado {}?
+sep1 = dag.active_trail_nodes('E', observed=[])
+print("\nNodos que se comunican con E (sin observar nada):", sep1)
+
+# ¿E e I son d-separados dado {F, H}?
+# Usamos d_separation() del modelo
+result_free  = dag.d_separation(['E'], ['I'], [])
+result_FH    = dag.d_separation(['E'], ['I'], ['F', 'H'])
+result_F     = dag.d_separation(['E'], ['I'], ['F'])
+
+print(f"\n¿E d-separado de I dado {{}}?    → {result_free}")   # False
+print(f"¿E d-separado de I dado {{F}}?   → {result_F}")      # False (H aún abre)
+print(f"¿E d-separado de I dado {{F,H}}? → {result_FH}")     # True  (ambos backdoor cerrados)
+
+# ---- MARKOV BLANKET ----
+# El Markov Blanket de un nodo = padres + hijos + co-padres de sus hijos
+# = el conjunto mínimo que hace al nodo condicionalmente independiente del resto
+mb_E = dag.get_markov_blanket('E')
+print(f"\nMarkov Blanket de Educación: {mb_E}")
+# Esperado: {'F', 'H', 'J'}  (padres de E: F, H; hijos de E: J; co-padres de J: H implícito)
+</code></pre>
+
+    <div class="info-box">
+        <strong>Nota sobre d_separation en pgmpy:</strong> La API puede variar según la versión.
+        Si da error, usa <code>dag.active_trail_nodes('E', observed=['F', 'H'])</code> y verifica si 'I' aparece
+        en el resultado. Si no aparece, están d-separados.
+    </div>
+
+    <h3>Generar Datos Sintéticos del DAG y Verificar con Correlaciones</h3>
+
+    <p class="code-label">python</p>
+    <pre><code>import numpy as np
+import pandas as pd
+from scipy import stats
+
+np.random.seed(42)
+N = 5000
+
+# Variables: binary para simplificar (0 = bajo, 1 = alto)
+F = np.random.binomial(1, 0.4, N)           # 40% familias ricas
+H = np.random.binomial(1, 0.5, N)           # 50% alta habilidad
+
+# Educación: aumenta con familia rica y con habilidad
+p_educ = 0.2 + 0.35 * F + 0.35 * H
+E = np.random.binomial(1, np.clip(p_educ, 0, 1), N)
+
+# Trabajo Calificado: depende solo de educación
+p_job = 0.1 + 0.6 * E
+J = np.random.binomial(1, np.clip(p_job, 0, 1), N)
+
+# Ingresos: depende de J, F y H (no de E directamente en este modelo)
+p_income = 0.1 + 0.5 * J + 0.2 * F + 0.15 * H
+Income = np.random.binomial(1, np.clip(p_income, 0, 1), N)
+
+df = pd.DataFrame({'F': F, 'H': H, 'E': E, 'J': J, 'Income': Income})
+
+# ---- Correlación E–Income sin ajuste (L1: sesgada) ----
+r_raw, p_raw = stats.pearsonr(df['E'], df['Income'])
+print(f"Correlación E–Income (cruda, biased): r={r_raw:.3f}, p={p_raw:.2e}")
+
+# ---- Correlación E–Income ajustada por F y H usando regresión parcial ----
+from numpy.linalg import lstsq
+
+# Residualizamos E e Income respecto a F, H
+Xmat = np.column_stack([np.ones(N), df['F'], df['H']])
+E_resid = df['E'] - Xmat @ lstsq(Xmat, df['E'], rcond=None)[0]
+I_resid = df['Income'] - Xmat @ lstsq(Xmat, df['Income'], rcond=None)[0]
+
+r_adj, p_adj = stats.pearsonr(E_resid, I_resid)
+print(f"Correlación E–Income (ajustada por F,H): r={r_adj:.3f}, p={p_adj:.2e}")
+
+# La diferencia entre r_raw y r_adj es el sesgo por los confounders
+print(f"\nSesgo por confounders (F, H): Δr = {r_raw - r_adj:+.3f}")
+</code></pre>
+
+    <!-- ======================= EJERCICIOS ======================= -->
+    <div class="exercise-box">
+        <h3>✏️ Ejercicios</h3>
+        <ol>
+            <li>
+                <strong>Identificar estructuras:</strong> En el DAG de Educación–Ingresos de arriba,
+                identifica <em>todos</em> los caminos no dirigidos entre H (Habilidad) e I (Ingresos).
+                ¿Cuántos hay? ¿Cuáles son causales y cuáles espurios?
+            </li>
+            <li>
+                <strong>d-separación manual:</strong> Dado el DAG: A → B → D, A → C → D, B → C.
+                ¿Está A d-separado de D dado {B}? ¿Dado {B, C}? Razona mostrando cada camino.
+            </li>
+            <li>
+                <strong>Collider trap:</strong> En el DAG E → J ← H (J es colisionador):
+                ¿Qué pasa con la correlación entre E y H si condicionas por J?
+                Verifica con el código: calcula la correlación E–H dentro del subset J=1 y dentro de J=0.
+            </li>
+            <li>
+                <strong>Diseña tu propio DAG:</strong> Elige un dominio (recomendación de contenido, diagnóstico médico,
+                o mercado laboral) y diseña un DAG con 5 variables. Identifica los confounders, mediadores y
+                colisionadores. Escríbelo como lista de aristas para pgmpy.
+            </li>
+        </ol>
+    </div>
+
+    <div class="btn-nav-group">
+        <a href="03_paradoja_simpson.html" class="btn-nav">← Anterior</a>
+        <a href="05_do_calculus.html" class="btn-nav primary">Siguiente: El Cálculo Do →</a>
+    </div>
+</div>
+<script src="../../../shared/lucentia.js" defer></script>
+
+
+<!-- ── Sidebar inyectada por inject_gen1_sidebar.py ────────────────────────── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">LucentIA</div>
+  <div class="sidebar-course">Causalidad</div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-section">Índice del curso</li>
+    <li><a href="01_introduccion.html">01: Más allá de las Correlaciones</a></li>
+    <li><a href="02_escalera_causacion.html">02: La Escalera de la Causación</a></li>
+    <li><a href="03_paradoja_simpson.html">03: La Paradoja de Simpson</a></li>
+    <li><a href="04_dags.html">04: Grafos Causales (DAGs)</a></li>
+    <li><a href="05_do_calculus.html">05: El Cálculo do()</a></li>
+    <li><a href="06_contrafactuales.html">06: Contrafactuales y SCMs</a></li>
+    <li><a href="07_deep_learning_causal.html">07: Deep Learning Causal</a></li>
+    <li><a href="08_papers_estado_del_arte.html">08: Papers y Estado del Arte</a></li>
+    <li><a href="09_practica_python_dags.html">09: Python - Datos Sintéticos y DAGs</a></li>
+    <li><a href="10_practica_python_do_calculus.html">10: Python - ML Sesgado vs DoWhy</a></li>
+    <li><a href="index.html">Causalidad</a></li>
+  </ul>
+  <div class="theme-toggle">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIcon">&#9728;</span>
+      <span id="themeLabel">Modo claro</span>
+    </button>
+  </div>
+</nav>
+
+</body>
 </html>

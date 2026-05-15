@@ -6,21 +6,17 @@
     <title>02: La Escalera de la Causación | Causalidad</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
+    <link rel="stylesheet" href="../../../shared/styles.css"/>
+  <style>
         :root {
             --accent: #79c0ff;
-            /* Azul para sección 2 */
             --bg: #0d1117;
             --text: #e6edf3;
             --card-bg: #161b22;
             --border: #30363d;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -30,47 +26,17 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding-top: 30px;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding-top: 30px; }
 
-        .breadcrumb {
-            font-size: 0.85em;
-            color: #8b949e;
-            margin-bottom: 20px;
-        }
+        .breadcrumb { font-size: 0.85em; color: #8b949e; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
 
-        .breadcrumb a {
-            color: var(--accent);
-            text-decoration: none;
-        }
+        h1 { font-size: 2.5em; font-weight: 900; margin-bottom: 15px; color: var(--accent); }
+        h2 { font-size: 1.8em; margin: 40px 0 15px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.3em; margin: 25px 0 10px; color: #c9d1d9; }
 
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: var(--accent);
-        }
-
-        h2 {
-            font-size: 1.8em;
-            margin: 40px 0 15px;
-            color: #fff;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-
-        p {
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            color: #c9d1d9;
-        }
+        p { margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
 
         .math {
             font-family: 'Courier New', Courier, monospace;
@@ -94,7 +60,6 @@
             border: 1px solid var(--border);
             padding: 25px;
             border-radius: 8px;
-            position: relative;
         }
 
         .stair h3 {
@@ -117,24 +82,139 @@
             border: 1px solid var(--accent);
         }
 
-        .stair p {
-            margin-bottom: 10px;
-            font-size: 1.05em;
-        }
+        .stair p { margin-bottom: 10px; font-size: 1.05em; }
 
         .stair .formula {
             font-family: monospace;
-            font-size: 1.25em;
+            font-size: 1.3em;
             color: #ff7b72;
             margin: 15px 0;
             font-weight: bold;
         }
 
-        .btn-nav-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 40px;
+        .highlight-box {
+            background: rgba(121, 192, 255, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
         }
+
+        .warning-box {
+            background: rgba(255, 123, 114, 0.08);
+            border-left: 4px solid #ff7b72;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: rgba(82, 196, 26, 0.08);
+            border-left: 4px solid #52c41a;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1em;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th, td { padding: 14px; text-align: center; border-bottom: 1px solid var(--border); }
+        th { background: #21262d; color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px; }
+        tr:last-child td { border-bottom: none; }
+        td:first-child { text-align: left; font-weight: 600; }
+
+        pre {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #edf2de;
+        }
+
+        code { font-family: 'Courier New', monospace; }
+
+        .code-label {
+            display: inline-block;
+            background: #21262d;
+            color: #8b949e;
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: -4px;
+            font-family: monospace;
+            border: 1px solid var(--border);
+            border-bottom: none;
+        }
+
+        .ate-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 30px 0;
+        }
+
+        .ate-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .ate-card .ate-name {
+            font-size: 1.5em;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .ate-card .ate-full {
+            font-size: 0.8em;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .ate-card p { font-size: 0.95em; margin-bottom: 8px; }
+
+        .ate-formula {
+            font-family: monospace;
+            color: #ff7b72;
+            font-size: 0.95em;
+            margin-top: 10px;
+        }
+
+        .exercise-box {
+            background: rgba(227, 179, 65, 0.06);
+            border: 1px solid #e3b341;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px 0;
+        }
+
+        .exercise-box h3 { color: #e3b341; margin-top: 0; }
+
+        ol { margin-left: 25px; margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
+        ol li { margin-bottom: 12px; }
+
+        .btn-nav-group { display: flex; gap: 15px; margin-top: 40px; }
 
         .btn-nav {
             display: inline-block;
@@ -155,88 +235,337 @@
             border: none;
         }
 
-        .btn-nav:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-        }
+        .btn-nav:hover { transform: translateY(-2px); border-color: var(--accent); }
     </style>
+
+  <!-- Anti-flash -->
+  <script>!function(){var t=localStorage.getItem('lucentia-theme')||'dark';'light'===t&&document.documentElement.setAttribute('data-theme','light')}()</script>
+
 </head>
 
 <body>
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="index.html">← Volver al Roadmap</a> / Sección 02
+<!-- Botón hamburguesa — visible en tablet/móvil -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Abrir menú" aria-expanded="true">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a href="index.html">← Volver al Roadmap</a> / Sección 02
+    </div>
+
+    <h1>🪜 La Escalera de la Causación</h1>
+    <p>En su libro fundacional <em>The Book of Why</em>, Judea Pearl establece que el razonamiento causal se organiza en
+        <strong>tres peldaños jerárquicos</strong>. La restricción fundamental es matemáticamente probada: es
+        <strong>imposible</strong> responder preguntas de un nivel superior usando únicamente datos del nivel inferior,
+        sin importar cuán grande sea el dataset.</p>
+    <p>Esta jerarquía explica por qué los mejores LLMs o modelos de Deep Learning — entrenados con billones de tokens —
+        siguen sin poder razonar causalmente por sí solos: todos viven en el Peldaño 1.</p>
+
+    <div class="stair-container">
+
+        <!-- PELDAÑO 1 -->
+        <div class="stair">
+            <h3>Peldaño 1: Ver (Asociación) <span class="stair-lvl">Nivel L1</span></h3>
+            <p><strong>Actividad:</strong> Observar patrones en datos pasivos. No hay intervención.</p>
+            <p><strong>Pregunta típica:</strong> ¿Qué ocurre si veo X? ¿Cuánto cambia mi creencia sobre Y
+                al observar X?</p>
+            <div class="formula">P(y | x)</div>
+            <p>Probabilidad de Y dado que <em>observamos</em> X. Solo correlación, no causalidad.</p>
+
+            <h3 style="color:#c9d1d9; font-size:1.1em; margin-top:18px;">Ejemplo numérico — Césped mojado</h3>
+            <p>Supón que tienes un dataset de 1000 días con las variables <em>Lluvia</em> y <em>Césped_Mojado</em>:
+                en 400 días el césped estaba mojado, y de esos, en 320 también había llovido.</p>
+            <p>La pregunta L1 es: <em>"Si observo que el césped está mojado, ¿con qué probabilidad llovió?"</em></p>
+            <p style="font-family:monospace; color:#a5d6ff; text-align:center; font-size:1.15em;">
+                P(Lluvia | Césped_Mojado) = 320 / 400 = <strong>0.80</strong>
+            </p>
+            <p>Simple conteo en la tabla de frecuencias. Cualquier modelo que calcule esta razón está en el Peldaño 1.
+                Nótese que el césped también se puede mojar por el aspersor del jardín — hay un <em>confounder</em>.</p>
+
+            <h3 style="color:#c9d1d9; font-size:1.1em; margin-top:18px;">Herramientas de L1</h3>
+            <p>Estadística clásica, regresión lineal, árboles de decisión, Random Forest, todas las redes neuronales
+                estándar (incluyendo Transformers y GPT). Son excelentes mapeando asociaciones, pero no
+                <em>entienden</em> el mundo.</p>
         </div>
 
-        <h1>🪜 La Escalera de la Causación</h1>
-        <p>En su libro fundacional "The Book of Why", Judea Pearl conceptualiza el razonamiento en tres niveles
-            jerárquicos. Es matemáticamente imposible responder preguntas de un nivel superior utilizando únicamente
-            conocimientos (datos + axiomas) de un nivel inferior.</p>
+        <!-- PELDAÑO 2 -->
+        <div class="stair">
+            <h3>Peldaño 2: Hacer (Intervención) <span class="stair-lvl">Nivel L2</span></h3>
+            <p><strong>Actividad:</strong> Actuar deliberadamente, modificar el sistema desde afuera.</p>
+            <p><strong>Pregunta típica:</strong> ¿Qué pasará si <em>fuerzo</em> X? ¿Qué efecto tiene sobre Y?</p>
+            <div class="formula">P(y | do(x))</div>
+            <p>El operador <span class="math">do(x)</span> no es una observación: es una <strong>cirugía en el grafo
+                causal</strong>. Equivale a tomar el nodo X en el DAG y cortar todos los arcos que llegaban a él,
+                asignándole un valor fijo desde afuera.</p>
 
-        <p>Esta es la limitación teórica que impide que el Data Science tradicional pueda responder preguntas causales,
-            sin importar cuán masivos sean los datos (Big Data).</p>
+            <h3 style="color:#c9d1d9; font-size:1.1em; margin-top:18px;">Por qué L1 ≠ L2 — Ejemplo numérico</h3>
+            <p>Volvamos al ejemplo del medicamento. Tenemos datos observacionales de 200 pacientes.
+                Los médicos tendieron a recetar el fármaco a los enfermos más graves (que tienen menor tasa de
+                recuperación base):</p>
 
-        <div class="stair-container">
-            <!-- PELDAÑO 1 -->
-            <div class="stair">
-                <h3>Peldaño 1: Ver (Asociación) <span class="stair-lvl">Nivel L1</span></h3>
-                <p><strong>Actividad:</strong> Observar, detectar patrones.</p>
-                <p><strong>Pregunta típica:</strong> ¿Qué ocurre si "X" es observado? ¿Cómo cambian mis creencias sobre
-                    "Y" si veo "X"?</p>
-                <p><strong>Ejemplo:</strong> ¿Qué probabilidad hay de que un dolor de cabeza (Y) remita si observamos
-                    que el paciente tomó aspirina (X)?</p>
-                <div class="formula">P(y | x)</div>
-                <p><strong>Herramientas:</strong> Estadística clásica, Regresión, Deep Learning estándar (Redes
-                    Neuronales, Transformers, LLMs autoregresivos). Son excelentes mapeando asociaciones, pero no
-                    "entienden" el mundo.</p>
-            </div>
+            <table>
+                <tr>
+                    <th>Grupo</th>
+                    <th>Tomó fármaco</th>
+                    <th>Se recuperó</th>
+                    <th>P(Recuperación | Fármaco)</th>
+                </tr>
+                <tr>
+                    <td>Enfermos leves</td>
+                    <td>20 de 100</td>
+                    <td>18 de 20</td>
+                    <td style="color:#50fa7b;">90%</td>
+                </tr>
+                <tr>
+                    <td>Enfermos graves</td>
+                    <td>80 de 100</td>
+                    <td>24 de 80</td>
+                    <td style="color:#ff7b72;">30%</td>
+                </tr>
+                <tr style="font-weight:700; background:rgba(255,255,255,0.03);">
+                    <td>Total (combinado)</td>
+                    <td>100 de 200</td>
+                    <td>42 de 100</td>
+                    <td style="color:#ff7b72;">42%</td>
+                </tr>
+            </table>
 
-            <!-- PELDAÑO 2 -->
-            <div class="stair">
-                <h3>Peldaño 2: Hacer (Intervención) <span class="stair-lvl">Nivel L2</span></h3>
-                <p><strong>Actividad:</strong> Intervenir, actuar deliberadamente modificando el sistema.</p>
-                <p><strong>Pregunta típica:</strong> ¿Qué ocurrirá si hago "X"? ¿Cómo cambia "Y"?</p>
-                <p><strong>Ejemplo:</strong> Si *obligo* a un paciente aleatorio a tomar aspirina, ¿cuál es la
-                    probabilidad de que su dolor de cabeza remita?</p>
-                <div class="formula">P(y | do(x))</div>
-                <p><strong>El matiz crítico:</strong> Observar que alguien compra un rolex (Peldaño 1) se asocia
-                    fuertemente con ser millonario. Pero *hacer* (Peldaño 2) que alguien compre un rolex regalándole uno
-                    o rebajando agresivamente su precio, no lo hará millonario. <span class="math">P(Millonario | Rolex)
-                        ≠ P(Millonario | do(Rolex))</span>.</p>
-                <p><strong>Pruebas Físicas:</strong> Los RCTs (Ensayos de Control Aleatorizado) o A/B Testing, permiten
-                    subir a este peldaño forzando la intervención física.</p>
-            </div>
-
-            <!-- PELDAÑO 3 -->
-            <div class="stair">
-                <h3>Peldaño 3: Imaginar (Contrafactuales) <span class="stair-lvl">Nivel L3</span></h3>
-                <p><strong>Actividad:</strong> Imaginar mundos alternativos. Razonamiento retrospectivo y entendimiento
-                    pleno.</p>
-                <p><strong>Pregunta típica:</strong> ¿Qué hubiera pasado si no hubiera hecho "X"?</p>
-                <p><strong>Ejemplo:</strong> El paciente tomó aspirina y su dolor remitió. ¿Habría remitido el dolor si
-                    *no* la hubiera tomado?</p>
-                <div class="formula">P(y_{x'} | x, y)</div>
-                <p><strong>Explicación de la fórmula:</strong> Probabilidad de Y en el mundo imaginario donde
-                    intervenimos para que X sea x' <span class="math">(y_{x'})</span>, dado que en el mundo *real*
-                    observamos que X ocurrió y resulto en Y <span class="math">(x, y)</span>. Para responder esto
-                    necesitamos un Modelo Causal Estructural (SCM) completo.</p>
-                <p>Este es el nivel de la cognición humana madura. Entendemos por qué suceden las cosas y podemos
-                    deducir responsabilidades y arrepentimientos ("Si hubiera salido antes de casa, no habría tenido el
-                    accidente").</p>
-            </div>
+            <p>Sin el fármaco (control, otros 100 pacientes distribuidos uniformemente): tasa de recuperación = <strong>55%</strong>.</p>
+            <p>La observación L1 dice: <span class="math">P(Recupera | Fármaco=Sí) = 42%</span> y
+               <span class="math">P(Recupera | Fármaco=No) = 55%</span>. ¿Conclusión? El fármaco es dañino.</p>
+            <p>Pero si <em>intervenimos</em> asignando el fármaco aleatoriamente a toda la población (i.e., cortamos
+                la influencia de <em>Severidad</em> sobre quien recibe el fármaco), el cálculo cambia:</p>
+            <p style="font-family:monospace; color:#a5d6ff; text-align:center; font-size:1.1em;">
+                P(Recupera | do(Fármaco=Sí)) = 0.5 × 90% + 0.5 × 30% = <strong>60%</strong>
+            </p>
+            <p>El fármaco <em>sí</em> funciona — pero los datos observacionales estaban sesgados porque los enfermos
+               más graves lo recibían más. La diferencia entre observar y hacer es exactamente la Paradoja de Simpson.</p>
         </div>
 
-        <h2>Conclusión del Módulo</h2>
-        <p>Un modelo de Machine Learning que vive exclusivamente en el Peldaño 1 jamás podrá responder espontáneamente
-            preguntas sobre el Peldaño 2. Necesita información causal externa (un modelo matemático, un DAG) provista
-            por un experto, o ejecutar acciones explícitas que perturben el sistema por fuerza bruta (como ocurre
-            inherentemente en algunas ramas puras de un Reinforcement Learning).</p>
+        <!-- PELDAÑO 3 -->
+        <div class="stair">
+            <h3>Peldaño 3: Imaginar (Contrafactuales) <span class="stair-lvl">Nivel L3</span></h3>
+            <p><strong>Actividad:</strong> Razonar sobre mundos alternativos que <em>no ocurrieron</em>.
+                Razonamiento retrospectivo e individual.</p>
+            <p><strong>Pregunta típica:</strong> Ya sé lo que pasó — ¿qué hubiera pasado si hubiera hecho algo distinto?</p>
+            <div class="formula">P(y<sub>x'</sub> | X=x, Y=y)</div>
 
-        <div class="btn-nav-group">
-            <a href="01_introduccion.html" class="btn-nav">← Anterior</a>
-            <a href="03_paradoja_simpson.html" class="btn-nav primary">Siguiente: La Paradoja de Simpson →</a>
+            <h3 style="color:#c9d1d9; font-size:1.1em; margin-top:18px;">Decodificando la notación</h3>
+            <p><span class="math">y<sub>x'</sub></span> es la notación de <strong>Resultados Potenciales</strong>
+                (Potential Outcomes, de Rubin): significa <em>"el valor que habría tomado Y si X hubiéramos forzado
+                a tomar el valor x'"</em>, en el mundo contrafactual.</p>
+            <p>La barra vertical <span class="math">| X=x, Y=y</span> indica que esto se pregunta <em>dado que en la
+                realidad</em> observamos X=x y el resultado fue Y=y. Es decir: ya pasó algo, y ahora preguntamos
+                qué habría pasado en un mundo paralelo.</p>
+
+            <h3 style="color:#c9d1d9; font-size:1.1em; margin-top:18px;">Ejemplo concreto</h3>
+            <p>María tomó aspirina (X=1) y su dolor de cabeza desapareció (Y=1). La pregunta contrafactual es:</p>
+            <p style="font-family:monospace; color:#a5d6ff; text-align:center; font-size:1.1em;">
+                P(Y<sub>0</sub> = 1 | X=1, Y=1)
+            </p>
+            <p>Es decir: ¿Cuál es la probabilidad de que el dolor de María hubiera desaparecido
+                <em>igualmente</em> sin la aspirina? Si esta probabilidad es alta, la aspirina no fue
+                <em>necesaria</em> para la curación de María en particular. Este razonamiento es imposible
+                en L1 o L2 — requiere un modelo causal estructural completo (SCM) del individuo.</p>
+
+            <h3 style="color:#c9d1d9; font-size:1.1em; margin-top:18px;">Diferencias vs. do()</h3>
+            <p><span class="math">do(x)</span> opera sobre <em>poblaciones</em>: "si damos el fármaco a todos,
+                ¿cuál es la tasa de recuperación media?". Los contrafactuales operan sobre
+                <em>individuos específicos</em>: "dado que este paciente concreto tomó el fármaco y murió,
+                ¿habría sobrevivido sin él?"</p>
         </div>
     </div>
-</body>
 
+    <!-- ========= POR QUÉ BIG DATA NO ES SUFICIENTE ========= -->
+    <h2>¿Por qué Big Data no sube de peldaño?</h2>
+    <p>Una objeción frecuente es: <em>"Con suficientes datos, ¿no deberían emerger las relaciones causales?"</em>
+        La respuesta es no, y aquí está la demostración:</p>
+
+    <div class="warning-box">
+        <strong>Argumento formal:</strong> Considera dos mundos con distribuciones de datos idénticas en L1:<br><br>
+        <strong>Mundo A:</strong> Fumar → Cáncer (fumar causa cáncer directamente)<br>
+        <strong>Mundo B:</strong> Gen-X → Fumar y Gen-X → Cáncer (un gen oculto causa ambas cosas)<br><br>
+        Ambos mundos generan exactamente la misma <span class="math">P(Fumar, Cáncer)</span> observable.
+        Un dataset de mil millones de filas no puede distinguirlos. Solo la estructura causal (el DAG) los diferencia.
+        En el Mundo A, prohibir fumar reduce el cáncer. En el Mundo B, no.
+        <br><br>Si no tienes el DAG, no puedes saber en qué mundo vives — sin importar los datos.
+    </div>
+
+    <p>Esto es la demostración de que la causalidad no emerge de los datos solos. Necesita <strong>supuestos estructurales
+        externos</strong> (el DAG, el modelo causal) que un experto del dominio debe aportar.</p>
+
+    <!-- ========= ATE ATT CATE ========= -->
+    <h2>Cantidades Causales: ATE, ATT y CATE</h2>
+    <p>Una vez en el Peldaño 2, hay tres maneras estándar de cuantificar el efecto de un tratamiento (T) sobre un
+        resultado (Y). Estas son las cantidades que aparecen en todos los papers de inferencia causal:</p>
+
+    <div class="ate-grid">
+        <div class="ate-card">
+            <div class="ate-name">ATE</div>
+            <div class="ate-full">Average Treatment Effect</div>
+            <p>El efecto promedio del tratamiento sobre <em>toda</em> la población.</p>
+            <p>"Si diéramos el fármaco a todos, ¿cuánto mejoraría el resultado medio?"</p>
+            <div class="ate-formula">E[Y(1) − Y(0)]</div>
+        </div>
+        <div class="ate-card">
+            <div class="ate-name">ATT</div>
+            <div class="ate-full">Avg. Treatment Effect on the Treated</div>
+            <p>El efecto del tratamiento <em>solo entre quienes realmente lo recibieron</em>.</p>
+            <p>"¿Cómo afectó el fármaco a los pacientes que efectivamente lo tomaron?"</p>
+            <div class="ate-formula">E[Y(1) − Y(0) | T=1]</div>
+        </div>
+        <div class="ate-card">
+            <div class="ate-name">CATE</div>
+            <div class="ate-full">Conditional Avg. Treatment Effect</div>
+            <p>El efecto del tratamiento <em>para un subgrupo X=x</em> (por sexo, edad, etc.).</p>
+            <p>"¿Cuánto ayuda el fármaco específicamente a mujeres mayores de 50?"</p>
+            <div class="ate-formula">E[Y(1)−Y(0) | X=x]</div>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Notación Y(1) e Y(0):</strong> Esta es la notación de Rubin (Potential Outcomes Framework).
+        Y(1) representa el resultado que tendría un individuo <em>si recibiera</em> el tratamiento.
+        Y(0) el resultado si <em>no lo recibiera</em>. Para cualquier individuo, solo uno de los dos
+        es observable (el que ocurrió en la realidad). El otro es el <em>contrafactual</em>.
+        El ATE es el promedio de la diferencia imaginaria Y(1)−Y(0) sobre toda la población.
+    </div>
+
+    <!-- ========= CÓDIGO PYTHON ========= -->
+    <h2>Código Python: Simulando los Tres Peldaños</h2>
+    <p>Generamos datos sintéticos donde existe un confounder oculto (Severidad de la enfermedad) y demostramos
+        numéricamente que L1 da una respuesta errónea mientras que L2 (estimado con ajuste) da la correcta.</p>
+
+    <p class="code-label">python</p>
+    <pre><code>import numpy as np
+import pandas as pd
+
+np.random.seed(42)
+N = 2000
+
+# --- MUNDO CAUSAL REAL ---
+# Severidad: 0 = leve, 1 = grave
+severity = np.random.binomial(1, 0.5, N)
+
+# Los médicos tienden a recetar el fármaco a los más graves (sesgo de indicación)
+# P(Farmaco=1 | severity=1) = 0.8, P(Farmaco=1 | severity=0) = 0.2
+prob_farmaco = np.where(severity == 1, 0.8, 0.2)
+farmaco = np.random.binomial(1, prob_farmaco)
+
+# El fármaco REAL mejora en +0.20, pero los graves tienen base de 0.30
+# y los leves tienen base de 0.80
+base_recovery = np.where(severity == 1, 0.30, 0.80)
+prob_recovery = np.clip(base_recovery + 0.20 * farmaco, 0, 1)
+recovery = np.random.binomial(1, prob_recovery)
+
+df = pd.DataFrame({'severity': severity, 'farmaco': farmaco, 'recovery': recovery})
+
+# =========================================
+# PELDAÑO 1: Correlación observacional (L1)
+# =========================================
+l1_farmaco_yes = df[df.farmaco == 1]['recovery'].mean()
+l1_farmaco_no  = df[df.farmaco == 0]['recovery'].mean()
+print("=== PELDAÑO 1 (Observación) ===")
+print(f"P(Recupera | Fármaco=Sí) = {l1_farmaco_yes:.3f}")
+print(f"P(Recupera | Fármaco=No) = {l1_farmaco_no:.3f}")
+print(f"Diferencia L1 (sesgada)  = {l1_farmaco_yes - l1_farmaco_no:+.3f}")
+print()
+
+# ========================================================
+# PELDAÑO 2: Efecto causal con ajuste por confounder (L2)
+# Backdoor adjustment: E[Y|do(T)] = Σ_s P(Y|T,S=s)·P(S=s)
+# ========================================================
+p_sev0 = (df.severity == 0).mean()
+p_sev1 = (df.severity == 1).mean()
+
+do_farmaco_yes = (
+    df[(df.farmaco==1)&(df.severity==0)]['recovery'].mean() * p_sev0 +
+    df[(df.farmaco==1)&(df.severity==1)]['recovery'].mean() * p_sev1
+)
+do_farmaco_no = (
+    df[(df.farmaco==0)&(df.severity==0)]['recovery'].mean() * p_sev0 +
+    df[(df.farmaco==0)&(df.severity==1)]['recovery'].mean() * p_sev1
+)
+
+ate = do_farmaco_yes - do_farmaco_no
+print("=== PELDAÑO 2 (Intervención — Ajuste Backdoor) ===")
+print(f"P(Recupera | do(Fármaco=Sí)) = {do_farmaco_yes:.3f}")
+print(f"P(Recupera | do(Fármaco=No)) = {do_farmaco_no:.3f}")
+print(f"ATE (efecto causal real)     = {ate:+.3f}  ← debería ser ~+0.20")
+</code></pre>
+
+    <div class="info-box">
+        <strong>Resultado esperado:</strong><br>
+        <code>P(Recupera | Fármaco=Sí) ≈ 0.44</code> — parece que el fármaco es <em>dañino</em> (sesgo L1).<br>
+        <code>ATE ≈ +0.20</code> — el fármaco mejora en 20 pp (verdad causal L2).<br><br>
+        El ajuste <em>backdoor</em> corrige el sesgo estratificando por el confounder Severidad y
+        re-ponderando por su distribución marginal en la población.
+    </div>
+
+    <!-- ========= EJERCICIOS ========= -->
+    <div class="exercise-box">
+        <h3>✏️ Ejercicios</h3>
+        <ol>
+            <li>
+                <strong>Clasificación de preguntas:</strong> Clasifica cada pregunta en L1, L2 o L3:
+                <ul style="margin-top:8px; margin-left:20px; font-size:1em;">
+                    <li>"¿Los usuarios que ven 3+ videos al día tienen más probabilidad de suscribirse?"</li>
+                    <li>"Si enviamos un email de descuento, ¿aumentará la tasa de conversión?"</li>
+                    <li>"Este cliente rechazó la oferta. Si el precio hubiera sido 10€ menos, ¿la habría aceptado?"</li>
+                    <li>"¿Qué hubiera pasado con el PIB si el banco central no hubiera subido los tipos en 2023?"</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Por qué fallan los LLMs en L2:</strong> Un chatbot entrenado con texto observacional aprende
+                que "tomar paraguas" se asocia con "lluvia". ¿Por qué no puede responder correctamente a
+                "Si obligo a todos a llevar paraguas, ¿reducirá la lluvia?" Explícalo en términos de L1 vs L2.
+            </li>
+            <li>
+                <strong>Modifica el código:</strong> Cambia el efecto real del fármaco de +0.20 a +0.05 y
+                ejecuta el script. ¿Qué pasa con el ATE? ¿Sigue siendo positivo el L1?
+                Reflexiona: ¿cuándo es más peligroso el sesgo L1?
+            </li>
+            <li>
+                <strong>Contrafactual personal:</strong> Piensa en una decisión pasada (profesional o personal).
+                Identifica cuál es X (la acción tomada), Y (el resultado observado), y formula la pregunta
+                contrafactual en la notación <span class="math">P(Y<sub>x'</sub> | X=x, Y=y)</span>.
+            </li>
+        </ol>
+    </div>
+
+    <div class="btn-nav-group">
+        <a href="01_introduccion.html" class="btn-nav">← Anterior</a>
+        <a href="03_paradoja_simpson.html" class="btn-nav primary">Siguiente: La Paradoja de Simpson →</a>
+    </div>
+</div>
+<script src="../../../shared/lucentia.js" defer></script>
+
+
+<!-- ── Sidebar inyectada por inject_gen1_sidebar.py ────────────────────────── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">LucentIA</div>
+  <div class="sidebar-course">Causalidad</div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-section">Índice del curso</li>
+    <li><a href="01_introduccion.html">01: Más allá de las Correlaciones</a></li>
+    <li><a href="02_escalera_causacion.html">02: La Escalera de la Causación</a></li>
+    <li><a href="03_paradoja_simpson.html">03: La Paradoja de Simpson</a></li>
+    <li><a href="04_dags.html">04: Grafos Causales (DAGs)</a></li>
+    <li><a href="05_do_calculus.html">05: El Cálculo do()</a></li>
+    <li><a href="06_contrafactuales.html">06: Contrafactuales y SCMs</a></li>
+    <li><a href="07_deep_learning_causal.html">07: Deep Learning Causal</a></li>
+    <li><a href="08_papers_estado_del_arte.html">08: Papers y Estado del Arte</a></li>
+    <li><a href="09_practica_python_dags.html">09: Python - Datos Sintéticos y DAGs</a></li>
+    <li><a href="10_practica_python_do_calculus.html">10: Python - ML Sesgado vs DoWhy</a></li>
+    <li><a href="index.html">Causalidad</a></li>
+  </ul>
+  <div class="theme-toggle">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIcon">&#9728;</span>
+      <span id="themeLabel">Modo claro</span>
+    </button>
+  </div>
+</nav>
+
+</body>
 </html>

@@ -6,21 +6,19 @@
     <title>06: Contrafactuales y SCMs | Causalidad</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+    <link rel="stylesheet" href="../../../shared/styles.css"/>
+  <style>
         :root {
             --accent: #e3b341;
-            /* Amarillo para sección 6 */
             --bg: #0d1117;
             --text: #e6edf3;
             --card-bg: #161b22;
             --border: #30363d;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -30,58 +28,65 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding-top: 30px;
+        .container { max-width: 900px; margin: 0 auto; padding-top: 30px; }
+
+        .breadcrumb { font-size: 0.85em; color: #8b949e; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        h1 { font-size: 2.5em; font-weight: 900; margin-bottom: 15px; color: var(--accent); }
+        h2 { font-size: 1.8em; margin: 40px 0 15px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.3em; margin: 25px 0 10px; color: #c9d1d9; }
+
+        p { margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
+
+        .math {
+            font-family: 'Courier New', Courier, monospace;
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #a5d6ff;
         }
 
-        .breadcrumb {
-            font-size: 0.85em;
-            color: #8b949e;
-            margin-bottom: 20px;
-        }
-
-        .breadcrumb a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: var(--accent);
-        }
-
-        h2 {
-            font-size: 1.8em;
-            margin: 40px 0 15px;
-            color: #fff;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-
-        p {
-            margin-bottom: 20px;
+        .math-block {
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            padding: 22px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
             font-size: 1.1em;
-            color: #c9d1d9;
+            margin: 22px 0;
+            color: #a5d6ff;
         }
 
         .highlight-box {
-            background: rgba(227, 179, 65, 0.1);
+            background: rgba(227, 179, 65, 0.08);
             border-left: 4px solid var(--accent);
             padding: 20px;
             border-radius: 0 8px 8px 0;
             margin: 30px 0;
-            font-size: 1.15em;
+            font-size: 1.1em;
         }
 
-        /* 3 Steps */
+        .warning-box {
+            background: rgba(255, 123, 114, 0.08);
+            border-left: 4px solid #ff7b72;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: rgba(82, 196, 26, 0.08);
+            border-left: 4px solid #52c41a;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
         .steps {
             display: flex;
             flex-direction: column;
@@ -113,19 +118,142 @@
             border-radius: 50%;
         }
 
-        .step h3 {
-            margin-top: 0;
-            font-size: 1.4em;
+        .step h4 {
             color: var(--accent);
-            margin-bottom: 15px;
-            padding-left: 15px;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            padding-left: 10px;
         }
 
-        .btn-nav-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 40px;
+        .step p { font-size: 1.05em; margin-bottom: 8px; }
+
+        .scm-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 22px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            color: #a5d6ff;
+            line-height: 1.8;
         }
+
+        .scm-box .comment { color: #8b949e; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1em;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th, td { padding: 14px; text-align: center; border-bottom: 1px solid var(--border); }
+        th { background: #21262d; color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.82em; letter-spacing: 1px; }
+        tr:last-child td { border-bottom: none; }
+        td:first-child { text-align: left; }
+
+        pre {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #edf2de;
+        }
+
+        code { font-family: 'Courier New', monospace; }
+
+        .code-label {
+            display: inline-block;
+            background: #21262d;
+            color: #8b949e;
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: -4px;
+            font-family: monospace;
+            border: 1px solid var(--border);
+            border-bottom: none;
+        }
+
+        .pns-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 25px 0;
+        }
+
+        .pns-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .pns-card .pns-abbr {
+            font-size: 1.6em;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .pns-card .pns-name {
+            font-size: 0.75em;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .pns-card .pns-formula {
+            font-family: monospace;
+            color: #a5d6ff;
+            font-size: 0.9em;
+            margin-top: 8px;
+        }
+
+        .pns-card p { font-size: 0.9em; margin-bottom: 6px; }
+
+        .graph-box {
+            background: #ffffff05;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .graph-desc { font-size: 0.95em; color: #8b949e; text-align: center; }
+
+        .exercise-box {
+            background: rgba(121, 192, 255, 0.04);
+            border: 1px solid #79c0ff;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px 0;
+        }
+
+        .exercise-box h3 { color: #79c0ff; margin-top: 0; }
+
+        ol { margin-left: 25px; margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
+        ol li { margin-bottom: 12px; }
+        ul { margin-left: 25px; margin-bottom: 20px; font-size: 1.05em; color: #c9d1d9; }
+        ul li { margin-bottom: 8px; }
+
+        .btn-nav-group { display: flex; gap: 15px; margin-top: 40px; }
 
         .btn-nav {
             display: inline-block;
@@ -146,79 +274,470 @@
             border: none;
         }
 
-        .btn-nav:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-        }
+        .btn-nav:hover { transform: translateY(-2px); border-color: var(--accent); }
     </style>
+
+  <!-- Anti-flash -->
+  <script>!function(){var t=localStorage.getItem('lucentia-theme')||'dark';'light'===t&&document.documentElement.setAttribute('data-theme','light')}()</script>
+
 </head>
 
 <body>
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="index.html">← Volver al Roadmap</a> / Sección 06
+<!-- Botón hamburguesa — visible en tablet/móvil -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Abrir menú" aria-expanded="true">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a href="index.html">← Volver al Roadmap</a> / Sección 06
+    </div>
+
+    <h1>🔮 Contrafactuales y SCMs</h1>
+    <p>Hemos llegado al Peldaño 3 de la Escalera de la Causación: los <strong>contrafactuales</strong>.
+        A diferencia del <span class="math">do()</span> — que trabaja con poblaciones y responde "¿qué efecto
+        tendría esta política aplicada a todos?" — los contrafactuales operan sobre
+        <strong>un individuo específico en retrospectiva</strong>.</p>
+
+    <div class="highlight-box">
+        <strong>La Pregunta Contrafactual:</strong><br>
+        "El paciente Ana García tomó el fármaco (X=1) y murió (Y=0).<br>
+        ¿Habría sobrevivido (Y=1) si no hubiera tomado el fármaco (X=0)?"<br><br>
+        Esta es una pregunta sobre un <em>mundo paralelo</em> que no ocurrió.
+        Para responderla matemáticamente, necesitamos un <strong>Structural Causal Model (SCM)</strong>.
+    </div>
+
+    <!-- ======================= SCM ======================= -->
+    <h2>¿Qué es un Structural Causal Model (SCM)?</h2>
+    <p>Un SCM no es simplemente un DAG (representación cualitativa). Es un sistema de
+        <strong>ecuaciones estructurales deterministas</strong> donde cada variable tiene una ecuación
+        exacta en función de sus causas directas y de un término de ruido exógeno <span class="math">U_i</span>
+        que representa toda la variabilidad idiosincrática del individuo que no captura el modelo:</p>
+
+    <div class="math-block">
+        V<sub>i</sub> = f<sub>i</sub>(pa<sub>i</sub>, U<sub>i</sub>)
+    </div>
+
+    <p>Donde <span class="math">pa_i</span> son los padres de V_i en el DAG y
+        <span class="math">U_i</span> es el ruido no observable específico de ese individuo.
+        Los <span class="math">U_i</span> son <em>mutuamente independientes</em>
+        (cada fuente de ruido es distinta) — este es el supuesto de Markov sobre U.</p>
+
+    <h3>Ejemplo — SCM de la Hipoteca</h3>
+    <p>Modelo simplificado de denegación de hipoteca con tres variables:</p>
+
+    <div class="scm-box">
+        <span class="comment"># Ecuaciones estructurales del SCM</span><br>
+        Ingresos (I) = f_I(U_I) = U_I&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># U_I ~ N(30000, 10000)</span><br>
+        Deuda (D) = f_D(I, U_D) = −0.3·I + U_D&nbsp;&nbsp;<span class="comment"># U_D ~ N(15000, 5000)</span><br>
+        Aprobada (A) = f_A(I, D, U_A) = 1 si I − 2·D > U_A, 0 si no&nbsp;&nbsp;<span class="comment"># U_A ~ N(0, 2000)</span>
+    </div>
+
+    <p>El DAG correspondiente:</p>
+    <div class="graph-box">
+        <div class="mermaid">
+            graph LR
+            I((Ingresos)) --> D((Deuda))
+            I --> A((Aprobada))
+            D --> A
+            style I fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style D fill:#da3633,stroke:#ff7b72,color:#fff
+            style A fill:#238636,stroke:#3fb950,color:#fff
+        </div>
+        <p class="graph-desc">Los ingresos influyen en la deuda y en la aprobación. La deuda también afecta la aprobación.</p>
+    </div>
+
+    <!-- ======================= 3 PASOS ======================= -->
+    <h2>El Algoritmo de 3 Pasos de Pearl — Ejecutado Numéricamente</h2>
+    <p>Ana García tiene: <strong>Ingresos = 28.000€, Deuda = 12.000€, Hipoteca Denegada (A=0).</strong></p>
+    <p>Pregunta contrafactual: <em>"Si los ingresos de Ana hubieran sido 35.000€ (en lugar de 28.000€),
+        ¿se le habría aprobado la hipoteca?"</em></p>
+
+    <div class="steps">
+
+        <div class="step">
+            <div class="step-num">1</div>
+            <h4>Abducción (Inferir U a partir de lo observado)</h4>
+            <p>Usamos los valores observados para <strong>inferir el ruido exógeno U específico de Ana</strong>.
+                Resolvemos las ecuaciones estructurales al revés (desde las observaciones hasta las causas ocultas):</p>
+            <p>De la ecuación de Ingresos: <span class="math">U_I = I = 28.000</span></p>
+            <p>De la ecuación de Deuda: <span class="math">U_D = D − (−0.3·I) = 12.000 + 0.3·28.000 = 12.000 + 8.400 = 20.400</span></p>
+            <p>De la ecuación de Aprobada: Ana fue denegada (A=0), lo que significa que
+               <span class="math">I − 2·D = 28.000 − 24.000 = 4.000 ≤ U_A</span>, lo que implica
+               <span class="math">U_A &gt; 4.000</span> (los factores ocultos de riesgo de Ana son altos).</p>
+            <p>Para la predicción usaremos el valor límite que hizo que Ana fuera denegada por el margen más estrecho:
+               <span class="math">U_A = 4.001</span> (dintel).</p>
+            <div style="background:#21262d; border-radius:6px; padding:12px; font-family:monospace; font-size:0.95em; color:#a5d6ff; margin-top:12px;">
+                U_Ana = (U_I=28.000, U_D=20.400, U_A=4.001) ← perfil idiosincrático de Ana
+            </div>
         </div>
 
-        <h1>🔮 Contrafactuales y SCMs</h1>
-        <p>Hemos llegado a la cúspide de la Escalera de la Causación: Peldaño 3. A diferencia del operador
-            <code>do()</code> (que opera a nivel de poblaciones y responde preguntas como "¿Deberíamos aprobar este
-            fármaco a nivel nacional?"), los contrafactuales lidian con el <strong>individuo específico en
-                retrospectiva</strong>.</p>
-
-        <div class="highlight-box">
-            <strong>La Pregunta Contrafactual:</strong> "El paciente John Smith murió tras tomar el fármaco. ¿Habría
-            sobrevivido si no lo hubiera tomado?"
-        </div>
-
-        <p>Para resolver esto, ya no nos basta con un DAG gráfico. Necesitamos un modelo fuertemente matemático: un
-            <strong>Structural Causal Model (SCM)</strong>. En un SCM, cada nodo está definido por una ecuación
-            determinista exacta basada en sus padres y en variables exógenas (ruido <code>U</code>, representing la
-            idiosincrasia oculta y específica de John Smith).</p>
-        <p style="font-family: monospace; color: #a5d6ff; text-align: center; font-size: 1.2em;">v_i = f_i(pa_i, U_i)
-        </p>
-
-        <h2>El Algoritmo de 3 Pasos de Pearl</h2>
-        <p>Evaluar un contrafactual matemáticamente requiere transformar nuestro modelo usando la información observada
-            para crear un "Mundo Paralelo".</p>
-
-        <div class="steps">
-            <div class="step">
-                <div class="step-num">1</div>
-                <h3>Abducción (Update)</h3>
-                <p>Usamos todo lo que <strong>sabemos</strong> que pasó en la realidad (E.g. John tomó el fármaco y
-                    murió) para <strong>actualizar nuestro conocimiento sobre el ruido exógeno U</strong> de ese
-                    individuo en particular. Ajustamos el SCM para que coincida exactamente con las características
-                    ocultas (U_John).</p>
-            </div>
-
-            <div class="step">
-                <div class="step-num">2</div>
-                <h3>Acción (Action / Mutilation)</h3>
-                <p>Modificamos el SCM matemáticamente: borramos las ecuaciones naturales que causaron que John tomara el
-                    fármaco, y las sustituimos con la acción forzada constante (<code>Fármaco = No</code>). Esto es
-                    equivalente a aplicar el operador <code>do(x')</code> dentro del modelo, mutilando el grafo.</p>
-            </div>
-
-            <div class="step">
-                <div class="step-num">3</div>
-                <h3>Predicción (Prediction)</h3>
-                <p>Propagamos las nuevas variables forzadas a través del DAG mutilado, utilizando el modelo original,
-                    pero —y esto es lo crucial— manteniendo el ruido idiosincrático <code>U_John</code> calculado en el
-                    paso 1. El resultado de esta propagación es la probabilidad matemática del escenario contrafactual.
-                </p>
+        <div class="step">
+            <div class="step-num">2</div>
+            <h4>Acción (Mutilar el grafo y forzar la intervención)</h4>
+            <p>Aplicamos <span class="math">do(I=35.000)</span>: <strong>cortamos el arco</strong> de U_I hacia I
+                y fijamos I=35.000 externamente (como si un ángel hubiera cambiado el sueldo de Ana).</p>
+            <p>El grafo mutilado tiene:</p>
+            <div style="background:#21262d; border-radius:6px; padding:12px; font-family:monospace; font-size:0.95em; color:#a5d6ff; margin-top:12px;">
+                I* = 35.000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;← forzado (no viene de U_I)<br>
+                D* = −0.3·I* + U_D = −0.3·35.000 + 20.400 = −10.500 + 20.400 = 9.900<br>
+                <span style="color:#8b949e;">← La deuda de Ana baja porque sus ingresos más altos le permiten endeudarse menos</span>
             </div>
         </div>
 
-        <p>Este nivel nos permite abordar Inteligencia Artificial verdaderamente explicable (XAI), donde un modelo no
-            solo te da una predicción de denegación de una hipoteca, sino que puede generarte exactamente la explicación
-            lógica: "Se le denegó. Si sus ingresos hubieran sido 5.000$ superiores, el modelo sí se la habría
-            concedido."</p>
-
-        <div class="btn-nav-group">
-            <a href="05_do_calculus.html" class="btn-nav">← Anterior</a>
-            <a href="07_deep_learning_causal.html" class="btn-nav primary">Siguiente: Deep Learning Causal →</a>
+        <div class="step">
+            <div class="step-num">3</div>
+            <h4>Predicción (Propagar con los U de Ana)</h4>
+            <p>Evaluamos la variable de interés (Aprobada) usando el grafo mutilado con los U
+                <strong>específicos de Ana</strong> calculados en el Paso 1:</p>
+            <div style="background:#21262d; border-radius:6px; padding:12px; font-family:monospace; font-size:0.95em; color:#a5d6ff; margin-top:12px;">
+                A* = 1 si I* − 2·D* &gt; U_A_Ana<br>
+                A* = 1 si 35.000 − 2·9.900 &gt; 4.001<br>
+                A* = 1 si 35.000 − 19.800 &gt; 4.001<br>
+                A* = 1 si 15.200 &gt; 4.001&nbsp;&nbsp;&nbsp;&nbsp;→ <strong style="color:#50fa7b;">TRUE → Hipoteca APROBADA</strong>
+            </div>
+            <p style="margin-top:14px;"><strong>Respuesta contrafactual:</strong> Si Ana hubiera tenido ingresos de 35.000€,
+               su hipoteca habría sido aprobada. La diferencia de 7.000€ en ingresos es <em>causalmente suficiente</em>
+               para revertir la decisión, dado el perfil idiosincrático U_Ana.</p>
         </div>
     </div>
-</body>
 
+    <div class="info-box">
+        <strong>Lo que hace único al contrafactual:</strong> En el Paso 3, la deuda bajó de 12.000 a 9.900
+        porque reflejamos que con más ingresos, Ana también se habría endeudado menos (efecto mediado).
+        Esto es lo que los métodos de Peldaño 2 (<span class="math">do()</span>) no pueden hacer:
+        ajustar el comportamiento del sistema a las características <em>específicas e idiosincráticas</em>
+        de un individuo particular.
+    </div>
+
+    <!-- ======================= RUBIN FRAMEWORK ======================= -->
+    <h2>El Marco de Resultados Potenciales (Rubin, 1974)</h2>
+    <p>En paralelo a Pearl, Donald Rubin formalizó la causalidad a través del
+        <strong>Potential Outcomes Framework</strong> (también llamado Rubin Causal Model o RCM).
+        Es el lenguaje estándar en econometría, epidemiología y la mayoría de los papers de ML causal.</p>
+
+    <p>Para cada individuo i y tratamiento binario T ∈ {0,1}, existen <strong>dos resultados potenciales</strong>:</p>
+
+    <div class="math-block">
+        Y<sub>i</sub>(1) = resultado que tendría el individuo i <em>si recibiera</em> el tratamiento<br>
+        Y<sub>i</sub>(0) = resultado que tendría el individuo i <em>si NO recibiera</em> el tratamiento
+    </div>
+
+    <p>El <strong>Problema Fundamental de la Inferencia Causal</strong> (Holland, 1986):</p>
+    <div class="math-block">
+        Para cualquier individuo i, solo se observa <strong>uno</strong> de los dos: Y_i(T_i).<br>
+        El otro, Y_i(1 − T_i), es el <strong>contrafactual no observable</strong>.
+    </div>
+
+    <table>
+        <tr>
+            <th>Individuo</th>
+            <th>Tratamiento T</th>
+            <th>Y observado</th>
+            <th>Y(1)</th>
+            <th>Y(0)</th>
+            <th>Efecto Individual Y(1)−Y(0)</th>
+        </tr>
+        <tr>
+            <td>Ana</td>
+            <td>1 (fármaco)</td>
+            <td>1 (sobrevive)</td>
+            <td style="color:#50fa7b;">1 ✓</td>
+            <td style="color:#8b949e;">? (no observable)</td>
+            <td style="color:#8b949e;">?</td>
+        </tr>
+        <tr>
+            <td>Carlos</td>
+            <td>0 (no fármaco)</td>
+            <td>0 (fallece)</td>
+            <td style="color:#8b949e;">? (no observable)</td>
+            <td style="color:#50fa7b;">0 ✓</td>
+            <td style="color:#8b949e;">?</td>
+        </tr>
+        <tr>
+            <td>Laura</td>
+            <td>1 (fármaco)</td>
+            <td>0 (fallece)</td>
+            <td style="color:#50fa7b;">0 ✓</td>
+            <td style="color:#8b949e;">? (no observable)</td>
+            <td style="color:#8b949e;">?</td>
+        </tr>
+        <tr>
+            <td>Marco</td>
+            <td>0 (no fármaco)</td>
+            <td>1 (sobrevive)</td>
+            <td style="color:#8b949e;">? (no observable)</td>
+            <td style="color:#50fa7b;">1 ✓</td>
+            <td style="color:#8b949e;">?</td>
+        </tr>
+    </table>
+
+    <p>Como el efecto individual nunca es observable para ambos estados, trabajamos con <strong>promedios</strong>:</p>
+
+    <table>
+        <tr>
+            <th>Cantidad</th>
+            <th>Fórmula</th>
+            <th>Pregunta que responde</th>
+        </tr>
+        <tr>
+            <td><strong>ATE</strong> (Avg Treatment Effect)</td>
+            <td><span class="math">E[Y(1) − Y(0)]</span></td>
+            <td>¿Cuánto mejora el tratamiento en promedio para la población?</td>
+        </tr>
+        <tr>
+            <td><strong>ATT</strong> (Avg Treatment Effect on Treated)</td>
+            <td><span class="math">E[Y(1)−Y(0) | T=1]</span></td>
+            <td>¿Cuánto ayudó el tratamiento a quienes lo recibieron?</td>
+        </tr>
+        <tr>
+            <td><strong>ATU</strong> (Avg Treatment Effect on Untreated)</td>
+            <td><span class="math">E[Y(1)−Y(0) | T=0]</span></td>
+            <td>¿Cuánto ayudaría a quienes no lo recibieron si se les diera?</td>
+        </tr>
+        <tr>
+            <td><strong>CATE</strong> (Conditional ATE)</td>
+            <td><span class="math">E[Y(1)−Y(0) | X=x]</span></td>
+            <td>¿Cuánto ayuda en el subgrupo con características X=x?</td>
+        </tr>
+    </table>
+
+    <!-- ======================= PN PS PNS ======================= -->
+    <h2>Probabilidades de Causalidad: PN, PS y PNS</h2>
+    <p>Pearl define tres medidas para cuantificar la <em>responsabilidad causal</em> de un evento en un individuo o
+        situación particular. Son esenciales para sistemas de XAI (Inteligencia Artificial Explicable) y para el
+        razonamiento legal (responsabilidad).</p>
+
+    <div class="pns-grid">
+        <div class="pns-card">
+            <div class="pns-abbr">PN</div>
+            <div class="pns-name">Probability of Necessity</div>
+            <p>X fue <em>necesario</em> para Y: si X no hubiera ocurrido, Y no habría ocurrido.</p>
+            <p style="font-size:0.85em; color:#8b949e;">Caso: X=1, Y=1 (ambos observados)</p>
+            <div class="pns-formula">P(Y<sub>0</sub>=0 | X=1, Y=1)</div>
+        </div>
+        <div class="pns-card">
+            <div class="pns-abbr">PS</div>
+            <div class="pns-name">Probability of Sufficiency</div>
+            <p>X fue <em>suficiente</em> para Y: si X hubiera ocurrido, Y habría ocurrido.</p>
+            <p style="font-size:0.85em; color:#8b949e;">Caso: X=0, Y=0 (X e Y no ocurrieron)</p>
+            <div class="pns-formula">P(Y<sub>1</sub>=1 | X=0, Y=0)</div>
+        </div>
+        <div class="pns-card">
+            <div class="pns-abbr">PNS</div>
+            <div class="pns-name">Prob. of Necessity and Sufficiency</div>
+            <p>X fue <em>tanto necesario como suficiente</em> para Y.</p>
+            <p style="font-size:0.85em; color:#8b949e;">El criterio más estricto de responsabilidad.</p>
+            <div class="pns-formula">P(Y<sub>1</sub>=1, Y<sub>0</sub>=0)</div>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Ejemplo Legal:</strong> Carlos fumó (X=1) durante 30 años y desarrolló cáncer (Y=1).
+        Su abogado pregunta: ¿causó el tabaco su cáncer específicamente?<br><br>
+        — <strong>PN alta</strong>: si es alto, significa que <em>sin el tabaco, probablemente no habría tenido cáncer</em>.
+        Es el estándar "but-for causation" del derecho anglosajón.<br>
+        — <strong>PS alta</strong>: el tabaco <em>habría causado</em> el cáncer incluso si Carlos no hubiera fumado
+        (es decir, si le hubiéramos obligado a fumar, habría enfermado).<br>
+        — <strong>PNS alta</strong>: el tabaco es el único responsable — necesario y suficiente.
+    </div>
+
+    <!-- ======================= CÓDIGO PYTHON ======================= -->
+    <h2>Código Python: SCM Completo con 3 Pasos</h2>
+
+    <p class="code-label">python</p>
+    <pre><code>import numpy as np
+import pandas as pd
+
+np.random.seed(42)
+
+# ============================================================
+# MODELO CAUSAL ESTRUCTURAL (SCM)
+# X → Y con confounder oculto U que afecta a ambos
+# Ecuaciones:
+#   X = 2*U + noise_X
+#   Y = 3*X + 1.5*U + noise_Y
+# El efecto CAUSAL de X en Y es 3.0 (ATE verdadero = 3.0)
+# ============================================================
+
+N = 10000
+
+U      = np.random.normal(0, 1, N)          # confounder oculto
+noise_X = np.random.normal(0, 0.5, N)
+noise_Y = np.random.normal(0, 1, N)
+
+X = 2*U + noise_X
+Y = 3*X + 1.5*U + noise_Y
+
+df = pd.DataFrame({'U': U, 'X': X, 'Y': Y})
+
+# ============================================================
+# PELDAÑO 3 — ALGORITMO DE 3 PASOS PARA UN INDIVIDUO
+# Observado: individuo i=0 con valores X_obs, Y_obs
+# Pregunta: "Si X hubiera sido X_cf, ¿qué Y habría tenido?"
+# ============================================================
+
+i = 0  # individuo bajo análisis
+X_obs = df['X'][i]
+Y_obs = df['Y'][i]
+
+print(f"=== INDIVIDUO i={i} ===")
+print(f"Observado: X={X_obs:.3f}, Y={Y_obs:.3f}")
+
+# PASO 1 — ABDUCCIÓN: inferir U_i a partir de lo observado
+# De X = 2*U + noise_X → pero noise_X no observable...
+# En la versión simplificada con noise=0 (modelo determinista):
+# X = 2*U → U_i = X_obs / 2
+
+U_inferred = X_obs / 2  # simplificación determinista
+print(f"\nPaso 1 - Abducción: U_i = X / 2 = {U_inferred:.3f}")
+print(f"  (U real del individuo: {df['U'][i]:.3f})")
+
+# PASO 2 — ACCIÓN: fijar X contrafactual
+X_cf = X_obs + 5.0  # ¿Qué pasa si X aumenta en 5 unidades?
+print(f"\nPaso 2 - Acción: do(X = {X_cf:.3f})")
+
+# PASO 3 — PREDICCIÓN: propagar con U_i del individuo
+# Y_cf = 3*X_cf + 1.5*U_i (usando U inferido del individuo, no el poblacional)
+Y_cf = 3 * X_cf + 1.5 * U_inferred
+print(f"\nPaso 3 - Predicción contrafactual: Y_cf = {Y_cf:.3f}")
+print(f"  Y observado:            Y  = {Y_obs:.3f}")
+print(f"  Delta individual:    ΔY = {Y_cf - Y_obs:+.3f}")
+print(f"  ATE poblacional esperado: 3.0 × 5 = +15.0")
+print(f"  ¿El efecto individual ≈ ATE? {abs((Y_cf - Y_obs) - 15.0) < 0.1}")
+
+# ============================================================
+# COMPARACIÓN: ATE por regresión vs. ATE verdadero
+# ============================================================
+print("\n=== COMPARACIÓN ATE ===")
+from numpy.linalg import lstsq
+
+# OLS ingenuo (no idéntico al verdadero por endogeneidad de U)
+Xmat = np.column_stack([np.ones(N), df['X']])
+betas_naive, _, _, _ = lstsq(Xmat, df['Y'], rcond=None)
+print(f"OLS naive β_X = {betas_naive[1]:.3f}  (verdadero: 3.000)")
+
+# OLS con U (como si U fuera observable — benchmark)
+Xmat_ctrl = np.column_stack([np.ones(N), df['X'], df['U']])
+betas_ctrl, _, _, _ = lstsq(Xmat_ctrl, df['Y'], rcond=None)
+print(f"OLS con U    β_X = {betas_ctrl[1]:.3f}  (verdadero: 3.000)")
+</code></pre>
+
+    <p class="code-label">python</p>
+    <pre><code># ============================================================
+# FRAMEWORK DE RUBIN — CALCULAR ATE, ATT, ATU
+# con datos de un RCT simulado (asignación aleatoria)
+# ============================================================
+np.random.seed(99)
+N = 2000
+
+# Características individuales
+age      = np.random.normal(40, 10, N)
+severity = np.random.binomial(1, 0.5, N)
+
+# Efectos potenciales (los dos mundos)
+noise = np.random.normal(0, 2, N)
+Y0 = 50 + 2 * age * 0.1 + 5 * severity + noise        # Y sin tratamiento
+Y1 = Y0 + 10 - 3 * severity + np.random.normal(0, 1, N)  # Y con tratamiento
+
+# ATE verdadero = E[Y1 - Y0]
+ate_true = np.mean(Y1 - Y0)
+print(f"ATE verdadero (solo posible en simulación): {ate_true:.3f}")
+
+# Asignación aleatoria (RCT): observamos solo uno de Y0, Y1
+T = np.random.binomial(1, 0.5, N)
+Y_obs = np.where(T == 1, Y1, Y0)
+
+df_rct = pd.DataFrame({'T': T, 'Y_obs': Y_obs, 'age': age, 'severity': severity})
+
+# ATE estimado: diferencia de medias (válido en RCT)
+ate_est = df_rct[df_rct.T==1].Y_obs.mean() - df_rct[df_rct.T==0].Y_obs.mean()
+print(f"ATE estimado (diferencia medias RCT):       {ate_est:.3f}")
+
+# ATT: efecto en los tratados
+att_true = np.mean((Y1 - Y0)[T == 1])
+print(f"ATT verdadero:                              {att_true:.3f}")
+
+# CATE: efecto en pacientes graves
+cate_grave_true = np.mean((Y1 - Y0)[severity == 1])
+cate_leve_true  = np.mean((Y1 - Y0)[severity == 0])
+print(f"CATE enfermos graves:                       {cate_grave_true:.3f}")
+print(f"CATE enfermos leves:                        {cate_leve_true:.3f}")
+print(f"Heterogeneidad (CATE grave − CATE leve):    {cate_grave_true - cate_leve_true:+.3f}")
+</code></pre>
+
+    <div class="info-box">
+        <strong>Resultado esperado:</strong><br>
+        El ATE verdadero ≈ 7 (10 pp base −3 pp en graves, promediado). El CATE en graves es ~7 pp,
+        en leves ~10 pp. Esta heterogeneidad del efecto del tratamiento es exactamente lo que los
+        modelos CATE (como Causal Forests, X-Learner de EconML) intentan aprender desde los datos.
+    </div>
+
+    <!-- ======================= EJERCICIOS ======================= -->
+    <div class="exercise-box">
+        <h3>✏️ Ejercicios</h3>
+        <ol>
+            <li>
+                <strong>Calcula el contrafactual manualmente:</strong> Con el SCM de la hipoteca del comienzo
+                (Ana García), repite los 3 pasos para la pregunta: "Si la deuda de Ana fuera 8.000€ en lugar
+                de 12.000€ (sin cambiar los ingresos), ¿se le habría aprobado la hipoteca?"
+            </li>
+            <li>
+                <strong>Múltiples contrafactuales:</strong> Modifica el código Python del SCM para calcular
+                el contrafactual de X_cf = X_obs − 2, X_obs − 1, X_obs, X_obs + 1, X_obs + 2 y plotea
+                Y_cf vs X_cf. ¿Es la relación lineal? ¿Por qué?
+            </li>
+            <li>
+                <strong>PN — Necesidad:</strong> En el ejemplo del fármaco del capítulo 02, Laura tomó el
+                fármaco (T=1) y falleció (Y=0). Explica en palabras qué significa PN para Laura y qué
+                necesitarías saber del SCM para calcularlo.
+            </li>
+            <li>
+                <strong>CATE heterogéneo:</strong> En el código del RCT, modifica el efecto del tratamiento
+                para que además dependa de la edad: <code>Y1 = Y0 + 10 - 0.15 * age</code>. Calcula el CATE
+                para el grupo de menores de 40 y el grupo de mayores. ¿En qué grupo es más beneficioso
+                el tratamiento?
+            </li>
+            <li>
+                <strong>Por qué L3 &gt; L2:</strong> Explica con el ejemplo de Ana García por qué el
+                resultado contrafactual individual (L3) puede diferir del ATE poblacional (L2).
+                ¿Cuándo son iguales? ¿Cuándo difieren máximamente?
+            </li>
+        </ol>
+    </div>
+
+    <div class="btn-nav-group">
+        <a href="05_do_calculus.html" class="btn-nav">← Anterior</a>
+        <a href="07_deep_learning_causal.html" class="btn-nav primary">Siguiente: Deep Learning Causal →</a>
+    </div>
+</div>
+<script src="../../../shared/lucentia.js" defer></script>
+
+
+<!-- ── Sidebar inyectada por inject_gen1_sidebar.py ────────────────────────── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">LucentIA</div>
+  <div class="sidebar-course">Causalidad</div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-section">Índice del curso</li>
+    <li><a href="01_introduccion.html">01: Más allá de las Correlaciones</a></li>
+    <li><a href="02_escalera_causacion.html">02: La Escalera de la Causación</a></li>
+    <li><a href="03_paradoja_simpson.html">03: La Paradoja de Simpson</a></li>
+    <li><a href="04_dags.html">04: Grafos Causales (DAGs)</a></li>
+    <li><a href="05_do_calculus.html">05: El Cálculo do()</a></li>
+    <li><a href="06_contrafactuales.html">06: Contrafactuales y SCMs</a></li>
+    <li><a href="07_deep_learning_causal.html">07: Deep Learning Causal</a></li>
+    <li><a href="08_papers_estado_del_arte.html">08: Papers y Estado del Arte</a></li>
+    <li><a href="09_practica_python_dags.html">09: Python - Datos Sintéticos y DAGs</a></li>
+    <li><a href="10_practica_python_do_calculus.html">10: Python - ML Sesgado vs DoWhy</a></li>
+    <li><a href="index.html">Causalidad</a></li>
+  </ul>
+  <div class="theme-toggle">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIcon">&#9728;</span>
+      <span id="themeLabel">Modo claro</span>
+    </button>
+  </div>
+</nav>
+
+</body>
 </html>

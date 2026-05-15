@@ -6,21 +6,19 @@
     <title>03: La Paradoja de Simpson | Causalidad</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+    <link rel="stylesheet" href="../../../shared/styles.css"/>
+  <style>
         :root {
             --accent: #bc8cff;
-            /* Morado para sección 3 */
             --bg: #0d1117;
             --text: #e6edf3;
             --card-bg: #161b22;
             --border: #30363d;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -30,52 +28,24 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding-top: 30px;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding-top: 30px; }
 
-        .breadcrumb {
-            font-size: 0.85em;
-            color: #8b949e;
-            margin-bottom: 20px;
-        }
+        .breadcrumb { font-size: 0.85em; color: #8b949e; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
 
-        .breadcrumb a {
-            color: var(--accent);
-            text-decoration: none;
-        }
+        h1 { font-size: 2.5em; font-weight: 900; margin-bottom: 15px; color: var(--accent); }
+        h2 { font-size: 1.8em; margin: 40px 0 15px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.3em; margin: 25px 0 10px; color: #c9d1d9; }
 
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
+        p { margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
 
-        h1 {
-            font-size: 2.5em;
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: var(--accent);
-        }
-
-        h2 {
-            font-size: 1.8em;
-            margin: 40px 0 15px;
-            color: #fff;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-
-        h3 {
-            font-size: 1.4em;
-            margin: 30px 0 10px;
-            color: #c9d1d9;
-        }
-
-        p {
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            color: #c9d1d9;
+        .math {
+            font-family: 'Courier New', Courier, monospace;
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #a5d6ff;
         }
 
         .highlight-box {
@@ -84,7 +54,25 @@
             padding: 20px;
             border-radius: 0 8px 8px 0;
             margin: 30px 0;
-            font-size: 1.15em;
+            font-size: 1.1em;
+        }
+
+        .warning-box {
+            background: rgba(255, 123, 114, 0.08);
+            border-left: 4px solid #ff7b72;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: rgba(82, 196, 26, 0.08);
+            border-left: 4px solid #52c41a;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
         }
 
         table {
@@ -98,36 +86,98 @@
             border: 1px solid var(--border);
         }
 
-        th,
-        td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
+        th, td { padding: 15px; text-align: center; border-bottom: 1px solid var(--border); }
+        th { background: #21262d; color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px; }
+        tr:last-child td { border-bottom: none; }
+
+        .bold-row { font-weight: 700; background: rgba(255, 255, 255, 0.03); }
+
+        .graph-box {
+            background: #ffffff05;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        th {
+        .graph-desc { font-size: 0.95em; color: #8b949e; text-align: center; }
+
+        pre {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #edf2de;
+        }
+
+        code { font-family: 'Courier New', monospace; }
+
+        .code-label {
+            display: inline-block;
             background: #21262d;
-            color: var(--accent);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.85em;
-            letter-spacing: 1px;
-        }
-
-        tr:last-child td {
+            color: #8b949e;
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: -4px;
+            font-family: monospace;
+            border: 1px solid var(--border);
             border-bottom: none;
         }
 
-        .bold-row {
-            font-weight: 700;
-            background: rgba(255, 255, 255, 0.03);
+        .math-block {
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            padding: 22px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            margin: 25px 0;
+            color: #a5d6ff;
         }
 
-        .btn-nav-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 40px;
+        .dag-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
         }
+
+        .dag-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .dag-card h4 { color: var(--accent); margin-bottom: 12px; }
+
+        .exercise-box {
+            background: rgba(227, 179, 65, 0.06);
+            border: 1px solid #e3b341;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px 0;
+        }
+
+        .exercise-box h3 { color: #e3b341; margin-top: 0; }
+
+        ol { margin-left: 25px; margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
+        ol li { margin-bottom: 12px; }
+        ul { margin-left: 25px; margin-bottom: 20px; font-size: 1.05em; color: #c9d1d9; }
+        ul li { margin-bottom: 8px; }
+
+        .btn-nav-group { display: flex; gap: 15px; margin-top: 40px; }
 
         .btn-nav {
             display: inline-block;
@@ -148,124 +198,425 @@
             border: none;
         }
 
-        .btn-nav:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-        }
+        .btn-nav:hover { transform: translateY(-2px); border-color: var(--accent); }
     </style>
+
+  <!-- Anti-flash -->
+  <script>!function(){var t=localStorage.getItem('lucentia-theme')||'dark';'light'===t&&document.documentElement.setAttribute('data-theme','light')}()</script>
+
 </head>
 
 <body>
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="index.html">← Volver al Roadmap</a> / Sección 03
+<!-- Botón hamburguesa — visible en tablet/móvil -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Abrir menú" aria-expanded="true">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a href="index.html">← Volver al Roadmap</a> / Sección 03
+    </div>
+
+    <h1>🔄 La Paradoja de Simpson</h1>
+    <p>Uno de los rompecabezas más fascinantes de la estadística: una tendencia presente en cada subgrupo de los datos
+        <em>desaparece o se invierte</em> al combinar los grupos. Para la estadística clásica es una paradoja
+        inescrutable. <strong>Para la inferencia causal, no existe ninguna paradoja</strong> — es simplemente el
+        resultado predecible de ignorar el modelo causal subyacente.</p>
+
+    <!-- ======================= EJEMPLO 1: EL FÁRMACO ======================= -->
+    <h2>Ejemplo 1 — El Falso Tratamiento Milagroso</h2>
+    <p>Eres el investigador principal de un nuevo fármaco. Los datos clínicos observacionales son estos:</p>
+
+    <h3>Datos globales (sin estratificar)</h3>
+    <table>
+        <tr>
+            <th>Grupo</th>
+            <th>Recuperados / Total</th>
+            <th>Tasa de Recuperación</th>
+        </tr>
+        <tr>
+            <td>Tratamiento (tomaron el fármaco)</td>
+            <td>40 / 80</td>
+            <td style="color:#ff7b72; font-weight:700;">50%</td>
+        </tr>
+        <tr>
+            <td>Control (no tomaron el fármaco)</td>
+            <td>32 / 80</td>
+            <td style="color:#ff7b72; font-weight:700;">40%</td>
+        </tr>
+    </table>
+    <p><strong>Conclusión L1:</strong> El fármaco parece funcionar (50% vs 40%). ¿Lo aprobamos?</p>
+
+    <h3>Los mismos datos estratificados por Género</h3>
+    <table>
+        <tr>
+            <th>Género</th>
+            <th>Grupo</th>
+            <th>Recuperados / Total</th>
+            <th>Tasa</th>
+        </tr>
+        <tr>
+            <td rowspan="2">Hombres</td>
+            <td>Tratamiento</td>
+            <td>36 / 60</td>
+            <td style="color:#50fa7b; font-weight:700;">60%</td>
+        </tr>
+        <tr>
+            <td>Control</td>
+            <td>14 / 20</td>
+            <td style="color:#50fa7b; font-weight:700;">70%</td>
+        </tr>
+        <tr class="bold-row">
+            <td colspan="4" style="text-align:left; padding-left:30px;"><em>→ Fármaco dañino para hombres (60% &lt; 70%)</em></td>
+        </tr>
+        <tr>
+            <td rowspan="2">Mujeres</td>
+            <td>Tratamiento</td>
+            <td>4 / 20</td>
+            <td style="color:#50fa7b; font-weight:700;">20%</td>
+        </tr>
+        <tr>
+            <td>Control</td>
+            <td>18 / 60</td>
+            <td style="color:#50fa7b; font-weight:700;">30%</td>
+        </tr>
+        <tr class="bold-row">
+            <td colspan="4" style="text-align:left; padding-left:30px;"><em>→ Fármaco dañino para mujeres (20% &lt; 30%)</em></td>
+        </tr>
+    </table>
+
+    <div class="highlight-box">
+        <strong>La Paradoja:</strong> El fármaco es MALO para los hombres, y MALO para las mujeres, pero aparece
+        BUENO para la población combinada. Matemáticamente correcto, causalmente engañoso. ¿A cuál tabla obedecemos?
+    </div>
+
+    <!-- ======================= DAG EXPLICACIÓN ======================= -->
+    <h2>La Resolución Causal: El Papel del DAG</h2>
+    <p>La estadística sola no puede decirte a qué tabla hacerle caso. Necesitas el modelo causal (DAG). El
+        <strong>Confounder</strong> es el Género, que actúa así:</p>
+
+    <div class="graph-box">
+        <div class="mermaid">
+            graph TD
+            G((Género)) --> T((Tratamiento))
+            G --> Y((Recuperación))
+            T --> Y
+            style G fill:#da3633,stroke:#ff7b72,color:#fff
+            style T fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style Y fill:#238636,stroke:#3fb950,color:#fff
         </div>
-
-        <h1>🔄 La Paradoja de Simpson</h1>
-        <p>Uno de los rompecabezas más fascinantes de la estadística es la Paradoja de Simpson. Ocurre cuando una
-            tendencia aparece en diferentes grupos de datos, pero desaparece o se invierte cuando estos grupos se
-            combinan.</p>
-
-        <p>Para la estadística clásica, esto es una "paradoja" inescrutable. <strong>Para la Inferencia Causal, no hay
-                paradoja alguna</strong>; es simplemente el resultado de ignorar el modelo causal subyacente
-            (específicamente, los <i>confounders</i>).</p>
-
-        <h2>El Falso Tratamiento Milagroso</h2>
-        <p>Imagina que eres el investigador principal de un nuevo fármaco para una enfermedad grave. Recopilas los
-            siguientes resultados de recuperación de pacientes clínicos:</p>
-
-        <h3>Población Global</h3>
-        <table>
-            <tr>
-                <th>Grupo</th>
-                <th>Recuperados / Total</th>
-                <th>Tasa de Recuperación</th>
-            </tr>
-            <tr>
-                <td>Tomaron el Fármaco (Tratamiento)</td>
-                <td>40 / 80</td>
-                <td style="color: #ff7b72; font-weight: bold;">50%</td>
-            </tr>
-            <tr>
-                <td>No tomaron Fármaco (Control)</td>
-                <td>32 / 80</td>
-                <td style="color: #ff7b72; font-weight: bold;">40%</td>
-            </tr>
-        </table>
-        <p><strong>Conclusión Estadística Nivel 1:</strong> El fármaco parece funcionar. 50% vs 40%. Debemos aprobarlo,
-            ¿verdad?</p>
-
-        <h3>Los Datos Estratificados por Género</h3>
-        <p>Decides desglosar los mismos datos exactos separándolos por hombres y mujeres. Observa lo que sucede:</p>
-
-        <table>
-            <tr>
-                <th>Género</th>
-                <th>Grupo</th>
-                <th>Recuperados / Total</th>
-                <th>Tasa de Recuperación</th>
-            </tr>
-            <tr>
-                <td rowspan="2">Hombres</td>
-                <td>Tratamiento</td>
-                <td>36 / 60</td>
-                <td style="color: #50fa7b; font-weight: bold;">60%</td>
-            </tr>
-            <tr>
-                <td>Control</td>
-                <td>14 / 20</td>
-                <td style="color: #50fa7b; font-weight: bold;">70%</td>
-            </tr>
-            <tr class="bold-row">
-                <td colspan="4" style="text-align: left; padding-left: 30px;"><i>→ Fármaco es dañino para los Hombres
-                        (60% vs 70%)</i></td>
-            </tr>
-            <tr>
-                <td rowspan="2">Mujeres</td>
-                <td>Tratamiento</td>
-                <td>4 / 20</td>
-                <td style="color: #50fa7b; font-weight: bold;">20%</td>
-            </tr>
-            <tr>
-                <td>Control</td>
-                <td>18 / 60</td>
-                <td style="color: #50fa7b; font-weight: bold;">30%</td>
-            </tr>
-            <tr class="bold-row">
-                <td colspan="4" style="text-align: left; padding-left: 30px;"><i>→ Fármaco es dañino para las Mujeres
-                        (20% vs 30%)</i></td>
-            </tr>
-        </table>
-
-        <div class="highlight-box">
-            <strong>La Paradoja:</strong> ¡El fármaco es MALO para los hombres, y MALO para las mujeres, pero parece
-            BUENO para la población general! ¿A quién le damos el fármaco? ¿Lo aprobamos o no?
-        </div>
-
-        <h2>La Resolución Causal</h2>
-        <p>La estadística sola no puede decirte a qué tabla hacerle caso. La matemática pura de la probabilidad
-            condicional es ambigua aquí.</p>
-        <p>Para resolver esto, <strong>necesitamos saber cómo se generaron los datos (la Causalidad)</strong>. El factor
-            de confusión clave (Confounder) es el "Género".</p>
-        <ul>
-            <li>Los Hombres tienen altas tasas naturales de recuperación (70% base).</li>
-            <li>Las Mujeres tienen bajas tasas naturales de recuperación (30% base).</li>
-            <li>En este estudio observacional, los doctores tendieron a recetar el fármaco a los pacientes con mayor
-                esperanza de base (Hombres: 60 tratados vs 20 control).</li>
-        </ul>
-        <p>Por tanto, el grupo "Tratamiento" total (80 personas) está desproporcionadamente lleno de pacientes que, de
-            base, se iban a curar casi seguro por sí mismos. Esto infla artificialmente la cifra global al 50%.</p>
-
-        <p><strong>El Cálculo do():</strong> Nos dice categóricamente que <i>debemos condicionar</i> por todos los
-            factores que causen simultáneamente la asignación del tratamiento y el resultado. Como el Género afecta a
-            ambos, debemos mirar los datos estratificados. El fármaco es <strong>veneno</strong> y no debe aprobarse.
+        <p class="graph-desc">
+            El Género causa quién recibe el tratamiento (T) y también afecta la recuperación (Y) directamente.<br>
+            Hay un camino espurio: T ← Género → Y. Este es el "backdoor path" que debemos cerrar.
         </p>
+    </div>
 
-        <div class="btn-nav-group">
-            <a href="02_escalera_causacion.html" class="btn-nav">← Anterior</a>
-            <a href="04_dags.html" class="btn-nav primary">Siguiente: Grafos Causales (DAGs) →</a>
+    <p>Mecanismo del sesgo en los datos:</p>
+    <ul>
+        <li>Los hombres tienen tasa base de recuperación <strong>alta</strong> (70%), y son <em>mayoría en el grupo de tratamiento</em> (60 de 80 tratados).</li>
+        <li>Las mujeres tienen tasa base <strong>baja</strong> (30%), y son <em>mayoría en el grupo control</em> (60 de 80 controles).</li>
+        <li>El grupo de tratamiento combinado está "contaminado" por los hombres de alta recuperación base → infla artificialmente el 50%.</li>
+    </ul>
+
+    <!-- ======================= CÁLCULO DO() ======================= -->
+    <h2>El Cálculo do() — Resolución Numérica Completa</h2>
+    <p>Aplicamos la <strong>fórmula de ajuste por backdoor</strong> (que veremos a fondo en el capítulo 05):</p>
+
+    <div class="math-block">
+        P(Y=1 | do(T=1)) = &sum;<sub>g</sub> P(Y=1 | T=1, G=g) &times; P(G=g)
+    </div>
+
+    <p>Los ingredientes que sacamos de los datos observacionales:</p>
+    <table>
+        <tr>
+            <th>Cantidad</th>
+            <th>Valor</th>
+            <th>Fuente</th>
+        </tr>
+        <tr>
+            <td>P(Y=1 | T=1, G=Hombre)</td>
+            <td>36/60 = 0.60</td>
+            <td>Tabla estratificada</td>
+        </tr>
+        <tr>
+            <td>P(Y=1 | T=1, G=Mujer)</td>
+            <td>4/20 = 0.20</td>
+            <td>Tabla estratificada</td>
+        </tr>
+        <tr>
+            <td>P(Y=1 | T=0, G=Hombre)</td>
+            <td>14/20 = 0.70</td>
+            <td>Tabla estratificada</td>
+        </tr>
+        <tr>
+            <td>P(Y=1 | T=0, G=Mujer)</td>
+            <td>18/60 = 0.30</td>
+            <td>Tabla estratificada</td>
+        </tr>
+        <tr>
+            <td>P(G=Hombre)</td>
+            <td>80/160 = 0.50</td>
+            <td>Distribución marginal real</td>
+        </tr>
+        <tr>
+            <td>P(G=Mujer)</td>
+            <td>80/160 = 0.50</td>
+            <td>Distribución marginal real</td>
+        </tr>
+    </table>
+
+    <p>Sustituyendo:</p>
+    <div class="math-block">
+        P(Y=1 | do(T=1)) = 0.60 × 0.50 + 0.20 × 0.50 = 0.30 + 0.10 = <strong>0.40</strong><br><br>
+        P(Y=1 | do(T=0)) = 0.70 × 0.50 + 0.30 × 0.50 = 0.35 + 0.15 = <strong>0.50</strong><br><br>
+        ATE = 0.40 − 0.50 = <strong>−0.10</strong> → El fármaco es contraproducente (−10 pp)
+    </div>
+
+    <p>La tabla global decía +10 pp a favor del fármaco. El ajuste causal dice −10 pp. La respuesta correcta es:
+        <strong>no aprobar el fármaco</strong>. La diferencia entre el dato crudo y la realidad causal es de 20 puntos
+        porcentuales — suficiente para matar o salvar miles de pacientes.</p>
+
+    <!-- ======================= EJEMPLO 2: BERKELEY ======================= -->
+    <h2>Ejemplo 2 — El Caso Berkeley (Admisiones Universitarias)</h2>
+    <p>Este es el caso histórico más famoso de la paradoja de Simpson. En 1973, la Universidad de Berkeley analizó sus
+        admisiones al posgrado y aparentemente encontró sesgo de género:</p>
+
+    <table>
+        <tr>
+            <th>Género</th>
+            <th>Solicitudes</th>
+            <th>Admitidos</th>
+            <th>Tasa de Admisión</th>
+        </tr>
+        <tr>
+            <td>Hombres</td>
+            <td>8.442</td>
+            <td>3.738</td>
+            <td style="color:#50fa7b; font-weight:700;">44%</td>
+        </tr>
+        <tr>
+            <td>Mujeres</td>
+            <td>4.321</td>
+            <td>1.494</td>
+            <td style="color:#ff7b72; font-weight:700;">35%</td>
+        </tr>
+    </table>
+    <p><em>Parece que Berkeley discrimina a las mujeres (44% vs 35%).</em></p>
+
+    <p>Al estratificar por departamento (A, B, C, D, E, F), el cuadro se invierte: en la mayoría de departamentos,
+        las mujeres tenían <em>tasas de admisión iguales o superiores</em> a los hombres. ¿Por qué la paradoja?</p>
+
+    <div class="graph-box">
+        <div class="mermaid">
+            graph TD
+            G((Género)) --> D((Departamento))
+            D --> A((Admisión))
+            G --> A
+            style G fill:#da3633,stroke:#ff7b72,color:#fff
+            style D fill:#d29922,stroke:#e3b341,color:#000
+            style A fill:#238636,stroke:#3fb950,color:#fff
+        </div>
+        <p class="graph-desc">
+            El DAG real: Género afecta la elección de Departamento.<br>
+            Las mujeres solicitaban en mayor proporción departamentos muy competitivos (bajas tasas de admisión).<br>
+            El Departamento es un <strong>mediador</strong>, no un confounder clásico.
+        </p>
+    </div>
+
+    <p>Las mujeres solicitaban masivamente a departamentos con baja tasa de admisión (Inglés, Drama: ~5-10%) mientras
+        que los hombres solicitaban más a departamentos con alta tasa (Ingeniería, Química: ~60-80%). Al combinar,
+        aparece el sesgo aparente de género.</p>
+
+    <div class="highlight-box">
+        <strong>Lección Berkeley:</strong> No había discriminación sistémica en la admisión por género. Había un
+        problema de <em>autoselección</em> en qué departamentos elegían hombres y mujeres. El causal correcto sería
+        preguntar: "¿Dentro de cada departamento, se discrimina por género?" — y la respuesta era: en general, no.
+    </div>
+
+    <!-- ======================= CUANDO NO ESTRATIFICAR ======================= -->
+    <h2>⚠️ Cuando NO debes estratificar — El Error del Mediador y del Colisionador</h2>
+    <p>El mayor error que cometen los analistas de datos es estratificar (condicionar por) una variable sin inspeccionar
+        el DAG primero. Hay dos casos en que estratificar es <strong>incorrecto y produce bias</strong>:</p>
+
+    <div class="dag-grid">
+        <div class="dag-card">
+            <h4>❌ Error 1: Condicionar por un Mediador</h4>
+            <div class="graph-box" style="padding:15px;">
+                <div class="mermaid">
+                    graph LR
+                    X((X)) --> M((M))
+                    M --> Y((Y))
+                    style X fill:#1f6feb,stroke:#58a6ff,color:#fff
+                    style M fill:#d29922,stroke:#e3b341,color:#000
+                    style Y fill:#238636,stroke:#3fb950,color:#fff
+                </div>
+            </div>
+            <p style="font-size:0.95em;">Si M está <em>en el camino causal</em> de X a Y (es el mecanismo por
+                el que X causa Y), condicionar por M <strong>bloquea el efecto total</strong> de X en Y.
+                Estarías midiendo el efecto directo de X en Y omitiendo el camino X→M→Y.</p>
+            <p style="font-size:0.95em; color:#ff7b72;"><strong>Ejemplo:</strong> X = Fumar, M = Alquitrán en pulmones,
+                Y = Cáncer. Si estratificas por nivel de alquitrán, eliminas el principal mecanismo causal.</p>
+        </div>
+        <div class="dag-card">
+            <h4>❌ Error 2: Condicionar por un Colisionador</h4>
+            <div class="graph-box" style="padding:15px;">
+                <div class="mermaid">
+                    graph TD
+                    X((X)) --> Z((Z))
+                    Y((Y)) --> Z((Z))
+                    style X fill:#1f6feb,stroke:#58a6ff,color:#fff
+                    style Z fill:#da3633,stroke:#ff7b72,color:#fff
+                    style Y fill:#238636,stroke:#3fb950,color:#fff
+                </div>
+            </div>
+            <p style="font-size:0.95em;">X e Y son independientes. Z es su consecuencia común. Si condicionas
+                por Z, <strong>creas una correlación espuria</strong> entre X e Y que no existe en la naturaleza.
+                Esto se llama Collider Bias o Berkson's Paradox.</p>
+            <p style="font-size:0.95em; color:#ff7b72;"><strong>Ejemplo:</strong> X = Talento, Y = Belleza,
+                Z = Actor famoso. En el dataset de actores, talento y belleza tienen correlación negativa artificial.</p>
         </div>
     </div>
-</body>
 
+    <div class="warning-box">
+        <strong>Regla de Oro:</strong> La decisión de estratificar (o ajustar) por una variable Z solo es correcta
+        si Z es un <strong>confounder</strong> (causa tanto X como Y). Nunca estratifiques por un mediador ni por
+        un colisionador sin haber trazado el DAG causal primero. La Paradoja de Simpson no dice "siempre estratifica"
+        — dice "estratifica por los confounders del DAG".
+    </div>
+
+    <!-- ======================= CÓDIGO PYTHON ======================= -->
+    <h2>Código Python: Reproducciendo la Paradoja</h2>
+    <p>Este código genera datos donde la paradoja de Simpson está presente y calcula ambas tablas
+        (agregada y estratificada) para visualizar el efecto.</p>
+
+    <p class="code-label">python</p>
+    <pre><code>import numpy as np
+import pandas as pd
+
+np.random.seed(7)
+N = 160
+
+# ---- MODELO CAUSAL REAL ----
+# Género: 50% hombres (0), 50% mujeres (1)
+genero = np.repeat([0, 1], N // 2)  # 80 hombres, 80 mujeres
+
+# Los hombres van más a tratamiento (60 de 80), mujeres menos (20 de 80)
+# Esto simula el sesgo de indicación (confounding by gender)
+tratamiento = np.zeros(N, dtype=int)
+tratamiento[:60] = 1          # primeros 60 hombres (de 80) → tratamiento
+tratamiento[80:100] = 1       # primeros 20 mujeres (de 80) → tratamiento
+
+# Tasa base: hombres 70%, mujeres 30%
+# Efecto REAL del fármaco: -10 pp (el fármaco es dañino)
+base_rate = np.where(genero == 0, 0.70, 0.30)
+prob_recovery = base_rate - 0.10 * tratamiento
+prob_recovery = np.clip(prob_recovery, 0.01, 0.99)
+recovery = np.array([np.random.binomial(1, p) for p in prob_recovery])
+
+df = pd.DataFrame({'genero': genero, 'trat': tratamiento, 'recovery': recovery})
+df['genero_str'] = df['genero'].map({0: 'Hombre', 1: 'Mujer'})
+
+# ---- TABLA GLOBAL (paradoja) ----
+print("=== TABLA GLOBAL (nivel L1) ===")
+for t, label in [(1,'Tratamiento'), (0,'Control')]:
+    grp = df[df.trat == t]
+    print(f"  {label}: {grp.recovery.sum()}/{len(grp)} = {grp.recovery.mean():.1%}")
+l1_diff = df[df.trat==1].recovery.mean() - df[df.trat==0].recovery.mean()
+print(f"  Diferencia global (sesgada): {l1_diff:+.3f}")
+
+# ---- TABLA ESTRATIFICADA (correcta para comparar dentro de grupo) ----
+print("\n=== TABLA ESTRATIFICADA por Género ===")
+for g in ['Hombre', 'Mujer']:
+    for t, label in [(1,'Trat'), (0,'Control')]:
+        grp = df[(df.genero_str == g) & (df.trat == t)]
+        print(f"  {g} - {label}: {grp.recovery.sum()}/{len(grp)} = {grp.recovery.mean():.1%}")
+
+# ---- AJUSTE DO() (correcto causalmente) ----
+print("\n=== AJUSTE CAUSAL do(T) ===")
+p_h = (df.genero == 0).mean()  # P(Hombre)
+p_m = (df.genero == 1).mean()  # P(Mujer)
+
+def do_rate(t):
+    r_h = df[(df.trat == t) & (df.genero == 0)].recovery.mean()
+    r_m = df[(df.trat == t) & (df.genero == 1)].recovery.mean()
+    return r_h * p_h + r_m * p_m
+
+do_1 = do_rate(1)
+do_0 = do_rate(0)
+print(f"  P(Y | do(T=1)) = {do_1:.3f}")
+print(f"  P(Y | do(T=0)) = {do_0:.3f}")
+print(f"  ATE causal real = {do_1 - do_0:+.3f}  ← negativo: fármaco es dañino")
+</code></pre>
+
+    <div class="info-box">
+        <strong>Interpretación:</strong><br>
+        La tabla global mostrará que el tratamiento parece beneficioso (sesgo positivo), pero el ATE con ajuste
+        backdoor revelará que el fármaco en realidad <em>reduce</em> la recuperación. Solo el ajuste causal
+        da la respuesta correcta.
+    </div>
+
+    <!-- ======================= EJERCICIOS ======================= -->
+    <div class="exercise-box">
+        <h3>✏️ Ejercicios</h3>
+        <ol>
+            <li>
+                <strong>Identificación:</strong> Para cada escenario, decide si la variable Z es un confounder,
+                un mediador o un colisionador con respecto a X→Y:
+                <ul style="margin-top:8px; margin-left:20px; font-size:1em;">
+                    <li>X=Ejercicio, Z=Pérdida de peso, Y=Glucosa en sangre</li>
+                    <li>X=Nivel educativo, Z=Barrio de residencia, Y=Salario (ambos causan ambos por igual)</li>
+                    <li>X=Calidad del software, Z=Bugs en producción, Y=Tiempo de respuesta del sistema</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Cálculo manual:</strong> Con los datos estratificados del ejemplo del fármaco, calcula
+                manualmente <span class="math">P(Y | do(T=0))</span> usando la fórmula de ajuste backdoor y
+                verifica que el ATE sea −0.10.
+            </li>
+            <li>
+                <strong>Modifica el código:</strong> Cambia el efecto real del fármaco a +0.15 (beneficioso)
+                manteniendo el confounder de género. ¿Aún aparece la paradoja? ¿En qué dirección?
+            </li>
+            <li>
+                <strong>Collider bias:</strong> Añade una variable Z = "paciente hospitalizado" que es
+                consecuencia de tanto el tratamiento como de la recuperación fallida. ¿Qué pasa con la
+                correlación entre Tratamiento y Recuperación al filtrar solo los hospitalizados?
+            </li>
+        </ol>
+    </div>
+
+    <div class="btn-nav-group">
+        <a href="02_escalera_causacion.html" class="btn-nav">← Anterior</a>
+        <a href="04_dags.html" class="btn-nav primary">Siguiente: Grafos Causales (DAGs) →</a>
+    </div>
+</div>
+<script src="../../../shared/lucentia.js" defer></script>
+
+
+<!-- ── Sidebar inyectada por inject_gen1_sidebar.py ────────────────────────── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">LucentIA</div>
+  <div class="sidebar-course">Causalidad</div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-section">Índice del curso</li>
+    <li><a href="01_introduccion.html">01: Más allá de las Correlaciones</a></li>
+    <li><a href="02_escalera_causacion.html">02: La Escalera de la Causación</a></li>
+    <li><a href="03_paradoja_simpson.html">03: La Paradoja de Simpson</a></li>
+    <li><a href="04_dags.html">04: Grafos Causales (DAGs)</a></li>
+    <li><a href="05_do_calculus.html">05: El Cálculo do()</a></li>
+    <li><a href="06_contrafactuales.html">06: Contrafactuales y SCMs</a></li>
+    <li><a href="07_deep_learning_causal.html">07: Deep Learning Causal</a></li>
+    <li><a href="08_papers_estado_del_arte.html">08: Papers y Estado del Arte</a></li>
+    <li><a href="09_practica_python_dags.html">09: Python - Datos Sintéticos y DAGs</a></li>
+    <li><a href="10_practica_python_do_calculus.html">10: Python - ML Sesgado vs DoWhy</a></li>
+    <li><a href="index.html">Causalidad</a></li>
+  </ul>
+  <div class="theme-toggle">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIcon">&#9728;</span>
+      <span id="themeLabel">Modo claro</span>
+    </button>
+  </div>
+</nav>
+
+</body>
 </html>

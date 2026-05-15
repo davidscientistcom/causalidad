@@ -5,7 +5,8 @@
     <title>08: Papers y Estado del Arte | Causalidad</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
+    <link rel="stylesheet" href="../../../shared/styles.css"/>
+  <style>
         :root { --accent: #bc8cff; --bg: #0d1117; --text: #e6edf3; --card-bg: #161b22; --border: #30363d; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 20px; }
@@ -44,8 +45,16 @@
         .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; }
         .btn-back { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
     </style>
+
+  <!-- Anti-flash -->
+  <script>!function(){var t=localStorage.getItem('lucentia-theme')||'dark';'light'===t&&document.documentElement.setAttribute('data-theme','light')}()</script>
+
 </head>
 <body>
+<!-- Botón hamburguesa — visible en tablet/móvil -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Abrir menú" aria-expanded="true">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
     <div class="container">
         <div class="breadcrumb"><a href="index.html">← Volver al Roadmap</a> / Sección 08</div>
 
@@ -262,5 +271,34 @@
             <a href="09_practica_python_dags.html" class="btn-nav">Siguiente: Práctica Python DAGs →</a>
         </div>
     </div>
+<script src="../../../shared/lucentia.js" defer></script>
+
+
+<!-- ── Sidebar inyectada por inject_gen1_sidebar.py ────────────────────────── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">LucentIA</div>
+  <div class="sidebar-course">Causalidad</div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-section">Índice del curso</li>
+    <li><a href="01_introduccion.html">01: Más allá de las Correlaciones</a></li>
+    <li><a href="02_escalera_causacion.html">02: La Escalera de la Causación</a></li>
+    <li><a href="03_paradoja_simpson.html">03: La Paradoja de Simpson</a></li>
+    <li><a href="04_dags.html">04: Grafos Causales (DAGs)</a></li>
+    <li><a href="05_do_calculus.html">05: El Cálculo do()</a></li>
+    <li><a href="06_contrafactuales.html">06: Contrafactuales y SCMs</a></li>
+    <li><a href="07_deep_learning_causal.html">07: Deep Learning Causal</a></li>
+    <li><a href="08_papers_estado_del_arte.html">08: Papers y Estado del Arte</a></li>
+    <li><a href="09_practica_python_dags.html">09: Python - Datos Sintéticos y DAGs</a></li>
+    <li><a href="10_practica_python_do_calculus.html">10: Python - ML Sesgado vs DoWhy</a></li>
+    <li><a href="index.html">Causalidad</a></li>
+  </ul>
+  <div class="theme-toggle">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIcon">&#9728;</span>
+      <span id="themeLabel">Modo claro</span>
+    </button>
+  </div>
+</nav>
+
 </body>
 </html>

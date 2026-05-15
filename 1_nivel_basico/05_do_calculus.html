@@ -6,21 +6,19 @@
     <title>05: El Cálculo do() | Causalidad</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'dark' });</script>
+    <link rel="stylesheet" href="../../../shared/styles.css"/>
+  <style>
         :root {
             --accent: #ff6b35;
-            /* Naranja para sección 5 */
             --bg: #0d1117;
             --text: #e6edf3;
             --card-bg: #161b22;
             --border: #30363d;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -30,46 +28,24 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding-top: 30px;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding-top: 30px; }
 
-        .breadcrumb {
-            font-size: 0.85em;
-            color: #8b949e;
-            margin-bottom: 20px;
-        }
+        .breadcrumb { font-size: 0.85em; color: #8b949e; margin-bottom: 20px; }
+        .breadcrumb a { color: var(--accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
 
-        .breadcrumb a {
-            color: var(--accent);
-            text-decoration: none;
-        }
+        h1 { font-size: 2.5em; font-weight: 900; margin-bottom: 15px; color: var(--accent); }
+        h2 { font-size: 1.8em; margin: 40px 0 15px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        h3 { font-size: 1.3em; margin: 25px 0 10px; color: #c9d1d9; }
 
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
+        p { margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
 
-        h1 {
-            font-size: 2.5em;
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: var(--accent);
-        }
-
-        h2 {
-            font-size: 1.8em;
-            margin: 40px 0 15px;
-            color: #fff;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-        }
-
-        p {
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            color: #c9d1d9;
+        .math {
+            font-family: 'Courier New', Courier, monospace;
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #a5d6ff;
         }
 
         .math-block {
@@ -78,38 +54,146 @@
             padding: 25px;
             border-radius: 8px;
             text-align: center;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.4em;
-            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            margin: 25px 0;
             color: #a5d6ff;
             box-shadow: 0 4px 20px rgba(255, 107, 53, 0.1);
         }
 
         .highlight-box {
-            background: rgba(255, 107, 53, 0.1);
+            background: rgba(255, 107, 53, 0.08);
             border-left: 4px solid var(--accent);
             padding: 20px;
             border-radius: 0 8px 8px 0;
             margin: 30px 0;
-            font-size: 1.15em;
-        }
-
-        ul {
-            margin-left: 20px;
-            margin-bottom: 20px;
             font-size: 1.1em;
-            color: #c9d1d9;
         }
 
-        li {
+        .warning-box {
+            background: rgba(255, 123, 114, 0.08);
+            border-left: 4px solid #ff7b72;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: rgba(82, 196, 26, 0.08);
+            border-left: 4px solid #52c41a;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+            font-size: 1.1em;
+        }
+
+        .rule-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            padding: 22px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .rule-card h4 {
+            color: var(--accent);
+            font-size: 1.1em;
             margin-bottom: 10px;
         }
 
-        .btn-nav-group {
+        .graph-box {
+            background: #ffffff05;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
             gap: 15px;
-            margin-top: 40px;
         }
+
+        .graph-desc { font-size: 0.95em; color: #8b949e; text-align: center; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1em;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th, td { padding: 14px; text-align: center; border-bottom: 1px solid var(--border); }
+        th { background: #21262d; color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.82em; letter-spacing: 1px; }
+        tr:last-child td { border-bottom: none; }
+        td:first-child { text-align: left; }
+
+        pre {
+            background: #161b22;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #edf2de;
+        }
+
+        code { font-family: 'Courier New', monospace; }
+
+        .code-label {
+            display: inline-block;
+            background: #21262d;
+            color: #8b949e;
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: -4px;
+            font-family: monospace;
+            border: 1px solid var(--border);
+            border-bottom: none;
+        }
+
+        .methods-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .method-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .method-card h4 { color: var(--accent); margin-bottom: 10px; font-size: 1.05em; }
+        .method-card p { font-size: 0.95em; margin-bottom: 8px; }
+
+        .exercise-box {
+            background: rgba(227, 179, 65, 0.06);
+            border: 1px solid #e3b341;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px 0;
+        }
+
+        .exercise-box h3 { color: #e3b341; margin-top: 0; }
+
+        ol { margin-left: 25px; margin-bottom: 20px; font-size: 1.1em; color: #c9d1d9; }
+        ol li { margin-bottom: 12px; }
+        ul { margin-left: 25px; margin-bottom: 20px; font-size: 1.05em; color: #c9d1d9; }
+        ul li { margin-bottom: 8px; }
+
+        .btn-nav-group { display: flex; gap: 15px; margin-top: 40px; }
 
         .btn-nav {
             display: inline-block;
@@ -130,79 +214,444 @@
             border: none;
         }
 
-        .btn-nav:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-        }
+        .btn-nav:hover { transform: translateY(-2px); border-color: var(--accent); }
     </style>
+
+  <!-- Anti-flash -->
+  <script>!function(){var t=localStorage.getItem('lucentia-theme')||'dark';'light'===t&&document.documentElement.setAttribute('data-theme','light')}()</script>
+
 </head>
 
 <body>
-    <div class="container">
-        <div class="breadcrumb">
-            <a href="index.html">← Volver al Roadmap</a> / Sección 05
+<!-- Botón hamburguesa — visible en tablet/móvil -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Abrir menú" aria-expanded="true">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="container">
+    <div class="breadcrumb">
+        <a href="index.html">← Volver al Roadmap</a> / Sección 05
+    </div>
+
+    <h1>🧮 El Cálculo do()</h1>
+    <p>El mayor logro algorítmico de Judea Pearl fue demostrar que, bajo ciertas condiciones gráficas en un DAG, la
+        expresión intervencionista <span class="math">P(Y | do(X))</span> puede <strong>traducirse completamente a
+        probabilidad observacional clásica</strong> de la forma <span class="math">P(y, x, z)</span>.
+        Esto significa que podemos predecir el efecto de una intervención
+        <strong>sin ejecutar ningún experimento</strong> — solo usando datos históricos y el DAG.</p>
+
+    <!-- ======================= LAS 3 REGLAS ======================= -->
+    <h2>Las Tres Reglas del Cálculo do()</h2>
+    <p>Pearl demostró en 1995 que hay exactamente <strong>tres reglas</strong> que permiten manipular expresiones
+        con el operador do() y traducirlas a observacionales. Son la base matemática de toda la identificación causal.</p>
+    <p>Notación: <span class="math">G_X̄</span> = DAG con todos los arcos entrantes a X eliminados
+        (la "cirugía del do"). <span class="math">G_X̲</span> = DAG con todos los arcos salientes de X eliminados.</p>
+
+    <div class="rule-card">
+        <h4>Regla 1 — Inserción/Eliminación de Observaciones</h4>
+        <p>Si Y es d-separado de Z dado {X, W} en el grafo modificado <span class="math">G_X̄</span>, entonces:</p>
+        <div class="math-block" style="font-size:1em; padding:15px;">
+            P(Y | do(X), Z, W) = P(Y | do(X), W)
         </div>
+        <p style="font-size:0.95em;">Una observación adicional Z puede eliminarse si es irrelevante (d-separada de Y)
+            una vez que hemos intervenido en X. <em>Intuición: si la observación de Z no aporta información nueva
+            sobre Y dado el do(X) y W, podemos ignorarla.</em></p>
+    </div>
 
-        <h1>🧮 El Cálculo do()</h1>
-        <p>El mayor hito algorítmico de Judea Pearl fue demostrar matemáticamente que, bajo ciertas reglas gráficas en
-            un DAG, la expresión intervencionista abstracta <span style="font-family: monospace; color: #a5d6ff;">P(Y |
-                do(X))</span> puede <strong>traducirse (reducirse) a probabilidad condicional puramente clásica
-                observacional</strong> de la forma <span style="font-family: monospace; color: #a5d6ff;">P(y, x,
-                z)</span>.</p>
-
-        <p>Esto significa que podemos predecir los efectos de una intervención (política pública, fármaco, estrategia de
-            precios) <strong>sin necesidad de llevar a cabo físicamente la intervención o experimento</strong>,
-            simplemente usando datos históricos observacionales y la topología causal (DAG).</p>
-
-        <h2>1. El Criterio de la Puerta Trasera (Backdoor Criterion)</h2>
-        <p>La forma principal de que nuestra estimación del efecto causal de X sobre Y sea espuria (falsa) es porque hay
-            un "camino por la puerta trasera" abierto entre X e Y. Es decir, variables que apuntan tanto a X como a Y
-            (Confounders).</p>
-
-        <p><strong>El Método:</strong> Para encontrar el efecto causal <i>puro</i> de X sobre Y, debemos condicionar
-            sobre un conjunto de variables Z tal que:</p>
-        <ul>
-            <li>Z bloquea todos los caminos espurios ("puertas traseras") entre X e Y.</li>
-            <li>Ningún elemento de Z es un descendiente de X (no podemos usar mediadores para ajustar).</li>
-        </ul>
-
-        <div class="math-block">
-            P(Y | do(X)) = &sum;<sub>z</sub> P(Y | X, Z=z) * P(Z=z)
+    <div class="rule-card">
+        <h4>Regla 2 — Intercambio do/observación</h4>
+        <p>Si Y es d-separado de X dado W en el grafo <span class="math">G_X̄_W̲</span>, entonces:</p>
+        <div class="math-block" style="font-size:1em; padding:15px;">
+            P(Y | do(X), do(W)) = P(Y | do(X), W)
         </div>
+        <p style="font-size:0.95em;">Una intervención do(W) puede reemplazarse por una simple observación W si la
+            acción forzada sobre W ya no tiene caminos no bloqueados hacia Y que no pasen por X.
+            <em>Esta es la regla que justifica el ajuste backdoor.</em></p>
+    </div>
 
-        <p>Esta es la fórmula fundamental de <strong>Ajuste por Puerta Trasera</strong>. Nota crucial: en la parte
-            derecha de la ecuación ya no existe el operador <i>do()</i>. Todo son probabilidades clásicas computables a
-            partir de tu base de datos (SQL, Pandas, PySpark).</p>
-
-        <h2>2. El Criterio de la Puerta Delantera (Frontdoor Criterion)</h2>
-        <p>¿Qué pasa si existe un confounder fortísimo entre X e Y, pero <strong>no podemos medirlo</strong>, no tenemos
-            datos en el dataset (<i>Unobserved Confounder</i>)?</p>
-
-        <div class="highlight-box">
-            <strong>Ejemplo de Fumar y Cáncer de Pulmón:</strong><br>Históricamente la tabaquera alegaba que quizá
-            existía un "Gen de la Adicción al Tabaco" (Confounder Oculto U) que hacía que la gente fumara (X) y también
-            causaba cáncer de pulmón (Y). Puesto que U no se puede medir, no podemos usar la fórmula Backdoor. ¡No
-            tenemos los datos!
+    <div class="rule-card">
+        <h4>Regla 3 — Inserción/Eliminación de Acciones</h4>
+        <p>Si Y es d-separado de X dado W en el grafo <span class="math">G_X̄(W)</span>, donde
+            X̄(W) es el conjunto de antecesores de W no in-do(X), entonces:</p>
+        <div class="math-block" style="font-size:1em; padding:15px;">
+            P(Y | do(X), do(W)) = P(Y | do(X))
         </div>
+        <p style="font-size:0.95em;">La intervención do(W) es irrelevante si W no tiene camino activo hasta Y
+            en el grafo modificado. <em>Intuición: si podemos "quitar" una variable del do() sin cambiar el resultado,
+            es porque su efecto ya está bloqueado.</em></p>
+    </div>
 
-        <p>Pearl diseñó el milagroso ajuste de Puerta Delantera. Si logramos encontrar una variable mediadora M (por
-            ejemplo, "Alquitrán en los pulmones") que interceda completamente entre X e Y, y que NO esté afectada
-            directamente por el Confounder Oculto U, podemos hacer el cálculo combinando dos mecanismos consecutivos (X
-            → M, y luego M → Y).</p>
+    <div class="highlight-box">
+        <strong>Completitud del Cálculo do():</strong> Shpitser y Pearl (2006) probaron que estas 3 reglas son
+        <em>completas</em>: si una expresión do() no puede identificarse con estas 3 reglas, entonces
+        es matemáticamente <strong>no identificable</strong> — ningún método puede estimar el efecto causal
+        desde datos observacionales sin supuestos adicionales.
+    </div>
 
-        <div class="math-block">
-            P(Y | do(X)) = &sum;<sub>m</sub> P(M=m | X) &sum;<sub>x'</sub> P(Y | X=x', M=m) * P(X=x')
+    <!-- ======================= BACKDOOR ======================= -->
+    <h2>1. El Criterio de la Puerta Trasera (Backdoor)</h2>
+    <p>La estrategia de identificación más común. Un conjunto Z satisface el <strong>criterio backdoor</strong>
+        respecto a (X, Y) si:</p>
+    <ul>
+        <li>Ningún nodo de Z es descendiente de X.</li>
+        <li>Z bloquea todos los caminos "backdoor" (caminos hacia X que entran desde atrás, i.e., con una flecha
+            apuntando a X) entre X e Y.</li>
+    </ul>
+
+    <div class="graph-box">
+        <div class="mermaid">
+            graph TD
+            Z((Z\nConfounder)) --> X((X\nTratamiento))
+            Z --> Y((Y\nResultado))
+            X --> Y
+            style Z fill:#da3633,stroke:#ff7b72,color:#fff
+            style X fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style Y fill:#238636,stroke:#3fb950,color:#fff
         </div>
+        <p class="graph-desc">
+            El único backdoor path es X ← Z → Y.<br>
+            Ajustar por Z bloquea este camino y permite identificar P(Y|do(X)).
+        </p>
+    </div>
 
-        <p>¡Magia matemática! Hemos logrado calcular la causalidad pura de <span
-                style="font-family: monospace; color: #a5d6ff;">P(Y | do(X))</span> ignorando por completo la variable
-            inmesurable U. Solo necesitamos datos sobre Fumar (X), Alquitrán (M) y Cáncer (Y).</p>
+    <div class="math-block">
+        P(Y | do(X=x)) = &sum;<sub>z</sub> P(Y | X=x, Z=z) &times; P(Z=z)
+    </div>
 
-        <div class="btn-nav-group">
-            <a href="04_dags.html" class="btn-nav">← Anterior</a>
-            <a href="06_contrafactuales.html" class="btn-nav primary">Siguiente: Contrafactuales y SCMs →</a>
+    <h3>Ejemplo Numérico Completo — Café y Productividad</h3>
+    <p>Estudio observacional: 1000 empleados. Queremos saber si tomar café (X) aumenta la productividad (Y).
+        El confounder es si el empleado trabaja de noche (Z), ya que los nocturnos beben más café y tienen
+        menor productividad basal.</p>
+
+    <table>
+        <tr>
+            <th>Z (Turno)</th>
+            <th>Toma Café</th>
+            <th>Alta Productividad</th>
+            <th>P(Y=1|X=1,Z)</th>
+        </tr>
+        <tr>
+            <td>Diurno (Z=0)</td>
+            <td>300 de 400 diurnos</td>
+            <td>240 productivos</td>
+            <td>240/300 = <strong>0.80</strong></td>
+        </tr>
+        <tr>
+            <td>Diurno (Z=0), no café</td>
+            <td>100 de 400 diurnos</td>
+            <td>70 productivos</td>
+            <td>70/100 = <strong>0.70</strong></td>
+        </tr>
+        <tr>
+            <td>Nocturno (Z=1)</td>
+            <td>450 de 600 nocturnos</td>
+            <td>225 productivos</td>
+            <td>225/450 = <strong>0.50</strong></td>
+        </tr>
+        <tr>
+            <td>Nocturno (Z=1), no café</td>
+            <td>150 de 600 nocturnos</td>
+            <td>60 productivos</td>
+            <td>60/150 = <strong>0.40</strong></td>
+        </tr>
+    </table>
+
+    <p>Distribución marginal de turnos: P(Z=0) = 400/1000 = 0.40, P(Z=1) = 600/1000 = 0.60</p>
+
+    <p><strong>Paso 1 — Estimación L1 (sesgada):</strong></p>
+    <p style="font-family:monospace; color:#a5d6ff; text-align:center; font-size:1.1em;">
+        P(Y=1 | X=1) = (240 + 225) / (300 + 450) = 465/750 ≈ 0.62
+    </p>
+    <p style="font-family:monospace; color:#a5d6ff; text-align:center; font-size:1.1em;">
+        P(Y=1 | X=0) = (70 + 60) / (100 + 150) = 130/250 = 0.52
+    </p>
+    <p>L1 dice: el café mejora la productividad en +10 pp. Parece pequeño pero positivo.</p>
+
+    <p><strong>Paso 2 — Ajuste backdoor do() (correcto):</strong></p>
+    <div class="math-block">
+        P(Y=1 | do(X=1)) = P(Y=1|X=1,Z=0)·P(Z=0) + P(Y=1|X=1,Z=1)·P(Z=1)<br>
+        = 0.80 × 0.40 + 0.50 × 0.60<br>
+        = 0.32 + 0.30 = <strong>0.62</strong>
+    </div>
+    <div class="math-block">
+        P(Y=1 | do(X=0)) = P(Y=1|X=0,Z=0)·P(Z=0) + P(Y=1|X=0,Z=1)·P(Z=1)<br>
+        = 0.70 × 0.40 + 0.40 × 0.60<br>
+        = 0.28 + 0.24 = <strong>0.52</strong>
+    </div>
+    <p><strong>ATE = 0.62 − 0.52 = +0.10</strong> — El café sí mejora la productividad en 10 pp, sin sesgo.
+        En este caso particular la estimación cruda y la do() coinciden porque la distribución del confounder
+        estaba equilibrada por la distribución de quienes tomaban café dentro de cada turno.</p>
+
+    <!-- ======================= FRONTDOOR ======================= -->
+    <h2>2. El Criterio de la Puerta Delantera (Frontdoor)</h2>
+    <p>¿Qué ocurre cuando el confounder existe pero es <strong>imposible medirlo</strong>? No tenemos los datos
+        de Z. No podemos aplicar el ajuste backdoor.</p>
+
+    <div class="highlight-box">
+        <strong>Ejemplo histórico — Tabaco y Cáncer:</strong> Las tabaqueras argüían que quizás existía un
+        "Gen de Adicción" (U, no observable) que causaba tanto el deseo de fumar (X) como el cáncer de pulmón (Y).
+        Si U no se puede medir, el camino backdoor X ← U → Y permanece abierto y no podemos usar el ajuste backdoor.
+    </div>
+
+    <div class="graph-box">
+        <div class="mermaid">
+            graph TD
+            U((U\ncap. oculta)) -.-> X((Fumar))
+            U -.-> Y((Cáncer))
+            X --> M((Alquitrán\nen pulmones))
+            M --> Y
+            style U fill:#6b6b6b,stroke:#8b949e,color:#fff,stroke-dasharray: 5 5
+            style X fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style M fill:#238636,stroke:#3fb950,color:#fff
+            style Y fill:#da3633,stroke:#ff7b72,color:#fff
+        </div>
+        <p class="graph-desc">
+            U (confounder oculto) crea el backdoor X ← U → Y (líneas discontinuas).<br>
+            Pero M (alquitrán) es un mediador entre X e Y que NO está afectado por U.
+        </p>
+    </div>
+
+    <p>Si existe un mediador M que: (a) es causado por X, (b) bloquea completamente el efecto de X sobre Y,
+        y (c) no está afectado por U, entonces podemos aplicar el ajuste frontdoor:</p>
+
+    <div class="math-block">
+        P(Y | do(X)) = &sum;<sub>m</sub> P(M=m | X) &sum;<sub>x'</sub> P(Y | X=x', M=m) &times; P(X=x')
+    </div>
+
+    <p>La magia: el lado derecho solo contiene <span class="math">P(M|X)</span>, <span class="math">P(Y|X,M)</span>
+        y <span class="math">P(X)</span> — todo observable sin conocer U.</p>
+
+    <!-- ======================= VARIABLES INSTRUMENTALES ======================= -->
+    <h2>3. Variables Instrumentales (IV)</h2>
+    <p>Cuando no hay mediador disponible ni confounder medible, otra estrategia es buscar un
+        <strong>Instrumento</strong> (Z): una variable que afecta X pero solo influye en Y
+        <em>a través de X</em>, sin efecto directo en Y ni correlación con los confounders ocultos.</p>
+
+    <div class="graph-box">
+        <div class="mermaid">
+            graph LR
+            Z((Instrumento\nZ)) --> X((Tratamiento\nX))
+            U((U\noculto)) -.-> X
+            U -.-> Y((Resultado\nY))
+            X --> Y
+            style Z fill:#d29922,stroke:#e3b341,color:#000
+            style U fill:#6b6b6b,stroke:#8b949e,color:#fff,stroke-dasharray: 5 5
+            style X fill:#1f6feb,stroke:#58a6ff,color:#fff
+            style Y fill:#238636,stroke:#3fb950,color:#fff
+        </div>
+        <p class="graph-desc">Z → X → Y, y Z no tiene camino directo a Y, ni a U.<br>
+            La variación exógena en Z "contamina solo X", aislando así el efecto causal de X en Y.</p>
+    </div>
+
+    <p>El estimador IV estándar es el estimador LATE (<em>Local Average Treatment Effect</em>):</p>
+
+    <div class="math-block">
+        &beta;<sub>IV</sub> = Cov(Y, Z) / Cov(X, Z) = &rho;<sub>YZ</sub> &sdot; &sigma;<sub>Y</sub> / (&rho;<sub>XZ</sub> &sdot; &sigma;<sub>X</sub>)
+    </div>
+
+    <div class="methods-grid">
+        <div class="method-card">
+            <h4>Ejemplos de Instrumentos Válidos</h4>
+            <ul style="font-size:0.95em; margin-left:16px;">
+                <li><strong>Draft lottery:</strong> Servicio militar (Z) → Ingresos futuros (Y) via educación/trauma (X)</li>
+                <li><strong>Distancia al hospital:</strong> Acceso a tratamiento (X) → Mortalidad (Y)</li>
+                <li><strong>Precio del petróleo:</strong> Costos de producción (X) → Inflación (Y)</li>
+                <li><strong>Quórum electoral:</strong> Políticas educativas (X) → Crecimiento (Y)</li>
+            </ul>
+        </div>
+        <div class="method-card">
+            <h4>Condiciones Necesarias del Instrumento</h4>
+            <ul style="font-size:0.95em; margin-left:16px;">
+                <li><strong>Relevancia:</strong> Cov(Z, X) ≠ 0 (Z debe mover X)</li>
+                <li><strong>Exogeneidad:</strong> Cov(Z, U) = 0 (Z no correlaciona con confounders)</li>
+                <li><strong>Exclusión:</strong> Z no afecta Y excepto a través de X (no hay camino directo Z→Y)</li>
+            </ul>
+            <p style="font-size:0.9em; color:#ff7b72; margin-top:10px;">La exogeneidad y exclusión no son testables
+                desde los datos — requieren argumentación teórica del dominio.</p>
         </div>
     </div>
-</body>
 
+    <!-- ======================= CÓDIGO PYTHON ======================= -->
+    <h2>Código Python: Backdoor Adjustment y Variables Instrumentales</h2>
+
+    <p class="code-label">python</p>
+    <pre><code>import numpy as np
+import pandas as pd
+from scipy import stats
+
+np.random.seed(0)
+N = 5000
+
+# =====================================================
+# EJEMPLO 1: AJUSTE BACKDOOR
+# Modelo: Z → X → Y, Z → Y (Z es confounder)
+# Verdadero efecto causal de X en Y: beta = 2.0
+# =====================================================
+Z = np.random.normal(0, 1, N)       # confounder (e.g., nivel de motivación)
+X = 1.5 * Z + np.random.normal(0, 1, N)  # tratamiento afectado por Z
+Y = 2.0 * X - 1.0 * Z + np.random.normal(0, 1, N)  # Y depende de X y Z directamente
+
+df = pd.DataFrame({'Z': Z, 'X': X, 'Y': Y})
+
+# ---- Estimación ingenua (OLS sin ajuste) ----
+slope_naive, intercept, r, p, se = stats.linregress(df['X'], df['Y'])
+print("=== BACKDOOR ADJUSTMENT ===")
+print(f"OLS sin ajuste (L1):  β̂ = {slope_naive:.3f}  (verdadero: 2.000, sesgo: {slope_naive-2:.3f})")
+
+# ---- Ajuste por Z (regresión múltiple = backdoor adjustment) ----
+from numpy.linalg import lstsq
+Xmat = np.column_stack([np.ones(N), df['X'], df['Z']])
+betas, _, _, _ = lstsq(Xmat, df['Y'], rcond=None)
+print(f"OLS con ajuste por Z: β̂_X = {betas[1]:.3f}  (verdadero: 2.000, sesgo: {betas[1]-2:.3f})")
+
+print()
+
+# =====================================================
+# EJEMPLO 2: VARIABLE INSTRUMENTAL
+# Modelo: Z → X, U → X, U → Y, X → Y
+# Z es instrumento válido. Beta_X = 3.0 (efecto causal de X en Y)
+# =====================================================
+Z_iv = np.random.normal(0, 1, N)    # instrumento (e.g., cercanía a hospital)
+U    = np.random.normal(0, 1, N)    # confounder oculto NO medido
+X_iv = 0.8 * Z_iv + 0.5 * U + np.random.normal(0, 0.5, N)  # X afectado por Z y U
+Y_iv = 3.0 * X_iv + 1.5 * U + np.random.normal(0, 1, N)     # Y afectado por X y U
+
+df2 = pd.DataFrame({'Z': Z_iv, 'U': U, 'X': X_iv, 'Y': Y_iv})
+
+# ---- OLS ingenuo (U no incluido → sesgo) ----
+slope_ols, *_ = stats.linregress(df2['X'], df2['Y'])
+print("=== VARIABLES INSTRUMENTALES ===")
+print(f"OLS ingenuo (sin controlar U):  β̂ = {slope_ols:.3f}  (verdadero: 3.000)")
+
+# ---- Estimador IV: 2SLS (Two-Stage Least Squares) ----
+# Etapa 1: regresar X sobre Z → obtener X_hat (variación exógena de X por Z)
+slope1, int1, *_ = stats.linregress(df2['Z'], df2['X'])
+X_hat = slope1 * df2['Z'] + int1
+
+# Etapa 2: regresar Y sobre X_hat (solo la parte de X explicada por Z)
+slope2, int2, *_ = stats.linregress(X_hat, df2['Y'])
+print(f"Estimador IV / 2SLS:            β̂ = {slope2:.3f}  (verdadero: 3.000, sesgo: {slope2-3:.3f})")
+
+# Forma directa: β_IV = Cov(Y,Z) / Cov(X,Z)
+beta_iv = np.cov(df2['Y'], df2['Z'])[0,1] / np.cov(df2['X'], df2['Z'])[0,1]
+print(f"Fórmula directa IV Cov(Y,Z)/Cov(X,Z): β̂ = {beta_iv:.3f}")
+</code></pre>
+
+    <div class="info-box">
+        <strong>Resultado esperado:</strong><br>
+        En el ejemplo 1: el OLS sin ajuste estará sesgado (~2.7), el ajuste por Z lo corrige a ~2.0.<br>
+        En el ejemplo 2: el OLS ingenuo estará muy sesgado (~3.9), el estimador IV corrige a ~3.0.<br>
+        Esta diferencia entre el estimador naive y el IV <em>es exactamente el sesgo de selección / endogeneidad</em>
+        que la causalidad intenta corregir.
+    </div>
+
+    <!-- ======================= IDENTIFICABILIDAD ======================= -->
+    <h2>¿Cuándo es Identificable un Efecto Causal?</h2>
+    <p>No todos los efectos causales son identificables desde datos observacionales. El <strong>problema de
+        identificación</strong> pregunta: ¿existe alguna combinación de las 3 reglas do-calculus que pueda
+        expresar <span class="math">P(Y|do(X))</span> en términos de distribuciones observacionales?</p>
+
+    <table>
+        <tr>
+            <th>Estructura del DAG</th>
+            <th>¿Identificable?</th>
+            <th>Estrategia</th>
+        </tr>
+        <tr>
+            <td>Confounder observado Z</td>
+            <td style="color:#50fa7b;">Sí</td>
+            <td>Ajuste backdoor</td>
+        </tr>
+        <tr>
+            <td>Confounder oculto U, mediador M disponible</td>
+            <td style="color:#50fa7b;">Sí</td>
+            <td>Ajuste frontdoor</td>
+        </tr>
+        <tr>
+            <td>Confounder oculto U, instrumento Z disponible</td>
+            <td style="color:#50fa7b;">Parcialmente (LATE)</td>
+            <td>Variables Instrumentales</td>
+        </tr>
+        <tr>
+            <td>Confounder oculto U, sin mediador ni instrumento</td>
+            <td style="color:#ff7b72;">No</td>
+            <td>Requiere RCT o supuestos adicionales</td>
+        </tr>
+    </table>
+
+    <div class="warning-box">
+        <strong>No confundir estimación con identificación:</strong> Incluso cuando un efecto es identificable,
+        la estimación desde datos finitos tiene varianza. Con muestras pequeñas, incluso estimadores correctos
+        (sin sesgo) tienen alta incertidumbre. Identificabilidad es una propiedad teórica (¿es posible estimarlo?),
+        no una garantía práctica de precisión.
+    </div>
+
+    <!-- ======================= EJERCICIOS ======================= -->
+    <div class="exercise-box">
+        <h3>✏️ Ejercicios</h3>
+        <ol>
+            <li>
+                <strong>Aplica el ajuste backdoor:</strong> En el ejemplo del café, verifica numéricamente que
+                si el confounder fuera el "nivel de energía inicial" (observado) con P(Z=0)=0.3 y P(Z=1)=0.7
+                y con las tasas de café diurno/nocturno del ejemplo, el ATE sería distinto.
+                ¿Por qué cambia el ATE al cambiar P(Z)?
+            </li>
+            <li>
+                <strong>Identifica la estrategia:</strong> Para cada escenario, di qué técnica de identificación
+                usarías (backdoor, frontdoor o IV):
+                <ul style="margin-top:8px; margin-left:20px; font-size:1em;">
+                    <li>Efecto de publicidad (X) en ventas (Y). Confounder: calidad del producto (observable).</li>
+                    <li>Efecto de educación (X) en ingresos (Y). Confounder: habilidad innata (no observable).
+                        Tienes datos de distancia a la universidad más cercana en la infancia (Z).</li>
+                    <li>Efecto de fumar (X) en cáncer (Y). Confounder genético oculto. Tienes datos de
+                        niveles de nicotina en sangre (M).</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Comprueba la Regla 1:</strong> En el código del ejemplo 1, elimina Z de la regresión
+                múltiple e introduce en su lugar una variable aleatoria totalmente independiente W.
+                ¿Cambia el estimador β̂_X? ¿Por qué sí o por qué no?
+            </li>
+            <li>
+                <strong>Instrumento débil:</strong> En el código IV, reduce la fuerza del instrumento
+                cambiando <code>0.8 * Z_iv</code> a <code>0.05 * Z_iv</code>. ¿Qué le pasa al estimador IV?
+                ¿Por qué los instrumentos débiles son peligrosos?
+            </li>
+        </ol>
+    </div>
+
+    <div class="btn-nav-group">
+        <a href="04_dags.html" class="btn-nav">← Anterior</a>
+        <a href="06_contrafactuales.html" class="btn-nav primary">Siguiente: Contrafactuales y SCMs →</a>
+    </div>
+</div>
+<script src="../../../shared/lucentia.js" defer></script>
+
+
+<!-- ── Sidebar inyectada por inject_gen1_sidebar.py ────────────────────────── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">LucentIA</div>
+  <div class="sidebar-course">Causalidad</div>
+  <ul class="sidebar-nav">
+    <li class="sidebar-section">Índice del curso</li>
+    <li><a href="01_introduccion.html">01: Más allá de las Correlaciones</a></li>
+    <li><a href="02_escalera_causacion.html">02: La Escalera de la Causación</a></li>
+    <li><a href="03_paradoja_simpson.html">03: La Paradoja de Simpson</a></li>
+    <li><a href="04_dags.html">04: Grafos Causales (DAGs)</a></li>
+    <li><a href="05_do_calculus.html">05: El Cálculo do()</a></li>
+    <li><a href="06_contrafactuales.html">06: Contrafactuales y SCMs</a></li>
+    <li><a href="07_deep_learning_causal.html">07: Deep Learning Causal</a></li>
+    <li><a href="08_papers_estado_del_arte.html">08: Papers y Estado del Arte</a></li>
+    <li><a href="09_practica_python_dags.html">09: Python - Datos Sintéticos y DAGs</a></li>
+    <li><a href="10_practica_python_do_calculus.html">10: Python - ML Sesgado vs DoWhy</a></li>
+    <li><a href="index.html">Causalidad</a></li>
+  </ul>
+  <div class="theme-toggle">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIcon">&#9728;</span>
+      <span id="themeLabel">Modo claro</span>
+    </button>
+  </div>
+</nav>
+
+</body>
 </html>
